@@ -26,10 +26,10 @@ export default function MyCalendars() {
   }, [session]);
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-xl font-bold mb-4">Your Calendars</h1>
-      <table className="min-w-full table-auto">
-        <thead>
+    <div className="container mx-auto p-6 pt-16">
+      <h1 className="text-2xl font-bold mb-8">Your Calendars</h1>
+      <table className="min-w-full table-auto m-4">
+        <thead className="bg-gray-100 text-gray-600 text-sm">
           <tr>
             <th className="px-4 py-2">TITLE</th>
             <th className="px-4 py-2">DESCRIPTION</th>
@@ -39,12 +39,11 @@ export default function MyCalendars() {
         </thead>
         <tbody>
           {calendars.map(calendar => (
-            <tr key={calendar._id}>
-              <td className="border px-4 py-2">{calendar.title}</td>
-              <td className="border px-4 py-2">{calendar.description}</td>
-              <td className="border px-4 py-2">{calendar.isActive ? "Active" : "Inactive"}</td>
-              <td className="border px-4 py-2">
-                {/* Sample actions; you'd need to implement the functionality for these */}
+            <tr key={calendar._id} className="border-b text-sm">
+              <td className="px-4 py-2">{calendar.title}</td>
+              <td className="px-4 py-2">{calendar.description}</td>
+              <td className="px-4 py-2">{calendar.isActive ? "Active" : "Inactive"}</td>
+              <td className="px-4 py-2">
                 <button className="bg-blue-500 text-white px-2 py-1 mr-2">Edit</button>
                 <button className="bg-green-500 text-white px-2 py-1 mr-2">View</button>
                 <button className="bg-yellow-500 text-white px-2 py-1 mr-2">Post</button>

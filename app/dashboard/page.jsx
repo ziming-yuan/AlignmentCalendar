@@ -1,11 +1,12 @@
+'use client';
 import Navbar from '../components/Navbar.jsx';
-import DashboardTable from '../components/DashboardTable.jsx';
+import CalendarTable from '../components/CalendarTable.jsx';
 
 function HomePage() {
   return (
     <div>
       <Navbar />
-      <DashboardTable />
+      <CalendarTable />
     </div>
   );
 }

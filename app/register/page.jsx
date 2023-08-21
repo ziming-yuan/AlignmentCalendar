@@ -2,11 +2,14 @@
 import Link from "next/link";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { useState } from 'react';
+import { useRouter } from "next/navigation";
 
 export default function Home() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const router = useRouter();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
@@ -72,8 +75,6 @@ export default function Home() {
                   <input
                     onChange={e=>setEmail(e.target.value)}
                     type="email"
-                    id="email"
-                    name="email"
                     placeholder="Enter your email"
                     className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
               </div>
@@ -83,8 +84,6 @@ export default function Home() {
                   <input
                     onChange={e=>setPassword(e.target.value)}
                     type="password"
-                    id="password"
-                    name="password"
                     placeholder="Enter your password"
                     className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
               </div>

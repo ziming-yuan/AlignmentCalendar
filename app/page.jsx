@@ -1,7 +1,35 @@
+'use client'
+
 import Link from "next/link";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if (res.error) {
+        setError("Invalid Credentials");
+        return;
+      }
+      router.replace("dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <main className="flex justify-center items-center min-h-screen">
       <div className="bg-white p-8 w-full max-w-lg"> 
@@ -18,15 +46,23 @@ export default function Home() {
           </p>
           
           {/* Form */}
-          <form>
+          <form onSubmit={handleSubmit}>
               <div className="mb-4">
                   <label htmlFor="email" className="block text-sm font-medium leading-tight text-slate-800 mb-2">Email Address</label>
-                  <input type="email" id="email" name="email" placeholder="Enter your email" className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
+                  <input 
+                    onChange={e => setEmail(e.target.value)}
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
               </div>
               
               <div className="mb-4 relative">
                   <label htmlFor="password" className="block text-sm font-medium leading-tight text-slate-800 mb-2">Password</label>
-                  <input type="password" id="password" name="password" placeholder="Enter your password" className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
+                  <input
+                    onChange={e => setPassword(e.target.value)}
+                    type="password"
+                    placeholder="Enter your password"
+                    className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
                   <a href="#" className="absolute right-0 top-0 text-indigo-600 text-sm font-medium leading-tight">Forgot Password?</a>
               </div>
 
@@ -38,6 +74,12 @@ export default function Home() {
               <div>
                   <button type="submit" className="w-full h-9 bg-indigo-600 rounded text-white font-medium mb-2">Sign in</button>
               </div>
+
+              {error && (
+                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                  {error}
+                </div>
+              )}
 
               <div className="text-sm mt-3 text-right text-gray-900">
                 Don't have an account? <Link href={"/register"} className="underline">Register</Link>

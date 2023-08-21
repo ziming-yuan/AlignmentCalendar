@@ -14,6 +14,19 @@ export default function Home() {
             return;
         }
         try {
+            const resUserExists = await fetch("api/userExists", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            });
+            const {user} = await resUserExists.json();
+            if (user) {
+              setError("User exists");
+              return;
+            }
+
             const res = await fetch("api/register", {
                 method: "POST",
                 headers: {
@@ -27,6 +40,7 @@ export default function Home() {
             if (res.ok) {
                 const form = e.target;
                 form.reset();
+                setError("");
                 router.push("/");
             } else {
                 console.log("User registration failed.");

@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link";
-import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 
@@ -17,7 +17,7 @@ export default function Home() {
             return;
         }
         try {
-            const resUserExists = await fetch("api/userExists", {
+            const resUserExists = await fetch("api/users/userExists", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export default function Home() {
               return;
             }
 
-            const res = await fetch("api/register", {
+            const res = await fetch("api/users/register", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

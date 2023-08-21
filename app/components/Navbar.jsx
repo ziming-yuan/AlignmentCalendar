@@ -2,7 +2,8 @@
 
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
+import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import { signOut } from "next-auth/react";
 
 const navigation = [

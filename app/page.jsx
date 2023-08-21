@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";

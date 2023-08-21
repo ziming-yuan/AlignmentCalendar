@@ -1,4 +1,4 @@
-import { connectMongoDB } from "../../../../lib/mongodb";
+import dbConnect from "../../../../lib/dbConnect";
 import User from "../../../../models/user";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -9,24 +9,18 @@ export const authOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {},
-
       async authorize(credentials) {
         const { email, password } = credentials;
-
         try {
-          await connectMongoDB();
+          await dbConnect();
           const user = await User.findOne({ email });
-
           if (!user) {
             return null;
           }
-
           const passwordsMatch = await bcrypt.compare(password, user.password);
-
           if (!passwordsMatch) {
             return null;
           }
-
           return user;
         } catch (error) {
           console.log("Error: ", error);
@@ -40,6 +34,15 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/",
+  },
+  callbacks: {
+    // async session({ session, token, user }) {
+    //   // Send properties to the client, like an access_token and user id from a provider.
+    //   // session.accessToken = token.accessToken
+    //   console.log("calbacks session", session)
+    //   console.log("calbacks accessToken", token.accessToken)
+    //   return session;
+    // }
   },
 };
 

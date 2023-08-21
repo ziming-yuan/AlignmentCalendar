@@ -1,10 +1,11 @@
 import Navbar from '../components/Navbar.jsx';
+import DashboardTable from '../components/DashboardTable.jsx';
 
 function HomePage() {
   return (
     <div>
       <Navbar />
-      {/* Rest of your page content */}
+      <DashboardTable />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-'use client'
 import CalendarHeader from "./CalendarHeader";
 import CalendarRows from "./CalendarBody";
 export default function CalendarTable(){

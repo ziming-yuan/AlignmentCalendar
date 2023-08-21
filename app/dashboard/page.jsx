@@ -1,6 +1,6 @@
 'use client';
 import Navbar from '../components/Navbar.jsx';
-import CalendarTable from '../components/CalendarTable.jsx';
+import CalendarTable from '../components/calendars/CalendarTable.jsx';
 
 function HomePage() {
   return (

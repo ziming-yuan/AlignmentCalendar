@@ -10,23 +10,34 @@ export default function MyCalendars() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    async function fetchCalendars(email) {
-      try {
-        const response = await fetch(`api/calendars/${email}`);
-        if (!response.ok) {
-          throw new Error(`API call failed with status: ${response.status}`);
-        }
-        const data = await response.json();
-        setCalendars(data.calendars);
-      } catch (error) {
-        console.error("Failed to fetch calendars:", error.message);
-      }
-    }
-
     if (session?.user?.email) {
       fetchCalendars(session.user.email);
     }
   }, [session]);
+
+  async function fetchCalendars(email) {
+    try {
+      const response = await fetch(`api/calendars/GET/${email}`);
+      if (!response.ok) {
+        throw new Error(`API call failed with status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCalendars(data.calendars);
+    } catch (error) {
+      console.error("Failed to fetch calendars:", error.message);
+    }
+  }
+  
+  async function handleDelete(calendarId) {
+    try {
+      const response = await fetch(`api/calendars/DELETE/${calendarId}`, {method: 'DELETE'});
+      if (session?.user?.email) {
+        fetchCalendars(session.user.email);
+      }
+    } catch (error) {
+      console.error("Failed to fetch calendars:", error.message);
+    }
+  }
 
   return (
     <tbody>

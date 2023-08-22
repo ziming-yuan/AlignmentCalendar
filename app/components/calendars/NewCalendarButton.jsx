@@ -10,7 +10,7 @@ export default function NewCalendarButton(){
     
     return (
         <>
-        <FormContext.Provider value={{formRef, onConfirmFunction}}>
+        <FormContext.Provider value={{formRef, setIsModalOpen}}>
             <Button onButtonClick={() => setIsModalOpen(true)} />
             <Modal 
                 isOpen={isModalOpen}
@@ -34,25 +34,4 @@ function Button({ onButtonClick }) {
         </button>
     );
 }
-
-const onConfirmFunction = () => {
-    setIsModalOpen(false);
-};
-
-// async function onConfirm() {
-//     try {
-//         // Close the modal
-//         setIsModalOpen(false);
-        
-//         // Execute async operation
-//         await api.deleteAccount();
-        
-//         // Provide success feedback
-//         alert("Your account has been successfully deactivated");
-//     } catch (error) {
-//         // Handle error
-//         console.error("There was an issue deactivating the account:", error);
-//         alert("There was an error deactivating your account. Please try again later.");
-//     }
-// }
 

@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 const defaultContextValue = {
     formRef: null,
-    onConfirmFunction: () => {}
+    setIsModalOpen: () => {}
 };
 
 const FormContext = createContext(defaultContextValue);

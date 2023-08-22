@@ -50,7 +50,7 @@ export default function Modal({ isOpen = false, setIsOpen = () => {}, title, Mod
                 {/* Modal header */}
                 <div className="border-b border-gray-300 px-4 pt-4 pb-3">
                     <div className="text-center sm:ml-4 sm:text-left">
-                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    <Dialog.Title className="text-base text-xl font-semibold text-gray-900">
                         {title}
                     </Dialog.Title>
                     </div>

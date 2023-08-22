@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useContext } from 'react';
 import FormContext from "../../FormContext"
+import { useSession } from "next-auth/react";
 
 function NewCalendarForm() {
   const [calendarTitle, setCalendarTitle] = useState('');
@@ -9,7 +10,8 @@ function NewCalendarForm() {
   const [endDate, setEndDate] = useState(null);
   const [daysDiff, setDaysDiff] = useState('0');
   const [error, setError] = useState(null);
-  const {formRef, onConfirmFunction} = useContext(FormContext);
+  const {formRef, setIsModalOpen} = useContext(FormContext);
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -42,16 +44,15 @@ const handleSubmit = async (e) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            calendarTitle,
-            calendarDescription,
-            startDate,
-            endDate
+            email: session.user.email,
+            title: calendarTitle,
+            description: calendarDescription,
         })
     });
 
     if (response.ok) {
         console.log('Data sent successfully.');
-        onConfirmFunction();  // Call the onConfirm prop, which will close the modal
+        setIsModalOpen(false);  // Call the onConfirm prop, which will close the modal
     } else {
         setError("Failed to send data. Please try again.");
     }
@@ -109,7 +110,7 @@ const handleSubmit = async (e) => {
                     className="text-sm w-36 h-9 px-2 py-3 bg-white rounded border border-gray-300 shadow"
                     onChange={e => setStartDate(e.target.value)}
                 />
-                <div className="  text-sm font-normal">Until</div>
+                <div className="text-sm font-normal">Until</div>
                 <input
                     type="date"
                     className="text-sm w-36 h-9 px-2 py-3 bg-white rounded border border-gray-300 shadow"

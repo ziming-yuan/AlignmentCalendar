@@ -1,9 +1,21 @@
 'use client'
-import { Fragment, useRef } from 'react'
+import { Fragment, useRef, useContext  } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import FormContext from "../../components/FormContext"
 
-export default function Modal({ isOpen = false, setIsOpen = () => {}, title, ModalContent, confirmLabel, onConfirm }) {
-  const cancelButtonRef = useRef(null)
+export default function Modal({ isOpen = false, setIsOpen = () => {}, title, ModalContent, confirmLabel }) {
+  const cancelButtonRef = useRef(null);
+  const {formRef} = useContext(FormContext);
+  const handleButtonClick = () => {
+    const form = formRef.current;
+    if (form) {
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit();
+      } else {
+        form.dispatchEvent(new Event('submit', {cancelable: true}));
+      }
+    }
+  }
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -46,18 +58,15 @@ export default function Modal({ isOpen = false, setIsOpen = () => {}, title, Mod
 
                 {/* Modal body */}
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                    <ModalContent/> 
+                  {ModalContent}
                 </div>
 
                 {/* Modal footer */}
                 <div className="border-t border-gray-300 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
+                    onClick={handleButtonClick}
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
-                    onClick={() => {
-                        onConfirm();
-                        setIsOpen(false);
-                    }}
                   >
                     {confirmLabel}
                   </button>

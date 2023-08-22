@@ -1,30 +1,64 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import FormContext from "../../FormContext"
 
-function CalendarForm() {
+function NewCalendarForm() {
   const [calendarTitle, setCalendarTitle] = useState('');
   const [calendarDescription, setCalendarDescription] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [daysDiff, setDaysDiff] = useState('0');
+  const [error, setError] = useState(null);
+  const {formRef, onConfirmFunction} = useContext(FormContext);
 
   useEffect(() => {
     if (startDate && endDate) {
         const start = new Date(startDate);
         const end = new Date(endDate);
         const diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
-        setDaysDiff(diff);
-    }
+        
+        if (diff < 0) {
+          setError("Invalid duration");
+        } else {
+          setError(null);
+          setDaysDiff(diff);
+        }
+      }
 }, [startDate, endDate]);
 
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Calendar Title:', calendarTitle);
-    // Add additional form submission logic here
+    if (!calendarTitle || !calendarDescription || !startDate || !endDate) {
+        setError("All fields required");
+        return;
+    }
+    else if (daysDiff < 0){
+        setError("Invalid date duration");
+        return;
+    }
+    const response = await fetch("api/calendars", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            calendarTitle,
+            calendarDescription,
+            startDate,
+            endDate
+        })
+    });
+
+    if (response.ok) {
+        console.log('Data sent successfully.');
+        onConfirmFunction();  // Call the onConfirm prop, which will close the modal
+    } else {
+        setError("Failed to send data. Please try again.");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} ref={formRef}>
         {/* Calendar Title */}
         <div className="relative flex flex-col mb-4 space-y-2">
             <label className="text-sm font-medium" htmlFor="calendarTitle">
@@ -85,8 +119,15 @@ function CalendarForm() {
             </div>
         </div>
 
+        {/* Error message */}
+        {error && (
+          <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+          {error}
+          </div>
+        )}
+
     </form>
   );
 }
 
-export default CalendarForm;
+export default NewCalendarForm;

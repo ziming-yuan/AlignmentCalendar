@@ -1,21 +1,25 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from "../modals/Modal"
 import NewCalendarForm from "../modals/forms/NewCalendarForm"
+import FormContext from "../FormContext.js";
 
 export default function NewCalendarButton(){
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const formRef = useRef(null);
     
     return (
         <>
+        <FormContext.Provider value={{formRef, onConfirmFunction}}>
             <Button onButtonClick={() => setIsModalOpen(true)} />
             <Modal 
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
                 title="New Calendar"
-                ModalContent = {NewCalendarForm}
+                ModalContent={<NewCalendarForm/>}
                 confirmLabel="Next"
             />
+        </FormContext.Provider>
         </>
     );
 }
@@ -30,6 +34,10 @@ function Button({ onButtonClick }) {
         </button>
     );
 }
+
+const onConfirmFunction = () => {
+    setIsModalOpen(false);
+};
 
 // async function onConfirm() {
 //     try {

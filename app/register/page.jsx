@@ -75,7 +75,6 @@ export default function Home() {
                   <input
                     onChange={e=>setEmail(e.target.value)}
                     type="email"
-                    placeholder="Enter your email"
                     className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
               </div>
               
@@ -84,7 +83,6 @@ export default function Home() {
                   <input
                     onChange={e=>setPassword(e.target.value)}
                     type="password"
-                    placeholder="Enter your password"
                     className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
               </div>
 

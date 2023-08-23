@@ -17,7 +17,7 @@ export default function NewCalendarButton(){
                 setIsOpen={setIsModalOpen}
                 title="New Calendar"
                 ModalContent={<NewCalendarForm/>}
-                confirmLabel="Next"
+                confirmLabel="Create"
             />
         </FormContext.Provider>
         </>

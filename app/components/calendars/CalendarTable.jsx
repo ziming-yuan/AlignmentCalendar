@@ -8,7 +8,7 @@ export default function CalendarTable(){
                 <h1 className="text-2xl font-bold">Your Calendars</h1>
                 <NewCalendarButton />
             </div>
-            <table className="min-w-full table-auto m-4">
+            <table className="min-w-full table-auto my-4">
                 <CalendarHeader />
                 <CalendarRows />
             </table>

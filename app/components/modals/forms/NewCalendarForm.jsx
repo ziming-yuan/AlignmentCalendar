@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useContext } from 'react';
-import FormContext from "../../FormContext"
+import FormContext from '../../contextProviders/FormContext';
+import RouterContext from '../../contextProviders/RouterContext';
 import { useSession } from "next-auth/react";
 
 function NewCalendarForm() {
@@ -11,6 +12,7 @@ function NewCalendarForm() {
   const [daysDiff, setDaysDiff] = useState('0');
   const [error, setError] = useState(null);
   const {formRef, setIsModalOpen} = useContext(FormContext);
+  const {router} = useContext(RouterContext);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -23,40 +25,63 @@ function NewCalendarForm() {
           setError("Invalid duration");
         } else {
           setError(null);
-          setDaysDiff(diff);
+          setDaysDiff(diff+1);
         }
       }
-}, [startDate, endDate]);
+    }, [startDate, endDate]);
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!calendarTitle || !calendarDescription || !startDate || !endDate) {
-        setError("All fields required");
-        return;
-    }
-    else if (daysDiff < 0){
-        setError("Invalid date duration");
-        return;
-    }
-    const response = await fetch("api/calendars", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email: session.user.email,
-            title: calendarTitle,
-            description: calendarDescription,
-        })
-    });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!calendarTitle || !calendarDescription || !startDate || !endDate) {
+            setError("All fields required");
+            return;
+        }
+        else if (daysDiff < 0){
+            setError("Invalid date duration");
+            return;
+        }
+        const calendarResponse = await fetch("api/calendars", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: session.user.email,
+                title: calendarTitle,
+                description: calendarDescription,
+            })
+        });
 
-    if (response.ok) {
-        console.log('Data sent successfully.');
-        setIsModalOpen(false);  // Call the onConfirm prop, which will close the modal
-    } else {
-        setError("Failed to send data. Please try again.");
-    }
-  };
+        if (calendarResponse.ok) {
+            console.log('Calendar created successfully.');
+        } else {
+            setError("Failed to create a new calendar. Please try again.");
+        }
+        const { data } = await calendarResponse.json();
+        const calendarId = data._id;
+
+        const doorsResponse = await fetch("api/doors/post-multiple", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                calendarId: calendarId,
+                startDate: startDate,
+                endDate: endDate
+            })
+        });
+
+        if (doorsResponse.ok){
+            setIsModalOpen(false);  // Call the onConfirm prop, which will close the modal
+            console.log('Doors created successfully.');
+            // Refresh the page - currently not working
+            router.replace("/dashboard", { scroll: true });
+            console.log("refreshed?");
+        } else {
+            setError("Failed to create doors. Please try again.");
+        }
+    };
 
   return (
     <form onSubmit={handleSubmit} ref={formRef}>

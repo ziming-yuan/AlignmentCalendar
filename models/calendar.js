@@ -2,6 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const calendarSchema = new Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    calendarId: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String },
     isActive: {

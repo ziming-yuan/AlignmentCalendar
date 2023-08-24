@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import Modal from "../modals/Modal"
 import NewCalendarForm from "../modals/forms/NewCalendarForm"
-import FormContext from "../FormContext.js";
+import FormContext from '../contextProviders/FormContext';
 
 export default function NewCalendarButton(){
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +14,6 @@ export default function NewCalendarButton(){
             <Button onButtonClick={() => setIsModalOpen(true)} />
             <Modal 
                 isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
                 title="New Calendar"
                 ModalContent={<NewCalendarForm/>}
                 confirmLabel="Create"
@@ -34,4 +33,12 @@ function Button({ onButtonClick }) {
         </button>
     );
 }
+
+/*
+Component structure:
+    NewCalendarForm >> Modal >> NewCalendarButton
+FormProvider:
+    formRef: used in Modal and NewCalendarForm
+    setIsModalOpen: used in Modal and NewCalendarForm
+*/
 

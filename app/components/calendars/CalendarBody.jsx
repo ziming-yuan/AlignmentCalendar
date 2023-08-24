@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSession } from "next-auth/react";
+import RouterContext from "../contextProviders/RouterContext";
 import ActiveButton from "./ActiveButton";
 import InactiveButton from "./InactiveButton";
 import {PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon} from "@heroicons/react/24/outline";
@@ -8,6 +9,7 @@ import {PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, Co
 export default function MyCalendars() {
   const [calendars, setCalendars] = useState([]);
   const { data: session } = useSession();
+  const {router} = useContext(RouterContext);
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -21,8 +23,8 @@ export default function MyCalendars() {
       if (!response.ok) {
         throw new Error(`API call failed with status: ${response.status}`);
       }
-      const data = await response.json();
-      setCalendars(data.calendars);
+      const { data } = await response.json();
+      setCalendars(data);
     } catch (error) {
       console.error("Failed to fetch calendars:", error.message);
     }
@@ -31,9 +33,9 @@ export default function MyCalendars() {
   async function handleDelete(calendarId) {
     try {
       const response = await fetch(`api/calendars/delete/${calendarId}`, {method: 'DELETE'});
-      if (session?.user?.email) {
-        fetchCalendars(session.user.email);
-      }
+      // Refresh the page
+      router.refresh()
+      console.log("refreshed in body?");
     } catch (error) {
       console.error("Failed to fetch calendars:", error.message);
     }

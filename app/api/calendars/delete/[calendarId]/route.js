@@ -4,10 +4,23 @@ import Calendar from "../../../../../models/calendar";
 
 // Delete certain calendarId
 export async function DELETE(req, context) {
-    await dbConnect();
-    console.log("inside delete")
-    const calendarId = context.params.calendarId;
-    console.log("id", calendarId)
-    await Calendar.findByIdAndDelete(calendarId);
-    return NextResponse.json({ message: "Deleted successfully!" });
-}
+    try {
+        await dbConnect();
+        const calendarId = context.params.calendarId;
+    
+        // Delete the calendar
+        await Calendar.findByIdAndDelete(calendarId);
+    
+        // Get the owner of the calendar
+        const owner = await User.findOne({ calendars: { $in: [calendarId] } }).select('_id');
+    
+        // If the owner is found, remove the calendar from their list
+        if (owner) {
+          await User.findByIdAndUpdate(owner._id, { $pull: { calendars: calendarId } });
+        }
+        return NextResponse.json({ message: 'Deleted the calendar successfully!' }, { status: 200 });
+      } catch (error) {
+        console.error('Error deleting the calendar:', error);
+        return NextResponse.json({ message: 'Error deleting the calendar' }, { status: 500 });
+      }
+    }

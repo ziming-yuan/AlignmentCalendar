@@ -23,9 +23,8 @@ export async function POST(req) {
     const user = await User.findOne({ email }).select("_id");
     // If user is not found, return an error response
     if (!user) {
-      return NextResponse.json({message: "error: user not found"}, {status: 400});
-    }
-    // const userId = ;
+      return NextResponse.json({message: "Error: user not found"}, {status: 400});
+    };
     const newCalendar = new Calendar({
       owner: user._id,
       calendarId: crypto.randomUUID(),
@@ -39,12 +38,12 @@ export async function POST(req) {
       doors
     });
     await Calendar.create(newCalendar);
-    // return calendarId
-    return NextResponse.json({message: "Calendar created successfully!"}, {status: 201});
-    // Return a success response
-    // {message: "Calendar created successfully!"}, {status: 201},
+    // Update the user's list of calendars
+    await User.findByIdAndUpdate(user._id, { $push: { calendars: newCalendar._id } });
+    // return newCalendar w/ a success response
+    return NextResponse.json({data: newCalendar}, {message: "Calendar created successfully!"}, {status: 201});
   } catch (error) {
     console.error("Error creating calendar:", error);
-    return NextResponse.json({message: "error while creating a calendar"}, {status: 500})
+    return NextResponse.json({message: "Error while creating a calendar"}, {status: 500})
   }
 }

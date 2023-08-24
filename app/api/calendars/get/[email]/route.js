@@ -5,12 +5,16 @@ import Calendar from "../../../../../models/calendar";
 
 // Fetch all calendars of a userId
 export async function GET(req, context) {
-    await dbConnect();
-    const email = context.params.email;
-    const user = await User.findOne({ email: email });
-    if (!user) {
-        return NextResponse.json({ message: "User not found" });
+    try {
+        await dbConnect();
+        const email = context.params.email;
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return NextResponse.json({ message: "User not found" });
+        }
+        const calendars = await Calendar.find({ owner: user._id });
+        return NextResponse.json({ data: calendars }, { message: "Successfully fetched all calendars!" }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Error while getting calendars" }, {status: 500})
     }
-    const calendars = await Calendar.find({ owner: user._id });
-    return NextResponse.json({ calendars: calendars });
 }

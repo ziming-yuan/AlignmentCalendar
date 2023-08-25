@@ -7,8 +7,8 @@ import Calendar from "../../../../../models/calendar";
 export async function GET(req, context) {
     try {
         await dbConnect();
-        const id = context.params.id;
-        const user = await User.findById(id);
+        const userId = context.params.userId;
+        const user = await User.findById(userId);
         if (!user) {
             return NextResponse.json({ message: "User not found" });
         }

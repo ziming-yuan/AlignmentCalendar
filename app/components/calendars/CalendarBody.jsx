@@ -41,6 +41,40 @@ export default function MyCalendars() {
     }
   }
 
+  async function handlePost(calendarId) {
+    try {
+      const doorsResponse = await fetch("api/calendars/changeActive", {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            calendarId: calendarId,
+            isActive: true
+        })
+      });
+    } catch (error) {
+      console.log("Failed to post calendar:", error.message);
+    }
+  }
+
+  async function handleHide(calendarId) {
+    try {
+      const doorsResponse = await fetch("api/calendars/changeActive", {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            calendarId: calendarId,
+            isActive: false
+        })
+      });
+    } catch (error) {
+      console.log("Failed to post calendar:", error.message);
+    }
+  }
+
   return (
     <tbody>
       {calendars.map(calendar => (
@@ -62,12 +96,14 @@ export default function MyCalendars() {
               <EyeIcon  className="w-4 h-4 ml-1"/>
             </button>
             <button
+              onClick={() => handlePost(calendar._id)}
               className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
             >
               Post
               <CloudArrowUpIcon  className="w-4 h-4 ml-1"/>
             </button>
             <button
+              onClick={() => handleHide(calendar._id)}
               className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
             >
               Hide

@@ -11,7 +11,6 @@ const userSchema = new Schema(
         type: String,
         required: true,
     },
-    calendars: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' }],
 },
     { timestamps: true }
 );

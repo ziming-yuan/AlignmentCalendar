@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const calendarSchema = new Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    calendarId: { type: String, required: true },
+    path: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String },
     isActive: {
@@ -13,7 +13,6 @@ const calendarSchema = new Schema({
     titleBackgroundColor: { type: String, default: '#FFF' },
     backgroundPhoto: { type: String },
     logoImage: { type: String },
-    doors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Door' }]
 });
 
 const Calendar = models.Calendar || mongoose.model("Calendar", calendarSchema);

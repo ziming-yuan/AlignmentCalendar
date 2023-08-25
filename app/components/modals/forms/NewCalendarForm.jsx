@@ -56,6 +56,7 @@ function NewCalendarForm() {
             console.log('Calendar created successfully.');
         } else {
             setError("Failed to create a new calendar. Please try again.");
+            return;
         }
         const { data } = await calendarResponse.json();
         const calendarId = data._id;
@@ -80,6 +81,7 @@ function NewCalendarForm() {
             console.log("refreshed?");
         } else {
             setError("Failed to create doors. Please try again.");
+            return;
         }
     };
 

@@ -27,27 +27,19 @@ export async function POST(req) {
         while (currentDate <= end) {
             newDoors.push(new Door ({
                 calendar: calendarId,
-                date: currentDate,
+                date: new Date(currentDate), // currentDate is a reference only
                 text: formatDate(currentDate),
                 message: "",
                 youtubeVideoId: "",
                 photoUrl: "",
-                textColor: "#000",
-                backgroundColor: "#FFF",
+                textColor: "#000000",
+                backgroundColor: "#FFFFFF",
                 closedDoorPhotoUrl: "",
-                autoOpenTime: currentDate
+                autoOpenTime: new Date(currentDate)
             }));
             currentDate.setDate(currentDate.getDate() + 1);
         }
         await Door.insertMany(newDoors);
-
-        // Extract the IDs of the created doors
-        const createdDoorIds = newDoors.map(door => door._id);
-
-        await Calendar.findByIdAndUpdate(
-            calendarId,
-            { $push: { doors: { $each: createdDoorIds } } }
-        );
 
         return NextResponse.json({message: "Multiple doors created successfully!"}, {status: 201})
     } catch (error) {

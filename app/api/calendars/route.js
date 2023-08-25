@@ -27,7 +27,7 @@ export async function POST(req) {
     };
     const newCalendar = new Calendar({
       owner: user._id,
-      calendarId: crypto.randomUUID(),
+      path: crypto.randomUUID(),
       title,
       description,
       isActive,
@@ -38,8 +38,6 @@ export async function POST(req) {
       doors
     });
     await Calendar.create(newCalendar);
-    // Update the user's list of calendars
-    await User.findByIdAndUpdate(user._id, { $push: { calendars: newCalendar._id } });
     // return newCalendar w/ a success response
     return NextResponse.json({data: newCalendar}, {message: "Calendar created successfully!"}, {status: 201});
   } catch (error) {

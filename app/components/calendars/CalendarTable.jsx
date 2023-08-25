@@ -1,5 +1,5 @@
 import CalendarHeader from "./CalendarHeader";
-import CalendarRows from "./CalendarBody";
+import CalendarRows from "./CalendarRows";
 import NewCalendarButton from "./NewCalendarButton";
 export default function CalendarTable(){
     return (

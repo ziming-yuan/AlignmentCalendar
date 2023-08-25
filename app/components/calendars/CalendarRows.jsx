@@ -6,20 +6,20 @@ import ActiveButton from "./ActiveButton";
 import InactiveButton from "./InactiveButton";
 import {PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon} from "@heroicons/react/24/outline";
 
-export default function MyCalendars() {
+export default function CalendarRows() {
   const [calendars, setCalendars] = useState([]);
   const { data: session } = useSession();
   const {router} = useContext(RouterContext);
 
   useEffect(() => {
     if (session?.user?.email) {
-      fetchCalendars(session.user.email);
+      fetchCalendars(session.user.id);
     }
   }, [session]);
 
-  async function fetchCalendars(email) {
+  async function fetchCalendars(id) {
     try {
-      const response = await fetch(`api/calendars/get/${email}`);
+      const response = await fetch(`api/calendars/get/${id}`);
       if (!response.ok) {
         throw new Error(`API call failed with status: ${response.status}`);
       }

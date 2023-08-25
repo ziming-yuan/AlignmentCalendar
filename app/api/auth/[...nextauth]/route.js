@@ -36,13 +36,13 @@ export const authOptions = {
     signIn: "/",
   },
   callbacks: {
-    // async session({ session, token, user }) {
-    //   // Send properties to the client, like an access_token and user id from a provider.
-    //   // session.accessToken = token.accessToken
-    //   console.log("calbacks session", session)
-    //   console.log("calbacks accessToken", token.accessToken)
-    //   return session;
-    // }
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
   },
 };
 

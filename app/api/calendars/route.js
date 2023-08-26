@@ -4,12 +4,12 @@ import Calendar from "../../../models/calendar";
 import User from "../../../models/user";
 
 // Create a new calendar
-// email and title required
+// id and title required
 export async function POST(req) {
   try {
     await dbConnect();
     const { 
-      email,
+      userId,
       title,
       description,
       isActive,
@@ -20,7 +20,7 @@ export async function POST(req) {
       doors 
     } = await req.json();
     // Find the user by email
-    const user = await User.findOne({ email }).select("_id");
+    const user = await User.findById(userId);
     // If user is not found, return an error response
     if (!user) {
       return NextResponse.json({message: "Error: user not found"}, {status: 400});

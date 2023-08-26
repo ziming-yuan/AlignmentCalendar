@@ -46,7 +46,7 @@ function NewCalendarForm() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: session.user.email,
+                userId: session.user.id,
                 title: calendarTitle,
                 description: calendarDescription,
             })
@@ -76,9 +76,6 @@ function NewCalendarForm() {
         if (doorsResponse.ok){
             setIsModalOpen(false);  // Call the onConfirm prop, which will close the modal
             console.log('Doors created successfully.');
-            // Refresh the page - currently not working
-            router.replace("/dashboard", { scroll: true });
-            console.log("refreshed?");
         } else {
             setError("Failed to create doors. Please try again.");
             return;

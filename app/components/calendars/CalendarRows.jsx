@@ -2,12 +2,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useSession } from "next-auth/react";
 import RouterContext from "../contextProviders/RouterContext";
+import RefetchContext from "../contextProviders/RefetchContext";
 import ActiveButton from "./ActiveButton";
 import InactiveButton from "./InactiveButton";
 import {PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 export default function CalendarRows() {
   const [calendars, setCalendars] = useState([]);
+  // const [refetch, setRefetch] = useState(false);
   const { data: session } = useSession();
   const {router} = useContext(RouterContext);
 
@@ -17,6 +19,12 @@ export default function CalendarRows() {
     }
   }, [session]);
 
+  // useEffect(() => {
+  //   if (session?.user?.id){
+  //     fetchCalendars(session.user.id);
+  //   }
+  // }, [refetch])
+
   async function fetchCalendars(id) {
     try {
       const response = await fetch(`api/calendars/get/${id}`);
@@ -24,6 +32,7 @@ export default function CalendarRows() {
         throw new Error(`API call failed with status: ${response.status}`);
       }
       const { data } = await response.json();
+      console.log("fetched data")
       setCalendars(data);
     } catch (error) {
       console.error("Failed to fetch calendars:", error.message);
@@ -33,9 +42,8 @@ export default function CalendarRows() {
   async function handleDelete(calendarId) {
     try {
       const response = await fetch(`api/calendars/delete/${calendarId}`, {method: 'DELETE'});
-      // Refresh the page
-      router.refresh()
-      console.log("refreshed in body?");
+      console.log("about to fetch Calendars");
+      fetchCalendars(session?.user.id);
     } catch (error) {
       console.error("Failed to fetch calendars:", error.message);
     }
@@ -53,6 +61,8 @@ export default function CalendarRows() {
             isActive: true
         })
       });
+      console.log("about to fetch Calendars");
+      fetchCalendars(session?.user.id);
     } catch (error) {
       console.log("Failed to post calendar:", error.message);
     }
@@ -70,13 +80,21 @@ export default function CalendarRows() {
             isActive: false
         })
       });
+      console.log("about to fetch Calendars");
+      fetchCalendars(session?.user.id);
     } catch (error) {
       console.log("Failed to post calendar:", error.message);
     }
   }
 
   return (
-    <tbody>
+    <RefetchContext.Provider value={{onRefetch: () => {
+        // setRefetch(!refetch);
+        // console.log("refetch value", refetch);
+        console.log("about to fetch Calendars")
+        fetchCalendars(session?.user.id)
+      }}}>
+      <tbody>
       {calendars.map(calendar => (
         <tr key={calendar._id} className="border-b text-sm">
           <td className="px-4 py-2">{calendar.title}</td>
@@ -131,6 +149,8 @@ export default function CalendarRows() {
           </td>
         </tr>
       ))}
-    </tbody>
+      </tbody>
+    </RefetchContext.Provider>
+
   );
 };

@@ -5,6 +5,7 @@ import ActiveButton from "./ActiveButton";
 import InactiveButton from "./InactiveButton";
 import { PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon } from "@heroicons/react/24/outline";
 import FetchContext from "../contextProviders/FetchContext";
+import Link from "next/link";
 
 export default function CalendarRows() {
   const [calendars, setCalendars] = useState([]);
@@ -90,18 +91,22 @@ export default function CalendarRows() {
         <td className="px-4 py-2">{calendar.description}</td>
         <td className="px-4 py-2">{calendar.isActive ? <ActiveButton/> : <InactiveButton/>}</td>
         <td className="px-4 py-2">
-          <button
-            className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
-          >
-            Edit
-            <PencilIcon className="w-3 h-3 ml-1"/>
-          </button>
-          <button 
-            className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
-          >
-            View 
-            <EyeIcon  className="w-4 h-4 ml-1"/>
-          </button>
+          <Link href={`/edit/${calendar.path}`}>
+            <button
+              className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+            >
+              Edit
+              <PencilIcon className="w-3 h-3 ml-1"/>
+            </button>
+          </Link>
+          <Link href={`/calendar/${calendar.path}`}>
+            <button 
+              className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+            >
+                View 
+                <EyeIcon  className="w-4 h-4 ml-1"/>
+            </button>
+          </Link>
           <button
             onClick={() => handlePost(calendar._id)}
             className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"

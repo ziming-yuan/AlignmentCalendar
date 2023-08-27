@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useContext } from 'react';
 import FormContext from '../../contextProviders/FormContext';
-import RouterContext from '../../contextProviders/RouterContext';
+import FetchContext from "../../contextProviders/FetchContext";
 import { useSession } from "next-auth/react";
 
 function NewCalendarForm() {
@@ -12,7 +12,7 @@ function NewCalendarForm() {
   const [daysDiff, setDaysDiff] = useState('0');
   const [error, setError] = useState(null);
   const {formRef, setIsModalOpen} = useContext(FormContext);
-  const {router} = useContext(RouterContext);
+  const {fetchFlag, setFetchFlag} = useContext(FetchContext);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -76,6 +76,7 @@ function NewCalendarForm() {
         if (doorsResponse.ok){
             setIsModalOpen(false);  // Call the onConfirm prop, which will close the modal
             console.log('Doors created successfully.');
+            setFetchFlag(!fetchFlag); // Set fetchFlag, which prompt CalendarRows to refetch calendars
         } else {
             setError("Failed to create doors. Please try again.");
             return;

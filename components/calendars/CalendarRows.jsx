@@ -3,17 +3,25 @@ import React, { useState, useEffect, useContext } from "react";
 import { useSession } from "next-auth/react";
 import ActiveButton from "./ActiveButton";
 import InactiveButton from "./InactiveButton";
-import {PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon} from "@heroicons/react/24/outline";
+import { PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon } from "@heroicons/react/24/outline";
+import FetchContext from "../contextProviders/FetchContext";
 
 export default function CalendarRows() {
   const [calendars, setCalendars] = useState([]);
   const { data: session } = useSession();
+  const {fetchFlag, setFetchFlag} = useContext(FetchContext);
 
   useEffect(() => {
     if (session?.user?.email) {
       fetchCalendars(session.user.id);
     }
   }, [session]);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetchCalendars(session.user.id);
+    }
+  }, [fetchFlag]);
 
   async function fetchCalendars(id) {
     try {
@@ -22,7 +30,7 @@ export default function CalendarRows() {
         throw new Error(`API call failed with status: ${response.status}`);
       }
       const { data } = await response.json();
-      console.log("fetched data")
+      console.log("fetched data");
       setCalendars(data);
     } catch (error) {
       console.error("Failed to fetch calendars:", error.message);
@@ -32,8 +40,7 @@ export default function CalendarRows() {
   async function handleDelete(calendarId) {
     try {
       const response = await fetch(`api/calendars/delete/${calendarId}`, {method: 'DELETE'});
-      console.log("about to fetch Calendars");
-      fetchCalendars(session?.user.id);
+      setFetchFlag(!fetchFlag);
     } catch (error) {
       console.error("Failed to fetch calendars:", error.message);
     }
@@ -51,8 +58,7 @@ export default function CalendarRows() {
             isActive: true
         })
       });
-      console.log("about to fetch Calendars");
-      fetchCalendars(session?.user.id);
+      setFetchFlag(!fetchFlag);
     } catch (error) {
       console.log("Failed to post calendar:", error.message);
     }
@@ -70,8 +76,7 @@ export default function CalendarRows() {
             isActive: false
         })
       });
-      console.log("about to fetch Calendars");
-      fetchCalendars(session?.user.id);
+      setFetchFlag(!fetchFlag);
     } catch (error) {
       console.log("Failed to post calendar:", error.message);
     }

@@ -51,7 +51,9 @@ export default function Home() {
                   <label htmlFor="email" className="block text-sm font-medium leading-tight text-slate-800 mb-2">Email Address</label>
                   <input 
                     onChange={e => setEmail(e.target.value)}
+                    id="email"
                     type="email"
+                    autoComplete="current-password"
                     className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
               </div>
               
@@ -59,7 +61,9 @@ export default function Home() {
                   <label htmlFor="password" className="block text-sm font-medium leading-tight text-slate-800 mb-2">Password</label>
                   <input
                     onChange={e => setPassword(e.target.value)}
+                    id="password"
                     type="password"
+                    autoComplete="current-password"
                     className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300" />
                   <a href="#" className="absolute right-0 top-0 text-indigo-600 text-sm font-medium leading-tight">Forgot Password?</a>
               </div>

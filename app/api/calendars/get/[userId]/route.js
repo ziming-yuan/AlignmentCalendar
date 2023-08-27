@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../../../lib/dbConnect";
-import User from "../../../../../models/user";
-import Calendar from "../../../../../models/calendar";
+import dbConnect from "/lib/dbConnect";
+import User from "/models/user";
+import Calendar from "/models/calendar";
 
 // Fetch all calendars of a userId
 export async function GET(req, context) {

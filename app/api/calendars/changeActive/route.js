@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '../../../../lib/dbConnect'
-import Calendar from '../../../../models/calendar';
+import dbConnect from '/lib/dbConnect'
+import Calendar from '/models/calendar';
 
 export async function PUT(request) {
   try {

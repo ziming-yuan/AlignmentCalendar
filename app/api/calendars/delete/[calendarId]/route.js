@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../../../lib/dbConnect";
-import Calendar from "../../../../../models/calendar";
-import Door from "../../../../../models/door";
+import dbConnect from "/lib/dbConnect";
+import Calendar from "/models/calendar";
+import Door from "/models/door";
 
 // Delete certain calendar
 export async function DELETE(req, { params }) {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/dbConnect"
-import Calendar from "../../../models/calendar";
-import User from "../../../models/user";
+import dbConnect from "/lib/dbConnect"
+import Calendar from "/models/calendar";
+import User from "/models/user";
 
 // Create a new calendar
 // id and title required

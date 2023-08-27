@@ -3,6 +3,8 @@ import { useState, useEffect, useContext } from 'react';
 import FormContext from '../../contextProviders/FormContext';
 import RouterContext from '../../contextProviders/RouterContext';
 import { useSession } from "next-auth/react";
+import { callFunction } from '/app/redux/features/functionRef/functionRefSlice';
+import { useDispatch } from 'react-redux';
 
 function NewCalendarForm() {
   const [calendarTitle, setCalendarTitle] = useState('');
@@ -14,6 +16,7 @@ function NewCalendarForm() {
   const {formRef, setIsModalOpen} = useContext(FormContext);
   const {router} = useContext(RouterContext);
   const { data: session } = useSession();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -76,6 +79,8 @@ function NewCalendarForm() {
         if (doorsResponse.ok){
             setIsModalOpen(false);  // Call the onConfirm prop, which will close the modal
             console.log('Doors created successfully.');
+            dispatch(callFunction());
+            console.log('refetched function');
         } else {
             setError("Failed to create doors. Please try again.");
             return;

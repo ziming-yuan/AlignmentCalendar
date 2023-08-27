@@ -3,11 +3,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { useSession } from "next-auth/react";
 import ActiveButton from "./ActiveButton";
 import InactiveButton from "./InactiveButton";
-import {PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon} from "@heroicons/react/24/outline";
+import { PencilIcon, EyeIcon, CloudArrowUpIcon, CloudArrowDownIcon, ShareIcon, CodeBracketIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { setReference } from '/app/redux/features/functionRef/functionRefSlice';
+import { useDispatch } from 'react-redux';
 
 export default function CalendarRows() {
   const [calendars, setCalendars] = useState([]);
   const { data: session } = useSession();
+  const dispatch = useDispatch();
+  dispatch(setReference({
+    reference: fetchCalendars,
+    arguments: session?.user.id
+  }));
 
   useEffect(() => {
     if (session?.user?.email) {

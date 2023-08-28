@@ -26,7 +26,7 @@ export default function CalendarRows() {
 
   async function fetchCalendars(id) {
     try {
-      const response = await fetch(`api/calendars/get/${id}`);
+      const response = await fetch(`api/calendars/getAll/${id}`);
       if (!response.ok) {
         throw new Error(`API call failed with status: ${response.status}`);
       }

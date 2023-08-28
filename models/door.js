@@ -1,15 +1,15 @@
 import mongoose, { Schema, models } from "mongoose";
 
 const doorSchema = new Schema({
-    calendar: { type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' },
+    calendarId: { type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' },
     date: { type: Date, required: true },
-    text: { type: String },
     message: { type: String },
-    youtubeVideoId: { type: String },
+    youtubeVideoUrl: { type: String },
     photoUrl: { type: String },
-    textColor: { type: String, default: '#000' },
-    backgroundColor: { type: String, default: '#FFF' },
-    closedDoorPhotoUrl: { type: String },
+    closedDoorText: { type: String },
+    closedDoorTextColor: { type: String, default: '#000000' },
+    closedDoorImageUrl: { type: String },
+    closedDoorColor: { type: String, default: '#FFFFFF' },
     autoOpenTime: { type: Date }
 });
 

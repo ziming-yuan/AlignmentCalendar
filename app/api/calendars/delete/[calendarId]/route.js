@@ -10,7 +10,7 @@ export async function DELETE(req, { params }) {
       const { calendarId } = params;
 
       // Delete the doors associated with the calendar
-      await Door.deleteMany({ calendar: calendarId });
+      await Door.deleteMany({ calendarId: calendarId });
   
       // Delete the calendar
       await Calendar.findByIdAndDelete(calendarId);

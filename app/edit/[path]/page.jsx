@@ -1,4 +1,4 @@
-export default function Page({params}) {
+export default function EditPage({params}) {
   return (
   <div>
     <h2>Edit Page</h2>

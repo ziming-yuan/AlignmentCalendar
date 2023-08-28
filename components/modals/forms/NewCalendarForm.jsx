@@ -61,7 +61,7 @@ function NewCalendarForm() {
         const { data } = await calendarResponse.json();
         const calendarId = data._id;
 
-        const doorsResponse = await fetch("api/doors/post-multiple", {
+        const doorsResponse = await fetch("api/doors/initializeDoors", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

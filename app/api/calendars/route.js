@@ -12,12 +12,11 @@ export async function POST(req) {
       userId,
       title,
       description,
-      isActive,
-      titleTextColor,
-      titleBackgroundColor,
-      backgroundPhoto,
-      logoImage,
-      doors 
+      isActive = false,
+      titleTextColor = "#000000",
+      backgroundImageUrl = "",
+      backgroundColor = "#FFFFFF",
+      logoImageUrl = "",
     } = await req.json();
     // Find the user by email
     const user = await User.findById(userId);
@@ -26,16 +25,15 @@ export async function POST(req) {
       return NextResponse.json({message: "Error: user not found"}, {status: 400});
     };
     const newCalendar = new Calendar({
-      owner: user._id,
+      owner: userId,
       path: crypto.randomUUID(),
       title,
       description,
       isActive,
       titleTextColor,
-      titleBackgroundColor,
-      backgroundPhoto,
-      logoImage,
-      doors
+      backgroundImageUrl,
+      backgroundColor,
+      logoImageUrl
     });
     await Calendar.create(newCalendar);
     // return newCalendar w/ a success response

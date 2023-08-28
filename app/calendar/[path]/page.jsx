@@ -1,4 +1,5 @@
-export default function Page({params}) {
+export default function ViewPage( {params} ) {
+
     return (
     <div>
         <h2>View Page</h2>

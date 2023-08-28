@@ -9,10 +9,10 @@ const calendarSchema = new Schema({
         type: Boolean,
         default: false
     },
-    titleTextColor: { type: String, default: '#000' },
-    titleBackgroundColor: { type: String, default: '#FFF' },
-    backgroundPhoto: { type: String },
-    logoImage: { type: String },
+    titleTextColor: { type: String, default: '#000000' },
+    backgroundImageUrl: { type: String },
+    backgroundColor: { type: String, default: '#FFFFFF' },
+    logoImageUrl: { type: String },
 });
 
 const Calendar = models.Calendar || mongoose.model("Calendar", calendarSchema);

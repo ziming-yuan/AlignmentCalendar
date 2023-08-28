@@ -25,16 +25,16 @@ export async function POST(req) {
         const newDoors = [];
         while (currentDate <= end) {
             newDoors.push(new Door ({
-                calendar: calendarId,
+                calendarId: calendarId,
                 date: new Date(currentDate), // currentDate is a reference only
-                text: formatDate(currentDate),
                 message: "",
-                youtubeVideoId: "",
+                youtubeVideoUrl: "",
                 photoUrl: "",
-                textColor: "#000000",
-                backgroundColor: "#FFFFFF",
-                closedDoorPhotoUrl: "",
-                autoOpenTime: new Date(currentDate)
+                closedDoorText: formatDate(currentDate),
+                closedDoorTextColor: "#000000",
+                closedDoorImageUrl: "",
+                closedDoorColor: "#FFFFFF",
+                autoOpenTime: new Date(currentDate),
             }));
             currentDate.setDate(currentDate.getDate() + 1);
         }

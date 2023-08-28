@@ -5,10 +5,16 @@ const doorSchema = new Schema({
     date: { type: Date, required: true },
     message: { type: String },
     youtubeVideoUrl: { type: String },
-    photoUrl: { type: String },
+    contentImage: {
+        fileUrl: { type: String },
+        fileKey: { type: String }
+    },
     closedDoorText: { type: String },
     closedDoorTextColor: { type: String, default: '#000000' },
-    closedDoorImageUrl: { type: String },
+    closedDoorImage: {
+        fileUrl: { type: String },
+        fileKey: { type: String }
+    },
     closedDoorColor: { type: String, default: '#FFFFFF' },
     autoOpenTime: { type: Date }
 });

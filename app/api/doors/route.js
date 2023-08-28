@@ -13,10 +13,16 @@ export async function POST(req) {
       date,
       message = "",
       youtubeVideoUrl = "",
-      photoUrl = "",
+      contentImage = {
+        fileUrl: "",
+        fileKey: "",
+      },
       closedDoorText = "",
       closedDoorTextColor = "#000000",
-      closedDoorImageUrl = "",
+      closedDoorImage = {
+        fileUrl: "",
+        fileKey: "",
+      },
       closedDoorColor = "#FFFFFF",
       autoOpenTime
     } = await req.json();
@@ -34,10 +40,10 @@ export async function POST(req) {
       date,
       message,
       youtubeVideoUrl,
-      photoUrl,
+      contentImage,
       closedDoorText,
       closedDoorTextColor,
-      closedDoorImageUrl,
+      closedDoorImage,
       closedDoorColor,
       autoOpenTime
     });

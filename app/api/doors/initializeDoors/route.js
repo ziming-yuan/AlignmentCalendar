@@ -29,10 +29,16 @@ export async function POST(req) {
                 date: new Date(currentDate), // currentDate is a reference only
                 message: "",
                 youtubeVideoUrl: "",
-                photoUrl: "",
+                contentImage: {
+                    fileUrl: "",
+                    fileKey: "",
+                },
                 closedDoorText: formatDate(currentDate),
                 closedDoorTextColor: "#000000",
-                closedDoorImageUrl: "",
+                closedDoorImage: {
+                    fileUrl: "",
+                    fileKey: "",
+                },
                 closedDoorColor: "#FFFFFF",
                 autoOpenTime: new Date(currentDate),
             }));

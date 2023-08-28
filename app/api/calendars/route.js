@@ -14,9 +14,15 @@ export async function POST(req) {
       description,
       isActive = false,
       titleTextColor = "#000000",
-      backgroundImageUrl = "",
+      backgroundImage = {
+        fileUrl: "",
+        fileKey: "",
+      },
       backgroundColor = "#FFFFFF",
-      logoImageUrl = "",
+      logoImage = {
+        fileUrl: "",
+        fileKey: "",
+      },
     } = await req.json();
     // Find the user by email
     const user = await User.findById(userId);
@@ -31,9 +37,9 @@ export async function POST(req) {
       description,
       isActive,
       titleTextColor,
-      backgroundImageUrl,
+      backgroundImage,
       backgroundColor,
-      logoImageUrl
+      logoImage
     });
     await Calendar.create(newCalendar);
     // return newCalendar w/ a success response

@@ -112,8 +112,14 @@ const DoorsComponent = ({ doors }) => {
         }
       })}
       {modalOpen && selectedDoor && (
-        <div className="fixed top-0 left-0 bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
-          <div className="bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl">
+        // <div className="fixed top-0 left-0 bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
+        //   <div className="bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl">
+        <div className={`fixed inset-0 bg-black w-full h-full flex items-center justify-center transition-opacity ease-out duration-300 
+                        ${modalOpen ? 'bg-opacity-50' : 'bg-opacity-0'}`}>
+          <div className={`relative bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl 
+                          transform ease-out duration-300 
+                          ${modalOpen ? 'translate-y-0 opacity-100 sm:scale-100' : 
+                          'translate-y-4 opacity-0 sm:scale-95'}`}>
             {/* Display YouTube video if url is provided */}
             {selectedDoor.youtubeVideoUrl && (
                 <iframe

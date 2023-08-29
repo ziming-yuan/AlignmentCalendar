@@ -69,7 +69,7 @@ const DoorsComponent = ({ doors }) => {
       {/* Render the modal if it's open and a door is selected */}
       {modalOpen && selectedDoor && (
         <div className="fixed top-0 left-0 bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
-          <div className="bg-white rounded-lg w-full mx-8 sm:max-w-2xl lg:max-w-3xl">
+          <div className="bg-white rounded-lg w-full max-h-[80vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl">
             {/* Display YouTube video if url is provided */}
             {selectedDoor.youtubeVideoUrl && (
                 <iframe

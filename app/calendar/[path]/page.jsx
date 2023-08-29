@@ -36,7 +36,7 @@ export default async function ViewPage({ params }) {
 
   return (
     <main
-      className="p-4"
+      className="p-4 h-full min-h-screen"
       style={{
         backgroundImage: backgroundImage.fileUrl ? `url(${backgroundImage.fileUrl})` : "none",
         backgroundColor: backgroundImage.fileUrl ? "transparent" : backgroundColor,

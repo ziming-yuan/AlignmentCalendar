@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import getYouTubeID from 'get-youtube-id';
-import grabLink from 'youtube-thumbnail-grabber';
+import getThumbnailUrl from '/utils/getThumbnailUrl';
 
 const DoorsComponent = ({ doors }) => {
   const currentDate = new Date();
@@ -82,7 +82,7 @@ const DoorsComponent = ({ doors }) => {
             )}
             {/* Get thumbnail of the youtube video */}
             <img
-              src={grabLink(getYoutubeUrl(selectedDoor.youtubeVideoUrl), 'mq')}
+              src={getThumbnailUrl(getYouTubeID(selectedDoor.youtubeVideoUrl), 'mq')}
               alt="Thumbnail"
               style={{
                 width: '100%',

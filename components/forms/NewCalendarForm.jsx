@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useContext } from 'react';
-import FormContext from '../../contextProviders/FormContext';
-import FetchContext from "../../contextProviders/FetchContext";
+import FormContext from '../contextProviders/FormContext';
+import FetchContext from "../contextProviders/FetchContext";
 import { useSession } from "next-auth/react";
 
 function NewCalendarForm() {

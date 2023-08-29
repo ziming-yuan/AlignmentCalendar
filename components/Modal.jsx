@@ -1,7 +1,7 @@
 'use client'
 import { Fragment, useRef, useContext  } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import FormContext from "../contextProviders/FormContext"
+import FormContext from './contextProviders/FormContext';
 
 export default function Modal({ isOpen = false, title, ModalContent, confirmLabel }) {
   const cancelButtonRef = useRef(null);

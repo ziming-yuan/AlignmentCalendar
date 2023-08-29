@@ -1,12 +1,14 @@
 import Image from "next/image";
+import DoorsComponent from "/components/doors/doorComponent"
 
 const fetchCalendar = async (path) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/calendars/getOne/${path}`);
+    const response = await fetch(`http://localhost:3000/api/calendars/getOne/${path}`, { next: { revalidate: 10 } });
     if (!response.ok) {
       throw new Error(`API call failed with status: ${response.status}`);
     }
     const { data } = await response.json();
+    console.log(JSON.stringify(data))
     return data;
   } catch (error) {
     console.error("Failed to fetch calendar:", error.message);
@@ -15,7 +17,7 @@ const fetchCalendar = async (path) => {
 
 const fetchDoors = async (path) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/doors/getAll/${path}`);
+    const response = await fetch(`http://localhost:3000/api/doors/getAll/${path}`, { next: { revalidate: 10 } });
     if (!response.ok) {
       throw new Error(`API call failed with status: ${response.status}`);
     }
@@ -34,24 +36,15 @@ export default async function ViewPage({ params }) {
     calendar;
 
   return (
-    <main 
-      className="p-8" 
-      style= {{backgroundColor: backgroundImage.fileUrl ? "transparent" : backgroundColor}}
+    <main
+      className="p-8"
+      style={{
+        backgroundImage: backgroundImage.fileUrl ? `url(${backgroundImage.fileUrl})` : "none",
+        backgroundColor: backgroundImage.fileUrl ? "transparent" : backgroundColor,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-
-      {backgroundImage.fileUrl && (
-          <Image
-            src={backgroundImage.fileUrl}
-            alt="Background Image"
-            quality="100"
-            fill
-            sizes="100vw"
-            style={{
-              objectFit: "cover",
-              display: "none",
-            }}
-          />
-        )}
 
       <header>
         {logoImage.fileUrl && (
@@ -73,7 +66,7 @@ export default async function ViewPage({ params }) {
 
       <section>
         {/* Render the doors */}
-
+        <DoorsComponent doors={doors}/>
       </section>
     </main>
   );

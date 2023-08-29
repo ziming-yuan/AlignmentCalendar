@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef } from 'react';
-import Modal from "../modals/Modal"
-import NewCalendarForm from "../modals/forms/NewCalendarForm"
+import Modal from '../Modal';
+import NewCalendarForm from "../forms/NewCalendarForm"
 import FormContext from '../contextProviders/FormContext';
 
 export default function NewCalendarButton(){

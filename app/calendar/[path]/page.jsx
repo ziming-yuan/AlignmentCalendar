@@ -8,7 +8,6 @@ const fetchCalendar = async (path) => {
       throw new Error(`API call failed with status: ${response.status}`);
     }
     const { data } = await response.json();
-    console.log(JSON.stringify(data))
     return data;
   } catch (error) {
     console.error("Failed to fetch calendar:", error.message);
@@ -37,7 +36,7 @@ export default async function ViewPage({ params }) {
 
   return (
     <main
-      className="p-8"
+      className="p-4"
       style={{
         backgroundImage: backgroundImage.fileUrl ? `url(${backgroundImage.fileUrl})` : "none",
         backgroundColor: backgroundImage.fileUrl ? "transparent" : backgroundColor,
@@ -46,7 +45,7 @@ export default async function ViewPage({ params }) {
       }}
     >
 
-      <header>
+      <header className="mt-4">
         {logoImage.fileUrl && (
           <div className="flex justify-center items-center">
             <Image
@@ -64,10 +63,16 @@ export default async function ViewPage({ params }) {
         <h1 className="text-center mt-4 text-3xl font-medium" style={{ color: titleTextColor }}>{title}</h1>
       </header>
 
-      <section>
-        {/* Render the doors */}
-        <DoorsComponent doors={doors}/>
+      <section className="mt-8 flex flex-wrap flex-none gap-4 justify-center">
+          <DoorsComponent doors={doors}/>
       </section>
+
+  {/* <section>
+    {doors.map((door) => (
+      <Door key={door._id} door={door} />
+    ))}
+  </section> */}
+      
     </main>
   );
 }

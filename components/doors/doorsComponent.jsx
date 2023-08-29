@@ -1,5 +1,6 @@
 'use client';
 import { useState } from "react";
+import getYouTubeID from 'get-youtube-id';
 
 const DoorsComponent = ({ doors }) => {
   const currentDate = new Date();
@@ -8,15 +9,18 @@ const DoorsComponent = ({ doors }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleDoorClick = (door) => {
-    if (door.autoOpenTime && currentDate < new Date(door.autoOpenTime)) {
-      // Door is closed, do nothing on click
+    if (door.date && currentDate < new Date(door.date)) {
+      // door cannot be opened yet
+      // shake effect
       return;
     }
+    // Set the selected door and open the modal
     setSelectedDoor(door);
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
+    // Close the modal and reset selectedDoor
     setModalOpen(false);
     setSelectedDoor(null);
   };
@@ -26,7 +30,7 @@ const DoorsComponent = ({ doors }) => {
       {doors.map((door) => (
         <div
           key={door._id}
-          className="w-150 h-150 shadow rounded flex items-center justify-center cursor-pointer"
+          className="w-[150px] h-[150px] shadow rounded-md flex items-center justify-center cursor-pointer"
           style={{
             backgroundColor: door.closedDoorImage.fileUrl
               ? "transparent"
@@ -35,8 +39,10 @@ const DoorsComponent = ({ doors }) => {
               ? `url(${door.closedDoorImage.fileUrl})`
               : "none",
           }}
+          // Handle door click event
           onClick={() => handleDoorClick(door)}
         >
+          {/* Check if the door should be in a closed state based on autoOpenTime */}
           {currentDate < new Date(door.autoOpenTime) ? (
             <div className="text-center">
               <p
@@ -47,6 +53,7 @@ const DoorsComponent = ({ doors }) => {
               </p>
             </div>
           ) : (
+            // Door is in a ready to open state
             <div className="text-center">
               <p
                 className="text-lg text-white"
@@ -59,21 +66,24 @@ const DoorsComponent = ({ doors }) => {
         </div>
       ))}
 
+      {/* Render the modal if it's open and a door is selected */}
       {modalOpen && selectedDoor && (
         <div className="fixed top-0 left-0 bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
-          <div className="bg-white p-8 max-w-md w-full">
+          <div className="bg-white rounded-lg w-full mx-8 sm:max-w-2xl lg:max-w-3xl">
+            {/* Display YouTube video if url is provided */}
             {selectedDoor.youtubeVideoUrl && (
-              <div className="aspect-w-16 aspect-h-9">
                 <iframe
-                  src={selectedDoor.youtubeVideoUrl}
+                  src={getYoutubeUrl(selectedDoor.youtubeVideoUrl)}
                   title="YouTube Video"
-                  className="w-full h-full"
+                  className="w-full aspect-video"
                 />
-              </div>
+                // <YouTube videoId={getYouTubeID(selectedDoor.youtubeVideoUrl)} opts={opts} iframeClassName="w-full aspect-video" />; 
             )}
+            {/* Display message if provided */}
             {selectedDoor.message && (
-              <p className="my-4">{selectedDoor.message}</p>
+              <p className="m-4">{selectedDoor.message}</p>
             )}
+            {/* Display content image if url is provided */}
             {selectedDoor.contentImage.fileUrl && (
               <img
                 src={selectedDoor.contentImage.fileUrl}
@@ -81,12 +91,15 @@ const DoorsComponent = ({ doors }) => {
                 className="w-full"
               />
             )}
-            <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={handleCloseModal}
-            >
-              Close
-            </button>
+            {/* Close button for the modal */}
+            <div className="flex justify-end">
+              <button
+                className="m-4 px-4 py-2 bg-blue-500 text-white rounded"
+                onClick={handleCloseModal}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -95,3 +108,7 @@ const DoorsComponent = ({ doors }) => {
 };
 
 export default DoorsComponent;
+
+const getYoutubeUrl = (url) => {
+  return `https://www.youtube.com/embed/${getYouTubeID(url)}`;
+}

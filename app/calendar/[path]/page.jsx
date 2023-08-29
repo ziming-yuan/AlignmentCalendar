@@ -21,7 +21,10 @@ const fetchDoors = async (path) => {
       throw new Error(`API call failed with status: ${response.status}`);
     }
     const { data } = await response.json();
-    return data;
+    // return data;
+    // Sort the doors by the date property
+    const sortedDoors = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+    return sortedDoors;
   } catch (error) {
     console.error("Failed to fetch doors:", error.message);
   }

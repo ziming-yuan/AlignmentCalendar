@@ -8,6 +8,15 @@ const DoorsComponent = ({ doors }) => {
 
   const [selectedDoor, setSelectedDoor] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [doorsStatus, setDoorsStatus] = useState({});
+
+  // Toggle doorsStatus for a doorId
+  const toggleDoorStatus = (doorId) => {
+    setDoorsStatus((prevDoors) => ({
+      ...prevDoors,
+      [doorId]: true,
+    }));
+  };
 
   const handleDoorClick = (door) => {
     if (door.date && currentDate < new Date(door.date)) {
@@ -15,7 +24,9 @@ const DoorsComponent = ({ doors }) => {
       // shake effect
       return;
     }
+    // Set door status to true
     // Set the selected door and open the modal
+    toggleDoorStatus(door._id);
     setSelectedDoor(door);
     setModalOpen(true);
   };
@@ -28,46 +39,72 @@ const DoorsComponent = ({ doors }) => {
 
   return (
     <>
-      {doors.map((door) => (
-        <div
-          key={door._id}
-          className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center cursor-pointer"
-          style={{
-            backgroundColor: door.closedDoorImage.fileUrl
-              ? "transparent"
-              : door.closedDoorColor,
-            backgroundImage: door.closedDoorImage.fileUrl
-              ? `url(${door.closedDoorImage.fileUrl})`
-              : "none",
-          }}
-          // Handle door click event
-          onClick={() => handleDoorClick(door)}
-        >
-          {/* Check if the door should be in a closed state based on autoOpenTime */}
-          {currentDate < new Date(door.autoOpenTime) ? (
-            <div className="text-center">
+      {doors.map((door) => {
+        // if beyond autoOpenTime or door is clicked once
+        if (currentDate > new Date(door.autoOpenTime) || (currentDate >= new Date(door.date) && doorsStatus[door._id])){
+          return (
+            // if youtubeVideoUrl: display thumbnail; else if contentImage: display contentImage; else use closedDoorColor
+            <div
+              key={door._id}
+              className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center"
+              style={
+                door.youtubeVideoUrl
+                  ? {
+                      backgroundImage: `url(${getThumbnailUrl(getYouTubeID(door.youtubeVideoUrl), 'mq')})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                    }
+                  : door.contentImage.fileUrl
+                  ? {
+                      backgroundImage: `url(${door.contentImage.fileUrl})`,
+                      backgroundSize: "cover",
+                      backgroundRepeat: "no-repeat",
+                    }
+                  : {
+                      backgroundColor: door.closedDoorColor,
+                    }
+              }
+              // Handle door click event
+              onClick={() => handleDoorClick(door)}
+            >
+              {!door.youtubeVideoUrl && !door.contentImage.fileUrl &&
+                <p
+                  className="text-lg text-center"
+                  style={{ color: door.closedDoorTextColor }}
+                >
+                  Mystery Opened
+                </p>
+              } 
+            </div>
+          );
+        } else {
+          return (
+            // otherwise, if closedDoorImage: display image; else use closedDoorColor
+            <div
+              key={door._id}
+              className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center cursor-pointer"
+              style={{
+                backgroundColor: door.closedDoorImage.fileUrl
+                  ? "transparent"
+                  : door.closedDoorColor,
+                backgroundImage: door.closedDoorImage.fileUrl
+                  ? `url(${door.closedDoorImage.fileUrl})`
+                  : "none",
+              }}
+              // Handle door click event
+              onClick={() => handleDoorClick(door)}
+            >
               <p
-                className="text-lg text-black"
+                className="text-lg text-center"
                 style={{ color: door.closedDoorTextColor }}
               >
                 {door.closedDoorText}
               </p>
             </div>
-          ) : (
-            // Door is in a ready to open state
-            <div className="text-center">
-              <p
-                className="text-lg text-white"
-                style={{ color: door.closedDoorTextColor }}
-              >
-                {door.closedDoorText}
-              </p>
-            </div>
-          )}
-        </div>
-      ))}
-
-      {/* Render the modal if it's open and a door is selected */}
+          );
+        }
+      })}
       {modalOpen && selectedDoor && (
         <div className="fixed top-0 left-0 bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
           <div className="bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl">
@@ -80,15 +117,6 @@ const DoorsComponent = ({ doors }) => {
                 />
                 // <YouTube videoId={getYouTubeID(selectedDoor.youtubeVideoUrl)} opts={opts} iframeClassName="w-full aspect-video" />; 
             )}
-            {/* Get thumbnail of the youtube video */}
-            <img
-              src={getThumbnailUrl(getYouTubeID(selectedDoor.youtubeVideoUrl), 'mq')}
-              alt="Thumbnail"
-              style={{
-                width: '100%',
-                height: "auto",
-              }}
-            />
             {/* Display message if provided */}
             {selectedDoor.message && (
               <p className="m-4">{selectedDoor.message}</p>

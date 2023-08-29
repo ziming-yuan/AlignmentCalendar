@@ -1,30 +1,34 @@
-'use client';
-import { useEffect, useState } from "react";
 import Image from "next/image";
 
-export default function ViewPage({ params }) {
-  const [calendar, setCalendar] = useState(null);
-
-  const fetchCalendar = async () => {
-    try {
-      const response = await fetch(`/api/calendars/getOne/${params.path}`);
-      if (!response.ok) {
-        throw new Error(`API call failed with status: ${response.status}`);
-      }
-      const { data } = await response.json();
-      setCalendar(data);
-    } catch (error) {
-      console.error("Failed to fetch calendar:", error.message);
+const fetchCalendar = async (path) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/calendars/getOne/${path}`);
+    if (!response.ok) {
+      throw new Error(`API call failed with status: ${response.status}`);
     }
-  };
-
-  useEffect(() => {
-    fetchCalendar();
-  }, []);
-
-  if (!calendar) {
-    return <p>Loading...</p>;
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch calendar:", error.message);
   }
+};
+
+const fetchDoors = async (path) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/doors/getAll/${path}`);
+    if (!response.ok) {
+      throw new Error(`API call failed with status: ${response.status}`);
+    }
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch doors:", error.message);
+  }
+}
+
+export default async function ViewPage({ params }) {
+  const calendar = await fetchCalendar(params.path);
+  const doors = await fetchDoors(params.path);
 
   const { logoImage, title, titleTextColor, backgroundImage, backgroundColor } =
     calendar;

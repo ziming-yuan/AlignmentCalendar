@@ -8,7 +8,7 @@ export async function GET(req, context) {
         await dbConnect();
         const calendar =  await Calendar.findOne({ path: context.params.path });
         if (!calendar) {
-            return NextResponse.json({ message: "Calendar not found" }, { status: 404 });
+            return NextResponse.json({ message: "Calendar not found in calendar" }, { status: 404 });
         }
         return NextResponse.json({ data: calendar }, { message: "Successfully fetched the calendar!" }, { status: 200 });
     } catch (error) {

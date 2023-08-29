@@ -63,7 +63,7 @@ export default async function ViewPage({ params }) {
         <h1 className="text-center mt-4 text-3xl font-medium" style={{ color: titleTextColor }}>{title}</h1>
       </header>
 
-      <section className="mt-8 flex flex-wrap flex-none gap-4 justify-center">
+      <section className="my-8 flex flex-wrap flex-none gap-4 justify-center">
           <DoorsComponent doors={doors}/>
       </section>
 

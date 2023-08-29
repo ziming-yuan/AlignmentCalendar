@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import getYouTubeID from 'get-youtube-id';
+import grabLink from 'youtube-thumbnail-grabber';
 
 const DoorsComponent = ({ doors }) => {
   const currentDate = new Date();
@@ -30,7 +31,7 @@ const DoorsComponent = ({ doors }) => {
       {doors.map((door) => (
         <div
           key={door._id}
-          className="w-[150px] h-[150px] shadow rounded-md flex items-center justify-center cursor-pointer"
+          className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center cursor-pointer"
           style={{
             backgroundColor: door.closedDoorImage.fileUrl
               ? "transparent"
@@ -69,7 +70,7 @@ const DoorsComponent = ({ doors }) => {
       {/* Render the modal if it's open and a door is selected */}
       {modalOpen && selectedDoor && (
         <div className="fixed top-0 left-0 bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
-          <div className="bg-white rounded-lg w-full max-h-[80vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl">
+          <div className="bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-8 sm:max-w-2xl lg:max-w-3xl">
             {/* Display YouTube video if url is provided */}
             {selectedDoor.youtubeVideoUrl && (
                 <iframe
@@ -79,6 +80,15 @@ const DoorsComponent = ({ doors }) => {
                 />
                 // <YouTube videoId={getYouTubeID(selectedDoor.youtubeVideoUrl)} opts={opts} iframeClassName="w-full aspect-video" />; 
             )}
+            {/* Get thumbnail of the youtube video */}
+            <img
+              src={grabLink(getYoutubeUrl(selectedDoor.youtubeVideoUrl), 'mq')}
+              alt="Thumbnail"
+              style={{
+                width: '100%',
+                height: "auto",
+              }}
+            />
             {/* Display message if provided */}
             {selectedDoor.message && (
               <p className="m-4">{selectedDoor.message}</p>

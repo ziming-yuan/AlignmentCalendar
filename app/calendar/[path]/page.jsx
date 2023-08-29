@@ -1,5 +1,5 @@
 import Image from "next/image";
-import DoorsComponent from "/components/doors/doorComponent"
+import DoorsComponent from "/components/doors/doorsComponent"
 
 const fetchCalendar = async (path) => {
   try {

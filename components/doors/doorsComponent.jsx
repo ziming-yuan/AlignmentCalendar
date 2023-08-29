@@ -9,6 +9,7 @@ const DoorsComponent = ({ doors }) => {
   const [selectedDoor, setSelectedDoor] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [doorsStatus, setDoorsStatus] = useState({});
+  const [shakingDoorId, setShakingDoorId] = useState(null);
 
   // Toggle doorsStatus for a doorId
   const toggleDoorStatus = (doorId) => {
@@ -22,6 +23,7 @@ const DoorsComponent = ({ doors }) => {
     if (door.date && currentDate < new Date(door.date)) {
       // door cannot be opened yet
       // shake effect
+      setShakingDoorId(door._id);
       return;
     }
     // Set door status to true
@@ -46,7 +48,9 @@ const DoorsComponent = ({ doors }) => {
             // if youtubeVideoUrl: display thumbnail; else if contentImage: display contentImage; else use closedDoorColor
             <div
               key={door._id}
-              className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center"
+              className= {`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center 
+                ${ shakingDoorId === door._id && "animate-shake" }`}
+                onAnimationEnd={() => setShakingDoorId(null)}
               style={
                 door.youtubeVideoUrl
                   ? {
@@ -83,7 +87,9 @@ const DoorsComponent = ({ doors }) => {
             // otherwise, if closedDoorImage: display image; else use closedDoorColor
             <div
               key={door._id}
-              className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center cursor-pointer"
+              className= {`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center 
+                ${ shakingDoorId === door._id && "animate-shake" }`}
+                onAnimationEnd={() => setShakingDoorId(null)}
               style={{
                 backgroundColor: door.closedDoorImage.fileUrl
                   ? "transparent"

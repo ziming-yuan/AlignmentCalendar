@@ -62,6 +62,7 @@ const DoorsComponent = ({ doors }) => {
                   : door.contentImage.fileUrl
                   ? {
                       backgroundImage: `url(${door.contentImage.fileUrl})`,
+                      backgroundPosition: "center",
                       backgroundSize: "cover",
                       backgroundRepeat: "no-repeat",
                     }

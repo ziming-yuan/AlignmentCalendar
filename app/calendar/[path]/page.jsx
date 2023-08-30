@@ -57,9 +57,6 @@ export default async function ViewPage({ params }) {
               width={400}
               height={400}
               priority={true}
-              style={{
-                height: "auto",
-              }}
             />
           </div>
         )}

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-    input, a, button {
+    input, a, button, select {
         @apply focus:outline-indigo-600;
     }
 }

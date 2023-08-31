@@ -2,6 +2,7 @@
 import { useState } from "react";
 import getYouTubeID from 'get-youtube-id';
 import getThumbnailUrl from '/utils/getThumbnailUrl';
+import Image from "next/image";
 
 const DoorsComponent = ({ doors }) => {
   const currentDate = new Date();
@@ -136,10 +137,13 @@ const DoorsComponent = ({ doors }) => {
             )}
             {/* Display content image if url is provided */}
             {selectedDoor.contentImage.fileUrl && (
-              <img
+              <Image
                 src={selectedDoor.contentImage.fileUrl}
                 alt="Content Image"
-                className="w-full"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="w-full h-auto object-contain"
               />
             )}
             {/* Close button for the modal */}

@@ -84,7 +84,7 @@ export default function Home() {
               )}
 
               <div className="text-sm mt-3 text-right text-gray-900">
-                Don't have an account? <Link href={"/register"} className="underline">Register</Link>
+                Don&apos;t have an account? <Link href={"/register"} className="underline">Register</Link>
                </div>
           </form>
       </div>

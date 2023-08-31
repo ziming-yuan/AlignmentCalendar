@@ -39,16 +39,21 @@ export default async function ViewPage({ params }) {
 
   return (
     <main
-      className="p-4 h-full min-h-screen"
+      className="p-4 h-full min-h-screen relative overflow-hidden"
       style={{
-        backgroundImage: backgroundImage.fileUrl ? `url(${backgroundImage.fileUrl})` : "none",
         backgroundColor: backgroundImage.fileUrl ? "transparent" : backgroundColor,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
       }}
     >
+      {backgroundImage.fileUrl && 
+        <Image
+          src={backgroundImage.fileUrl}
+          alt="Background Image"
+          fill
+          className="object-cover inset-0 z-0"
+        />
+      }
 
-      <header className="mt-4">
+      <header className="mt-4 relative z-10">
         {logoImage.fileUrl && (
           <div className="flex justify-center items-center">
             <Image
@@ -63,15 +68,9 @@ export default async function ViewPage({ params }) {
         <h1 className="text-center mt-4 text-3xl font-medium" style={{ color: titleTextColor }}>{title}</h1>
       </header>
 
-      <section className="my-8 flex flex-wrap flex-none gap-4 justify-center">
+      <section className="my-8 flex flex-wrap flex-none gap-4 justify-center relative z-10">
           <DoorsComponent doors={doors}/>
       </section>
-
-  {/* <section>
-    {doors.map((door) => (
-      <Door key={door._id} door={door} />
-    ))}
-  </section> */}
       
     </main>
   );

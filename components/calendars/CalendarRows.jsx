@@ -13,16 +13,16 @@ export default function CalendarRows() {
   const {fetchFlag, setFetchFlag} = useContext(FetchContext);
 
   useEffect(() => {
-    if (session?.user?.email) {
+    if (session?.user?.id) {
       fetchCalendars(session.user.id);
     }
   }, [session]);
 
   useEffect(() => {
-    if (session?.user?.email) {
+    if (session?.user?.id) {
       fetchCalendars(session.user.id);
     }
-  }, [fetchFlag]);
+  }, [fetchFlag, session?.user?.id]);
 
   async function fetchCalendars(id) {
     try {

@@ -3,12 +3,12 @@ const nextConfig = {}
 
 module.exports = {
     images: {
-      domains: ['uploadthing.com'],
+      domains: ['uploadthing.com', 'images.unsplash.com'],
     },
     experimental: {
       serverActions: true,
     },
-    webpack: (config, { isServer, dev }) => {
+    webpack: (config) => {
       config.module.rules.push({
         test: /\.svg$/,
         use: ['@svgr/webpack'],

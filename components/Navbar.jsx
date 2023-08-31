@@ -3,6 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import { signOut } from "next-auth/react";
+import Image from 'next/image';
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -67,10 +68,12 @@ export default function Navbar() {
                   <div>
                     <Menu.Button className="relative flex rounded-full bg-indigo-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 focus:ring-offset-white">
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
+                      <Image
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                         alt=""
+                        width={32}
+                        height={32}
+                        className='rounded-full'
                       />
                     </Menu.Button>
                   </div>

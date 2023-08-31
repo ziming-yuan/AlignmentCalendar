@@ -3,7 +3,7 @@ import DoorsComponent from "/components/doors/doorsComponent"
 
 const fetchCalendar = async (path) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/calendars/getOne/${path}`, { next: { revalidate: 10 } });
+    const response = await fetch(`${process.env.BASE_URL}api/calendars/getOne/${path}`, { next: { revalidate: 10 } });
     if (!response.ok) {
       throw new Error(`API call failed with status: ${response.status}`);
     }
@@ -16,7 +16,7 @@ const fetchCalendar = async (path) => {
 
 const fetchDoors = async (path) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/doors/getAll/${path}`, { next: { revalidate: 10 } });
+    const response = await fetch(`${process.env.BASE_URL}api/doors/getAll/${path}`, { next: { revalidate: 10 } });
     if (!response.ok) {
       throw new Error(`API call failed with status: ${response.status}`);
     }
@@ -33,6 +33,10 @@ const fetchDoors = async (path) => {
 export default async function ViewPage({ params }) {
   const calendar = await fetchCalendar(params.path);
   const doors = await fetchDoors(params.path);
+
+  if (!calendar || !doors) {
+    return;
+  }
 
   const { logoImage, title, titleTextColor, backgroundImage, backgroundColor } =
     calendar;

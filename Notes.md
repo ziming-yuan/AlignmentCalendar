@@ -19,5 +19,13 @@
 ## Youtube Iframe
 * dependencies: get-youtube-id, youtube-thumbnail-grabber
 
+## Dropzone
+* dependencies: react-dropzone
+* reference:
+   * [Drag and dropping files in React using react-dropzone](https://www.youtube.com/watch?v=eGVC8UUqCBE&ab_channel=HamedBahram)
+      * [source code](https://github.com/HamedBahram/dropzone)
+   * [Uploading files in NextJs 13 using Server Actions](https://www.youtube.com/watch?v=gW7DSJ2a6pg&list=PL7pr3dTTT0nefJg5aeFkC4ua4f9OpxuR7&index=7&t=50s&ab_channel=HamedBahram)
+      * [source code](https://github.com/HamedBahram/next-upload)
+
 ## Backend
 * MongoDB

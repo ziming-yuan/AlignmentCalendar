@@ -128,8 +128,8 @@ function NewCalendarForm() {
                 What your calendar will be called when viewed by others.
             </p>
 
-            <div className="flex items-center space-x-4 mb-2">
-                <div className="  text-sm font-normal">From</div>
+            <div className="flex items-center mb-2 flex-wrap gap-y-3 gap-x-4">
+                <div className="text-sm font-normal">From</div>
                 <input
                     type="date"
                     className="text-sm w-36 h-9 px-2 py-3 bg-white rounded border border-gray-300 shadow"

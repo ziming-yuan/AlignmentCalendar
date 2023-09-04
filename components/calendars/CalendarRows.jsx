@@ -87,9 +87,14 @@ export default function CalendarRows() {
     <tbody>
     {calendars.map(calendar => (
       <tr key={calendar._id} className="border-b text-sm">
-        <td className="px-4 py-2">{calendar.title}</td>
+        <td className="px-4 py-2 table-cell">
+          {calendar.title}
+          <div className="sm:hidden mt-2">
+            {calendar.isActive ? <ActiveButton/> : <InactiveButton/>}
+          </div>
+        </td>
         <td className="px-4 py-2">{calendar.description}</td>
-        <td className="px-4 py-2">{calendar.isActive ? <ActiveButton/> : <InactiveButton/>}</td>
+        <td className="hidden sm:table-cell px-4 py-2">{calendar.isActive ? <ActiveButton/> : <InactiveButton/>}</td>
         <td className="px-4 py-2">
           <Link href={`/edit/${calendar.path}`}>
             <button

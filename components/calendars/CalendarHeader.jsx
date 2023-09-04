@@ -4,7 +4,7 @@ export default function CalendarHeader(){
         <tr>
           <th className="px-4 py-2">TITLE</th>
           <th className="px-4 py-2">DESCRIPTION</th>
-          <th className="px-4 py-2">STATUS</th>
+          <th className="hidden sm:table-cell px-4 py-2">STATUS</th>
           <th className="px-4 py-2">ACTIONS</th>
         </tr>
       </thead>

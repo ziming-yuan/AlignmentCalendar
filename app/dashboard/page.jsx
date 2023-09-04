@@ -1,19 +1,13 @@
-'use client';
-import Navbar from '/components/Navbar.jsx';
-import CalendarTable from '/components/calendars/CalendarTable.jsx';
-import RouterContext from '/components/contextProviders/RouterContext.js'
-import { useRouter } from 'next/navigation';
+import Navbar from "/components/Navbar.jsx";
+import CalendarTable from "/components/calendars/CalendarTable.jsx";
 
 function HomePage() {
-  const router = useRouter();
-  return (
-    <RouterContext.Provider value={{router: router}}>
-      <div>
-        <Navbar />
-        <CalendarTable />
-      </div>
-    </RouterContext.Provider>
-  );
+    return (
+        <div>
+            <Navbar />
+            <CalendarTable />
+        </div>
+    );
 }
 
 export default HomePage;

@@ -124,22 +124,18 @@ const customTheme = (theme) => {
   }
 }
 
-const Tiptap = () => {
+const Tiptap = ({setDesc}) => {
   const editor = useEditor({
     extensions: [Document, Paragraph, Text, Heading, Bold, Italic, Underline, OrderedList, ListItem, BulletList, 
                   TextStyle, FontFamily, Link, 
                   TextAlign.configure({
                     types: ['heading', 'paragraph'],
                   })],
-    content: `
-        <p>This isn’t bold.</p>
-        <p><strong>This is bold.</strong></p>
-        <p><b>And this.</b></p>
-        <p style="font-weight: bold">This as well.</p>
-        <p style="font-weight: bolder">Oh, and this!</p>
-        <p style="font-weight: 500">Cool, isn’t it!?</p>
-        <p style="font-weight: 999">Up to font weight 999!!!</p>
-      `,
+    content: ``,
+    onUpdate: ({editor}) => {
+      const html = editor.getHTML();
+      setDesc(html);
+    }
   })
 
   const setLink = useCallback(() => {

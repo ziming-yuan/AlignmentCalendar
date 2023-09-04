@@ -86,49 +86,46 @@ function NewCalendarForm() {
   return (
     <form onSubmit={handleSubmit} ref={formRef}>
         {/* Calendar Title */}
-        <div className="relative flex flex-col mb-4 space-y-2">
+        <div className="relative flex flex-col mb-4 gap-y-2">
             <label className="text-sm font-medium" htmlFor="calendarTitle">
                 Calendar Title
             </label>
             <input
                 id="calendarTitle"
                 type="text"
-                className="flex-grow mt-1 px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                 value={calendarTitle}
                 onChange={(e) => setCalendarTitle(e.target.value)}
             />
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="text-xs text-gray-500">
                 What your calendar will be called when viewed by others.
             </p>
         </div>
 
         {/* Calendar Description */}
-        <div className="relative flex flex-col mb-4 space-y-2">
+        <div className="relative flex flex-col mb-4 gap-y-2">
             <label className="text-sm font-medium" htmlFor="calendarTitle">
                 Calendar Description
             </label>
             <input
                 id="calendarTitle"
                 type="text"
-                className="flex-grow mt-1 px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                 value={calendarDescription}
                 onChange={(e) => setCalendarDescription(e.target.value)}
             />
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="text-xs text-gray-500">
             A description of your calendar’s contents for your reference.
             </p>
         </div>
 
         {/* Date range */}
-        <div className="relative flex flex-col mb-4 space-y-2">
+        <div className="relative flex flex-col mb-4 gap-y-3">
             <div className="text-sm font-medium">
                 Calendar Duration
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-                What your calendar will be called when viewed by others.
-            </p>
 
-            <div className="flex items-center mb-2 flex-wrap gap-y-3 gap-x-4">
+            <div className="flex items-center flex-wrap gap-y-2 gap-x-4">
                 <div className="text-sm font-normal">From</div>
                 <input
                     type="date"
@@ -143,6 +140,10 @@ function NewCalendarForm() {
                 />
                 <div className="text-sm font-normal">{daysDiff} days in total</div>
             </div>
+
+            <p className="text-xs text-gray-500">
+                Duration of the calendar.
+            </p>
         </div>
 
         {/* Error message */}

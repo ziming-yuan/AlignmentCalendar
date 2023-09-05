@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
-import { ArrowUpTrayIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import UploadIcon from "/components/icons/Upload.svg"
 import Image from "next/image";
 
 export default function MyForm({ uploadFiles }) {
@@ -10,7 +11,7 @@ export default function MyForm({ uploadFiles }) {
     const [fileSizeError, setFileSizeError] = useState(null);
 
     const handleFileChange = (file) => {
-        if (file.size > 0.5 * 1024 * 1024) {
+        if (file && file.size > 8 * 1024 * 1024) {
             setFileSizeError("File size exceeds the 8MB limit.");
             setSelectedFile(null);
         } else {
@@ -68,7 +69,7 @@ export default function MyForm({ uploadFiles }) {
             />
             <div
                 role="presentation"
-                className={`flex flex-col items-center justify-center gap-4 border border-dashed border-gray-900/25 px-4 py-8 ${
+                className={`flex flex-col items-center justify-center rounded-lg gap-2 border border-dashed border-gray-900/25 px-4 py-8 ${
                     isDragActive && "bg-indigo-300/25"
                 }`}
                 onClick={handleStyledDivClick}
@@ -77,14 +78,17 @@ export default function MyForm({ uploadFiles }) {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
             >
-                <ArrowUpTrayIcon className="w-5 h-5 fill-current" />
+                <div className="flex justify-center">
+                    <UploadIcon className="h-12 w-12 text-gray-400" />
+                </div>
                 {isDragActive ? (
-                    <p>Drop the files here ...</p>
+                    <p className="font-bold text-indigo-600"> Drop the files here ...</p>
                 ) : (
-                    <p className="text-indigo-600 hover:text-indigo-500 ">
+                    <p className="font-bold text-indigo-600 hover:text-indigo-500 ">
                         Choose files or drag and drop
                     </p>
                 )}
+                <div class="text-xs leading-5 text-gray-600">Images up to 8MB, max 1</div>
             </div>
 
             <button type="submit" className="border border-gray-500">

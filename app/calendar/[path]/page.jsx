@@ -21,7 +21,6 @@ const fetchDoors = async (path) => {
       throw new Error(`API call failed with status: ${response.status}`);
     }
     const { data } = await response.json();
-    // return data;
     // Sort the doors by the date property
     const sortedDoors = data.sort((a, b) => new Date(a.date) - new Date(b.date));
     return sortedDoors;

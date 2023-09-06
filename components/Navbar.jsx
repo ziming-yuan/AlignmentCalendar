@@ -7,16 +7,16 @@ import { signOut } from "next-auth/react";
 import Image from 'next/image';
 import Link from 'next/link';
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'Team', href: '#', current: false },
-]
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navbar() {
+export default function Navbar({isDashboard}) {
+  const navigation = [
+    { name: 'Dashboard', href: '/dashboard', current: isDashboard ? true : false },
+    { name: 'Team', href: '#', current: false },
+  ]
+  
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-300">
       {({ open }) => (

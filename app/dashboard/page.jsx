@@ -4,7 +4,7 @@ import CalendarTable from "/components/dashboard/CalendarTable.jsx";
 function HomePage() {
     return (
         <div>
-            <Navbar />
+            <Navbar isDashboard={true} />
             <CalendarTable />
         </div>
     );

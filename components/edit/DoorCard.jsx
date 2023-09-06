@@ -7,22 +7,25 @@ import EditContentForm from "../forms/EditContentForm";
 import EditStyleForm from "../forms/EditStyleForm";
 import Modal from "../Modal";
 
-export default function DoorCard({ door, isModalOpen, setIsModalOpen }) {
+export default function DoorCard({ door, isOpen, onMenuToggle }) {
     const formRef = useRef(null);
-    const [menuOpen, setMenuOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleMenuToggle = () => {
+        onMenuToggle(door._id);
+    };
 
     return (
         <div className="border border-gray-100 rounded-lg shadow-lg relative">
-            {/* Add relative positioning here */}
             <div className="flex justify-between items-center border-b px-4 py-2">
                 <h2 className="text-base text-indigo-600">
                     {door.closedDoorText}
                 </h2>
-                <button onClick={() => setMenuOpen(!menuOpen)}>
+                <button onClick={handleMenuToggle}>
                     <EllipsisHorizontalIcon className="h-5 w-5" />
                 </button>
-                {menuOpen && (
+                {isOpen && (
                     <FormContext.Provider value={{ formRef, setIsModalOpen }}>
                         <div className="absolute right-4 top-8 py-1 w-30 bg-white rounded-md shadow-xl z-10 border border-gray-100 divide divide-y divide-gray-200">
                             <EditStyleButton
@@ -33,7 +36,7 @@ export default function DoorCard({ door, isModalOpen, setIsModalOpen }) {
                             />
                             <EditContentButton
                                 onButtonClick={() => {
-                                    setIsModalOpen(true)
+                                    setIsModalOpen(true);
                                     setIsEdit(false);
                                 }}
                             />
@@ -41,14 +44,16 @@ export default function DoorCard({ door, isModalOpen, setIsModalOpen }) {
                                 <Modal
                                     isOpen={isModalOpen}
                                     title={`${door.closedDoorText} - Edit Style`}
-                                    ModalContent={<EditStyleForm door={door}/>}
+                                    ModalContent={<EditStyleForm door={door} />}
                                     confirmLabel="Save"
                                 />
                             ) : (
                                 <Modal
                                     isOpen={isModalOpen}
-                                    title={`${door.closedDoorText} - Edit Style`}
-                                    ModalContent={<EditContentForm door={door}/>}
+                                    title={`${door.closedDoorText} - Edit Content`}
+                                    ModalContent={
+                                        <EditContentForm door={door} />
+                                    }
                                     confirmLabel="Save"
                                 />
                             )}

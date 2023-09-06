@@ -5,9 +5,10 @@ import { Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import { signOut } from "next-auth/react";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
+  { name: 'Dashboard', href: '/dashboard', current: true },
   { name: 'Team', href: '#', current: false },
 ]
 
@@ -40,7 +41,7 @@ export default function Navbar() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -50,7 +51,7 @@ export default function Navbar() {
                         aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

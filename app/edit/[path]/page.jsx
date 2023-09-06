@@ -1,6 +1,6 @@
 import Navbar from "/components/Navbar.jsx";
 import { fetchCalendar, fetchDoors } from "/utils/fetchCalendarData";
-import DoorCard from "/components/edit/doorCard"
+import DoorCard from "/components/edit/DoorCard"
 
 export default async function EditPage({ params }) {
     const calendar = await fetchCalendar(params.path);

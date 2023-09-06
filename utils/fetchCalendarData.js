@@ -1,6 +1,6 @@
 export const fetchCalendar = async (path) => {
     try {
-      const response = await fetch(`http://${process.env.VERCEL_URL}/api/calendars/getOne/${path}`, { next: { revalidate: 10 } });
+      const response = await fetch(`https://${process.env.VERCEL_URL}/api/calendars/getOne/${path}`, { next: { revalidate: 10 } });
       if (!response.ok) {
         throw new Error(`API call failed with status: ${response.status}`);
       }
@@ -13,7 +13,7 @@ export const fetchCalendar = async (path) => {
   
   export const fetchDoors = async (path) => {
     try {
-      const response = await fetch(`http://${process.env.VERCEL_URL}/api/doors/getAll/${path}`, { next: { revalidate: 10 } });
+      const response = await fetch(`https://${process.env.VERCEL_URL}/api/doors/getAll/${path}`, { next: { revalidate: 10 } });
       if (!response.ok) {
         throw new Error(`API call failed with status: ${response.status}`);
       }

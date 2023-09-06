@@ -6,6 +6,10 @@ export default async function ViewPage({ params }) {
     const calendar = await fetchCalendar(params.path);
     const doors = await fetchDoors(params.path);
 
+    if (!calendar || !doors){
+        return;
+    }
+
     const {
         logoImage,
         title,

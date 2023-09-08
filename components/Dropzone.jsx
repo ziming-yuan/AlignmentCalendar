@@ -1,13 +1,15 @@
 "use client";
 import { useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import UploadIcon from "/components/icons/Upload.svg"
+import UploadIcon from "/components/icons/Upload.svg";
 import Image from "next/image";
 
-export default function MyForm({ uploadFiles }) {
+export default function MyForm({ uploadFiles, defaultImageUrl = null }) {
     const fileInputRef = useRef(null);
     const [isDragActive, setIsDragActive] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(
+        defaultImageUrl ? { url: defaultImageUrl, isDefault: true } : null
+    );
     const [fileSizeError, setFileSizeError] = useState(null);
 
     const handleFileChange = (file) => {
@@ -21,9 +23,13 @@ export default function MyForm({ uploadFiles }) {
     };
 
     const removeFile = () => {
-        setSelectedFile(null);
-        setFileSizeError(null); // optionally reset any errors
-        fileInputRef.current.value = ""; // reset the input field
+        if (selectedFile.isDefault) {
+            setSelectedFile(null);
+        } else {
+            setSelectedFile(null);
+            setFileSizeError(null); // optionally reset any errors
+            fileInputRef.current.value = ""; // reset the input field
+        }
     };
 
     const handleStyledDivClick = () => {
@@ -69,7 +75,7 @@ export default function MyForm({ uploadFiles }) {
             />
             <div
                 role="presentation"
-                className={`flex flex-col items-center justify-center rounded-lg gap-2 border border-dashed border-gray-900/25 px-4 py-8 ${
+                className={`flex flex-col items-center justify-center rounded-lg gap-2 border border-dashed border-gray-900/25 p-4 ${
                     isDragActive && "bg-indigo-300/25"
                 }`}
                 onClick={handleStyledDivClick}
@@ -82,28 +88,39 @@ export default function MyForm({ uploadFiles }) {
                     <UploadIcon className="h-12 w-12 text-gray-400" />
                 </div>
                 {isDragActive ? (
-                    <p className="font-bold text-indigo-600"> Drop the files here ...</p>
+                    <p className="font-semibold text-indigo-600">
+                        {" "}
+                        Drop the files here ...
+                    </p>
                 ) : (
-                    <p className="font-bold text-indigo-600 hover:text-indigo-500 ">
+                    <p className="font-semibold text-indigo-600 hover:text-indigo-500 ">
                         Choose files or drag and drop
                     </p>
                 )}
-                <div class="text-xs leading-5 text-gray-600">Images up to 8MB, max 1</div>
+                <div class="text-xs leading-5 text-gray-600">
+                    Images up to 8MB, max 1
+                </div>
             </div>
-
-            <button type="submit" className="border border-gray-500">
-                Upload
-            </button>
-            {selectedFile && <span className="ml-4">{selectedFile.name}</span>}
+            {selectedFile && <div className="mt-2">{selectedFile.name}</div>}
             {selectedFile && (
                 <div className="relative mt-4 h-fit w-fit rounded-md shadow-lg">
-                    <Image
-                        src={URL.createObjectURL(selectedFile)}
-                        alt={selectedFile.name}
-                        width={100}
-                        height={100}
-                        className="object-contain rounded-md"
-                    />
+                    {selectedFile.isDefault ? (
+                        <Image
+                            src={selectedFile.url}
+                            alt="Default Image"
+                            width={200}
+                            height={150}
+                            className="object-contain rounded-md"
+                        />
+                    ) : (
+                        <Image
+                            src={URL.createObjectURL(selectedFile)}
+                            alt={selectedFile.name}
+                            width={200}
+                            height={150}
+                            className="object-contain rounded-md"
+                        />
+                    )}
                     <button
                         type="button"
                         className="w-6 h-6 border border-rose-400 bg-rose-400 rounded-full flex justify-center items-center absolute -top-3 -right-3 hover:bg-white transition-colors"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import parser from "html-react-parser";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import FormContext from "../contextProviders/FormContext";
 import EditContentForm from "../forms/EditContentForm";
@@ -61,9 +62,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                     </FormContext.Provider>
                 )}
             </div>
-            <div className="p-4">
-                <p>{door.message}</p>
-            </div>
+            <div className="p-4">{parser(door.message)}</div>
         </div>
     );
 }

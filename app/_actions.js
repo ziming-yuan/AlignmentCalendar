@@ -6,12 +6,12 @@ import Door from "/models/door";
 
 export async function updateDoorContent(fileData, data, door) {
     try {
+        const file = fileData.get("file");
         const doorId = door._id;
         const closedDoorText = data.closedDoorText;
         const date = data.date;
         const message = data.message;
         const youtubeVideoUrl = data.youtubeVideoUrl;
-        const file = fileData.get("file");
         const isFileUpdate = data.isFileUpdate;
         const deleteOgFile = data.deleteOgFile;
         const ogImageFileKey = door.contentImage.fileKey;
@@ -55,6 +55,6 @@ export async function updateDoorContent(fileData, data, door) {
         revalidateTag("editPageDoors");
     } catch (error) {
         console.error("Error updating door content:", error);
-        throw error; // Re-throw the error if you want the caller to be aware of it
+        throw error;
     }
 }

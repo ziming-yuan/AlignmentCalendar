@@ -4,27 +4,34 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import UploadIcon from "/components/icons/Upload.svg";
 import Image from "next/image";
 
-export default function MyForm({ uploadFiles, defaultImageUrl = null }) {
+export default function MyForm({ defaultImageUrl = null }) {
     const fileInputRef = useRef(null);
     const [isDragActive, setIsDragActive] = useState(false);
     const [selectedFile, setSelectedFile] = useState(
         defaultImageUrl ? { url: defaultImageUrl, isDefault: true } : null
     );
     const [fileSizeError, setFileSizeError] = useState(null);
+    const [isFileUpdate, setIsFileUpdate] = useState(false);
+    const [deleteOgFile, setDeleteOgFile] = useState(false);
 
     const handleFileChange = (file) => {
         if (file && file.size > 8 * 1024 * 1024) {
             setFileSizeError("File size exceeds the 8MB limit.");
             setSelectedFile(null);
         } else {
+            if (selectedFile && selectedFile.isDefault) {
+                setDeleteOgFile(true);
+            }
             setFileSizeError(null);
             setSelectedFile(file);
+            setIsFileUpdate(true);
         }
     };
 
     const removeFile = () => {
         if (selectedFile.isDefault) {
             setSelectedFile(null);
+            setDeleteOgFile(true);
         } else {
             setSelectedFile(null);
             setFileSizeError(null); // optionally reset any errors
@@ -64,15 +71,18 @@ export default function MyForm({ uploadFiles, defaultImageUrl = null }) {
     };
 
     return (
-        <form action={uploadFiles}>
+        <>
             <input
                 ref={fileInputRef}
-                name="files"
+                name="file"
                 type="file"
                 accept="image/*"
                 style={{ display: "none" }}
                 onChange={(e) => handleFileChange(e.target.files[0])}
             />
+            <input type="hidden" name="fileSizeError" value={fileSizeError} />
+            <input type="hidden" name="isFileUpdate" value={isFileUpdate} />
+            <input type="hidden" name="deleteOgFile" value={deleteOgFile} />
             <div
                 role="presentation"
                 className={`flex flex-col items-center justify-center rounded-lg gap-2 border border-dashed border-gray-900/25 p-4 ${
@@ -101,9 +111,11 @@ export default function MyForm({ uploadFiles, defaultImageUrl = null }) {
                     Images up to 8MB, max 1
                 </div>
             </div>
-            {selectedFile && <div className="mt-2">{selectedFile.name}</div>}
+            {selectedFile && selectedFile.name && (
+                <div className="mt-2 text-sm">{selectedFile.name}</div>
+            )}
             {selectedFile && (
-                <div className="relative mt-4 h-fit w-fit rounded-md shadow-lg">
+                <div className="relative mt-2 h-fit w-fit rounded-md shadow-lg">
                     {selectedFile.isDefault ? (
                         <Image
                             src={selectedFile.url}
@@ -131,6 +143,6 @@ export default function MyForm({ uploadFiles, defaultImageUrl = null }) {
                 </div>
             )}
             {fileSizeError && <p className="text-red-500">{fileSizeError}</p>}
-        </form>
+        </>
     );
 }

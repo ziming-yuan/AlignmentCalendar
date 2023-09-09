@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import FormContext from "../contextProviders/FormContext";
 import TipTap from "/components/rte/TipTap";
 import Dropzone from "/components/Dropzone";
+import { updateDoorContent } from "/lib/actions";
 
 const formatDate = (inputDate) => {
     const d = new Date(inputDate);
@@ -10,11 +11,17 @@ const formatDate = (inputDate) => {
     let day = "" + d.getDate();
     const year = d.getFullYear();
 
+    let hour = "" + d.getHours();
+    let minute = "" + d.getMinutes();
+
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
+    if (hour.length < 2) hour = "0" + hour;
+    if (minute.length < 2) minute = "0" + minute;
 
-    return [year, month, day].join("-");
+    return `${year}-${month}-${day}T${hour}:${minute}`;
 };
+
 const validateYouTubeUrl = (url) => {
     const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
     return pattern.test(url);
@@ -37,7 +44,7 @@ export default function EditContentForm({ door }) {
     const [error, setError] = useState(null);
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         console.log("submitted");
 
         if (youtubeVideoUrl && !validateYouTubeUrl(youtubeVideoUrl)) {
@@ -49,20 +56,32 @@ export default function EditContentForm({ door }) {
     };
 
     return (
-        <form ref={formRef} onSubmit={handleSubmit}>
-            {/* Door Date */}
+        <form ref={formRef} action={updateDoorContent} onSubmit={handleSubmit}>
+            {/* Pass in contentImage filekey */}
+            <input
+                type="hidden"
+                name="contentImageFileKey"
+                value={door.contentImage.fileKey}
+            />
+            <input type="hidden" name="doorId" value={door._id} />
+            {/* Door Date & Time */}
             <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium" htmlFor="doorDate">
-                    Door Date
+                <label className="text-base font-medium" htmlFor="doorDateTime">
+                    Door Date & Time
                 </label>
                 <input
-                    id="doorDate"
-                    type="date"
+                    id="doorDateTime"
+                    type="datetime-local"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                     value={date}
-                    onChange={(e) => setDate(e.target.value)}
+                    onChange={(e) => {
+                        setDate(e.target.value);
+                        console.log(date);
+                    }}
                 />
-                <p className="text-sm text-gray-500">The date of the door.</p>
+                <p className="text-sm text-gray-500">
+                    The date and time of the door.
+                </p>
             </div>
 
             {/* Door Text */}

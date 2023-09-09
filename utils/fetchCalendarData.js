@@ -18,7 +18,7 @@ export const fetchDoors = async (path) => {
     try {
         const response = await fetch(
             `https://${process.env.VERCEL_URL}/api/doors/getAll/${path}`,
-            { next: { revalidate: 10 } }
+            { next: { tags: ["editPageDoors"] } }
         );
         if (!response.ok) {
             throw new Error(`API call failed with status: ${response.status}`);

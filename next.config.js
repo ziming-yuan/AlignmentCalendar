@@ -3,7 +3,12 @@ const nextConfig = {};
 
 module.exports = {
     images: {
-        domains: ["uploadthing.com", "images.unsplash.com", "i1.ytimg.com"],
+        domains: [
+            "uploadthing.com",
+            "images.unsplash.com",
+            "i1.ytimg.com",
+            "utfs.io",
+        ],
     },
     experimental: {
         serverActions: true,

@@ -1,8 +1,10 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import FormContext from "../contextProviders/FormContext";
 import TipTap from "/components/rte/TipTap";
 import Dropzone from "/components/Dropzone";
+import { useForm, Controller } from "react-hook-form";
+
 import { updateDoorContent } from "/lib/actions";
 
 const formatDate = (inputDate) => {
@@ -22,48 +24,38 @@ const formatDate = (inputDate) => {
     return `${year}-${month}-${day}T${hour}:${minute}`;
 };
 
-const validateYouTubeUrl = (url) => {
-    const pattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
-    return pattern.test(url);
-};
-
 export default function EditContentForm({ door }) {
     const { formRef, setIsModalOpen } = useContext(FormContext);
-    const [date, setDate] = useState(door.date ? formatDate(door.date) : "");
-    const [closedDoorText, setClosedDoorText] = useState(
-        door.closedDoorText || ""
-    );
-    const [youtubeVideoUrl, setYoutubeVideoUrl] = useState(
-        door.youtubeVideoUrl || ""
-    );
-    const initialMessage = door.message || "";
-    const [message, setMessage] = useState(door.message || "");
-    const [contentImage, setContentImage] = useState(
-        door.contentImage || { fileUrl: "", fileKey: "" }
-    );
-    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
-        // e.preventDefault();
-        console.log("submitted");
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+        control,
+        setValue,
+    } = useForm({
+        defaultValues: {
+            date: door.date ? formatDate(door.date) : "",
+            closedDoorText: door.closedDoorText,
+            youtubeVideoUrl: door.youtubeVideoUrl,
+            message: door.message,
+            file: "",
+            deleteOgFile: false,
+            isFileUpdate: false,
+        },
+    });
 
-        if (youtubeVideoUrl && !validateYouTubeUrl(youtubeVideoUrl)) {
-            setError("Please enter a valid YouTube URL");
-            return;
-        }
-
+    const processData = async (data) => {
+        const fileData = new FormData();
+        fileData.append("file", data.file); // file is not serializable unless wrapped inside FormData
+        data["file"] = "";
+        const imageResponse = await updateDoorContent(fileData, data, door);
         setIsModalOpen(false);
     };
 
     return (
-        <form ref={formRef} action={updateDoorContent} onSubmit={handleSubmit}>
-            {/* Pass in contentImage filekey */}
-            <input
-                type="hidden"
-                name="contentImageFileKey"
-                value={door.contentImage.fileKey}
-            />
-            <input type="hidden" name="doorId" value={door._id} />
+        <form ref={formRef} onSubmit={handleSubmit(processData)}>
             {/* Door Date & Time */}
             <div className="relative flex flex-col mb-4 gap-y-2">
                 <label className="text-base font-medium" htmlFor="doorDateTime">
@@ -73,11 +65,7 @@ export default function EditContentForm({ door }) {
                     id="doorDateTime"
                     type="datetime-local"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    value={date}
-                    onChange={(e) => {
-                        setDate(e.target.value);
-                        console.log(date);
-                    }}
+                    {...register("date")}
                 />
                 <p className="text-sm text-gray-500">
                     The date and time of the door.
@@ -93,8 +81,7 @@ export default function EditContentForm({ door }) {
                     id="doorText"
                     type="text"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    value={closedDoorText}
-                    onChange={(e) => setClosedDoorText(e.target.value)}
+                    {...register("closedDoorText")}
                 />
                 <p className="text-sm text-gray-500">
                     The text displayed on the door when it&apos;s closed.
@@ -111,8 +98,10 @@ export default function EditContentForm({ door }) {
                     id="youtubeVideo"
                     type="url"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    value={youtubeVideoUrl}
-                    onChange={(e) => setYoutubeVideoUrl(e.target.value)}
+                    {...register("youtubeVideoUrl", {
+                        pattern:
+                            /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/,
+                    })}
                 />
                 <p className="text-sm text-gray-500">
                     Link to Youtube video when door is open.
@@ -124,7 +113,16 @@ export default function EditContentForm({ door }) {
                 <label className="text-base font-medium" htmlFor="doorMessage">
                     Message
                 </label>
-                <TipTap desc={initialMessage} setDesc={setMessage} />
+                <Controller
+                    name="message"
+                    control={control}
+                    render={({ field }) => (
+                        <TipTap
+                            onFileChange={field.onChange}
+                            initialMessage={field.value}
+                        />
+                    )}
+                />
                 <p className="text-sm text-gray-500">
                     The message shown once door is open.
                 </p>
@@ -135,18 +133,27 @@ export default function EditContentForm({ door }) {
                 <label className="text-base font-medium" htmlFor="doorImage">
                     Image
                 </label>
-                <Dropzone
-                    uploadFiles={null}
-                    defaultImageUrl={contentImage.fileUrl}
+                <Controller
+                    name="file"
+                    control={control}
+                    render={({ field }) => (
+                        <Dropzone
+                            defaultImageUrl={door.contentImage.fileUrl}
+                            onFileChange={field.onChange}
+                            setValue={setValue}
+                        />
+                    )}
                 />
+
                 <p className="text-sm text-gray-500">
                     The image displayed when user opens the door.
                 </p>
             </div>
+
             {/* Error message */}
-            {error && (
+            {errors.youtubeVideoUrl && (
                 <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                    {error}
+                    Please enter a valid YouTube URL.
                 </div>
             )}
         </form>

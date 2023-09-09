@@ -1,41 +1,45 @@
 "use client";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { Controller } from "react-hook-form";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import UploadIcon from "/components/icons/Upload.svg";
 import Image from "next/image";
 
-export default function MyForm({ defaultImageUrl = null }) {
+export default function Dropzone({ onFileChange, setValue, defaultImageUrl }) {
     const fileInputRef = useRef(null);
     const [isDragActive, setIsDragActive] = useState(false);
     const [selectedFile, setSelectedFile] = useState(
         defaultImageUrl ? { url: defaultImageUrl, isDefault: true } : null
     );
     const [fileSizeError, setFileSizeError] = useState(null);
-    const [isFileUpdate, setIsFileUpdate] = useState(false);
-    const [deleteOgFile, setDeleteOgFile] = useState(false);
 
     const handleFileChange = (file) => {
         if (file && file.size > 8 * 1024 * 1024) {
             setFileSizeError("File size exceeds the 8MB limit.");
+            setValue("isFileUpdate", false);
             setSelectedFile(null);
+            onFileChange(null);
         } else {
             if (selectedFile && selectedFile.isDefault) {
-                setDeleteOgFile(true);
+                setValue("deleteOgFile", true);
             }
-            setFileSizeError(null);
             setSelectedFile(file);
-            setIsFileUpdate(true);
+            setFileSizeError(null);
+            onFileChange(file);
+            setValue("isFileUpdate", true);
         }
     };
 
     const removeFile = () => {
         if (selectedFile.isDefault) {
             setSelectedFile(null);
-            setDeleteOgFile(true);
+            onFileChange(null);
+            setValue("deleteOgFile", true);
         } else {
             setSelectedFile(null);
-            setFileSizeError(null); // optionally reset any errors
-            fileInputRef.current.value = ""; // reset the input field
+            onFileChange(null);
+            setFileSizeError(null);
+            fileInputRef.current.value = "";
         }
     };
 
@@ -74,15 +78,18 @@ export default function MyForm({ defaultImageUrl = null }) {
         <>
             <input
                 ref={fileInputRef}
-                name="file"
                 type="file"
                 accept="image/*"
                 style={{ display: "none" }}
-                onChange={(e) => handleFileChange(e.target.files[0])}
+                onChange={(e) => {
+                    handleFileChange(e.target.files[0]);
+                }}
             />
-            <input type="hidden" name="fileSizeError" value={fileSizeError} />
-            <input type="hidden" name="isFileUpdate" value={isFileUpdate} />
-            <input type="hidden" name="deleteOgFile" value={deleteOgFile} />
+            {/* <Controller
+                name="fileSizeError"
+                control={control}
+                render={({ field }) => <input type="hidden" {...field} />}
+            /> */}
             <div
                 role="presentation"
                 className={`flex flex-col items-center justify-center rounded-lg gap-2 border border-dashed border-gray-900/25 p-4 ${
@@ -99,7 +106,6 @@ export default function MyForm({ defaultImageUrl = null }) {
                 </div>
                 {isDragActive ? (
                     <p className="font-semibold text-indigo-600">
-                        {" "}
                         Drop the files here ...
                     </p>
                 ) : (
@@ -107,7 +113,7 @@ export default function MyForm({ defaultImageUrl = null }) {
                         Choose files or drag and drop
                     </p>
                 )}
-                <div class="text-xs leading-5 text-gray-600">
+                <div className="text-xs leading-5 text-gray-600">
                     Images up to 8MB, max 1
                 </div>
             </div>

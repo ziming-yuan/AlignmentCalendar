@@ -131,7 +131,7 @@ const customTheme = (theme) => {
     };
 };
 
-const Tiptap = ({ desc, setDesc }) => {
+const Tiptap = ({ onFileChange, initialMessage }) => {
     const editor = useEditor({
         extensions: [
             Document,
@@ -151,10 +151,10 @@ const Tiptap = ({ desc, setDesc }) => {
                 types: ["heading", "paragraph"],
             }),
         ],
-        content: desc,
+        content: initialMessage,
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
-            setDesc(html);
+            onFileChange(html);
         },
     });
 

@@ -5,6 +5,7 @@ import dbConnect from "/lib/dbConnect";
 import Door from "/models/door";
 
 export async function updateDoorContent(fileData, formData, door) {
+    "use server";
     try {
         const file = fileData.get("file");
         const doorId = door._id;

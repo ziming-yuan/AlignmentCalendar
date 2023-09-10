@@ -5,7 +5,7 @@ import TipTap from "/components/rte/TipTap";
 import Dropzone from "/components/Dropzone";
 import { useForm, Controller } from "react-hook-form";
 
-import { updateDoorContent } from "/app/_actions";
+import { updateDoorContent } from "/app/api/_actions";
 
 const formatDate = (inputDate) => {
     const d = new Date(inputDate);

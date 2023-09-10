@@ -46,12 +46,42 @@ export default function EditContentForm({ door }) {
         },
     });
 
+    // const processData = async (data) => {
+    //     const fileData = new FormData();
+    //     fileData.append("file", data.file); // file is not serializable unless wrapped inside FormData
+    //     data["file"] = "";
+    //     const imageResponse = await updateDoorContent(fileData, data, door);
+    //     setIsModalOpen(false);
+    // };
+
     const processData = async (data) => {
-        const fileData = new FormData();
-        fileData.append("file", data.file); // file is not serializable unless wrapped inside FormData
-        data["file"] = "";
-        const imageResponse = await updateDoorContent(fileData, data, door);
-        setIsModalOpen(false);
+        try {
+            const formData = new FormData();
+            // Append the file
+            formData.append("file", data.file);
+            // Remove the file from the data object
+            delete data.file;
+            for (const key in data) {
+                formData.append(key, data[key]);
+            }
+            formData.append("doorId", door._id);
+            formData.append("ogImageFileKey", door.contentImage.fileKey);
+            const response = await fetch("/api/edit/updateContent", {
+                method: "POST",
+                body: formData,
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error(
+                    "Error while updating content:",
+                    errorData.message
+                );
+                return;
+            }
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Error making the request:", error);
+        }
     };
 
     return (

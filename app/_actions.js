@@ -4,16 +4,16 @@ import { revalidateTag } from "next/cache";
 import dbConnect from "/lib/dbConnect";
 import Door from "/models/door";
 
-export async function updateDoorContent(fileData, data, door) {
+export async function updateDoorContent(fileData, formData, door) {
     try {
         const file = fileData.get("file");
         const doorId = door._id;
-        const closedDoorText = data.closedDoorText;
-        const date = data.date;
-        const message = data.message;
-        const youtubeVideoUrl = data.youtubeVideoUrl;
-        const isFileUpdate = data.isFileUpdate;
-        const deleteOgFile = data.deleteOgFile;
+        const closedDoorText = formData.closedDoorText;
+        const date = formData.date;
+        const message = formData.message;
+        const youtubeVideoUrl = formData.youtubeVideoUrl;
+        const isFileUpdate = formData.isFileUpdate;
+        const deleteOgFile = formData.deleteOgFile;
         const ogImageFileKey = door.contentImage.fileKey;
         await dbConnect();
 
@@ -26,6 +26,7 @@ export async function updateDoorContent(fileData, data, door) {
 
         if (deleteOgFile) {
             console.log("inside delete");
+            console.log(ogImageFileKey);
 
             // delete the previous file from uploadthing
             await utapi.deleteFiles(ogImageFileKey);

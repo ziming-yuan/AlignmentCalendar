@@ -30,6 +30,7 @@ export async function POST(req) {
         console.log(deleteOgFile);
         if (deleteOgFile) {
             console.log("inside delete");
+            console.log(ogImageFileKey);
 
             // delete the previous file from uploadthing
             const deleteFileResponse = await utapi.deleteFiles(ogImageFileKey);

@@ -9,6 +9,8 @@ export async function POST(req) {
         await dbConnect();
         const formData = await req.formData();
         const file = formData.get("file");
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
         const doorId = formData.get("doorId");
         const closedDoorText = formData.get("closedDoorText");
         const date = formData.get("date");
@@ -47,7 +49,7 @@ export async function POST(req) {
         if (isFileUpdate) {
             console.log("inside update");
             // upload the new file to uploadthing
-            const response = await utapi.uploadFiles(file);
+            const response = await utapi.uploadFiles(buffer);
             console.log(response);
             const { data } = response;
             // update contentImage in the database

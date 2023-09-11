@@ -1,15 +1,17 @@
 import { utapi } from "uploadthing/server";
-import Dropzone from "/components/Dropzone";
 
 async function uploadFiles(formData) {
     "use server";
     const files = formData.getAll("files");
     const response = await utapi.uploadFiles(files);
-    //    ^? { key: string, url: string }[]
+    //    ^? UploadedFileResponse[]
 }
 
 export default function MyForm() {
     return (
-        <Dropzone uploadFiles={uploadFiles}/>
+        <form action={uploadFiles}>
+            <input name="files" type="file" multiple />
+            <button type="submit">Upload</button>
+        </form>
     );
 }

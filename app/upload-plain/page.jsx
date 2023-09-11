@@ -1,5 +1,4 @@
 import { utapi } from "uploadthing/server";
-import Dropzone from "/components/Dropzone";
 
 async function uploadFiles(formData) {
     "use server";

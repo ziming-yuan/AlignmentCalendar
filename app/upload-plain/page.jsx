@@ -1,9 +1,15 @@
+process.nodeprecation = true;
+
 import { utapi } from "uploadthing/server";
 
 async function uploadFiles(formData) {
     "use server";
-    const files = formData.getAll("files");
-    const response = await utapi.uploadFiles(files);
+    try {
+        const files = await formData.getAll("files");
+        const response = await utapi.uploadFiles(files);
+    } catch (e) {
+        console.log(e);
+    }
     //    ^? UploadedFileResponse[]
 }
 

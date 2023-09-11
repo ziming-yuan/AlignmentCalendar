@@ -72,50 +72,54 @@ export async function uploadImages(formData) {
     const doorImgU = formData.get("closedDoorImage-fileUpdated") == "true";
     const doorImgOgD = formData.get("closedDoorImage-ogFileDelted") == "true";
     const closedImgKey = formData.get("closedImgKey");
-    await dbConnect();
-    if (contentImgOgD) {
-        // delete the previous file from uploadthing
-        await utapi.deleteFiles(contentImgKey);
-        // delete the url in the database
-        await Door.findByIdAndUpdate(doorId, {
-            $set: {
-                "contentImage.fileUrl": "",
-                "contentImage.fileKey": "",
-            },
-        });
-    }
-    if (doorImgOgD) {
-        // delete the previous file from uploadthing
-        await utapi.deleteFiles(closedImgKey);
-        // delete the url in the database
-        await Door.findByIdAndUpdate(doorId, {
-            $set: {
-                "closedDoorImage.fileUrl": "",
-                "closedDoorImage.fileKey": "",
-            },
-        });
-    }
-    if (contentImgU) {
-        // upload the new file to uploadthing
-        const { data } = await utapi.uploadFiles(contentImage);
-        // update contentImage in the database
-        await Door.findByIdAndUpdate(doorId, {
-            $set: {
-                "contentImage.fileUrl": data.url,
-                "contentImage.fileKey": data.key,
-            },
-        });
-    }
-    if (doorImgU) {
-        // upload the new file to uploadthing
-        const { data } = await utapi.uploadFiles(closedDoorImage);
-        // update contentImage in the database
-        await Door.findByIdAndUpdate(doorId, {
-            $set: {
-                "closedDoorImage.fileUrl": data.url,
-                "closedDoorImage.fileKey": data.key,
-            },
-        });
+    try {
+        await dbConnect();
+        if (contentImgOgD) {
+            // delete the previous file from uploadthing
+            await utapi.deleteFiles(contentImgKey);
+            // delete the url in the database
+            await Door.findByIdAndUpdate(doorId, {
+                $set: {
+                    "contentImage.fileUrl": "",
+                    "contentImage.fileKey": "",
+                },
+            });
+        }
+        if (doorImgOgD) {
+            // delete the previous file from uploadthing
+            await utapi.deleteFiles(closedImgKey);
+            // delete the url in the database
+            await Door.findByIdAndUpdate(doorId, {
+                $set: {
+                    "closedDoorImage.fileUrl": "",
+                    "closedDoorImage.fileKey": "",
+                },
+            });
+        }
+        if (contentImgU) {
+            // upload the new file to uploadthing
+            const { data } = await utapi.uploadFiles(contentImage);
+            // update contentImage in the database
+            await Door.findByIdAndUpdate(doorId, {
+                $set: {
+                    "contentImage.fileUrl": data.url,
+                    "contentImage.fileKey": data.key,
+                },
+            });
+        }
+        if (doorImgU) {
+            // upload the new file to uploadthing
+            const { data } = await utapi.uploadFiles(closedDoorImage);
+            // update contentImage in the database
+            await Door.findByIdAndUpdate(doorId, {
+                $set: {
+                    "closedDoorImage.fileUrl": data.url,
+                    "closedDoorImage.fileKey": data.key,
+                },
+            });
+        }
+    } catch (e) {
+        console.log(e);
     }
     revalidateTag("editPageDoors");
 }

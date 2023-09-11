@@ -2,10 +2,8 @@ import React from "react";
 import { useContext } from "react";
 import FormContext from "../contextProviders/FormContext";
 import TipTap from "/components/rte/TipTap";
-import Dropzone from "/components/Dropzone";
 import { useForm, Controller } from "react-hook-form";
-
-import { updateDoorContent } from "/app/api/_actions";
+import { updateDoorContent } from "/app/_actions";
 
 const formatDate = (inputDate) => {
     const d = new Date(inputDate);
@@ -33,66 +31,39 @@ export default function EditContentForm({ door }) {
         watch,
         formState: { errors },
         control,
-        setValue,
     } = useForm({
         defaultValues: {
             date: door.date ? formatDate(door.date) : "",
             closedDoorText: door.closedDoorText,
             youtubeVideoUrl: door.youtubeVideoUrl,
             message: door.message,
-            file: "",
-            deleteOgFile: false,
-            isFileUpdate: false,
+            doorId: door._id,
+            closedDoorColor: door.closedDoorColor,
+            closedDoorTextColor: door.closedDoorTextColor,
+            autoOpenTime: door.autoOpenTime
+                ? formatDate(door.autoOpenTime)
+                : "",
         },
     });
 
+    console.log(watch("closedDoorColor"));
+
     const processData = async (data) => {
-        const fileData = new FormData();
-        fileData.append("file", data.file); // file is not serializable unless wrapped inside FormData
-        data["file"] = "";
-        const imageResponse = await updateDoorContent(fileData, data, door);
+        // const fileData = new FormData();
+        // fileData.append("file", data.file); // file is not serializable unless wrapped inside FormData
+        // data["file"] = "";
+        const imageResponse = await updateDoorContent(data);
         setIsModalOpen(false);
     };
-
-    // const processData = async (data) => {
-    //     try {
-    //         const formData = new FormData();
-    //         // Append the file
-    //         formData.append("file", data.file);
-    //         // Remove the file from the data object
-    //         delete data.file;
-    //         for (const key in data) {
-    //             formData.append(key, data[key]);
-    //         }
-    //         formData.append("doorId", door._id);
-    //         formData.append("ogImageFileKey", door.contentImage.fileKey);
-    //         const response = await fetch("/api/edit/updateContent", {
-    //             method: "POST",
-    //             body: formData,
-    //         });
-    //         if (!response.ok) {
-    //             const errorData = await response.json();
-    //             console.error(
-    //                 "Error while updating content:",
-    //                 errorData.message
-    //             );
-    //             return;
-    //         }
-    //         setIsModalOpen(false);
-    //     } catch (error) {
-    //         console.error("Error making the request:", error);
-    //     }
-    // };
 
     return (
         <form ref={formRef} onSubmit={handleSubmit(processData)}>
             {/* Door Date & Time */}
             <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium" htmlFor="doorDateTime">
+                <label className="text-base font-medium">
                     Door Date & Time
                 </label>
                 <input
-                    id="doorDateTime"
                     type="datetime-local"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                     {...register("date")}
@@ -102,30 +73,12 @@ export default function EditContentForm({ door }) {
                 </p>
             </div>
 
-            {/* Door Text */}
-            <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium" htmlFor="doorText">
-                    Closed Door Text
-                </label>
-                <input
-                    id="doorText"
-                    type="text"
-                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    {...register("closedDoorText")}
-                />
-                <p className="text-sm text-gray-500">
-                    The text displayed on the door when it&apos;s closed.
-                    Default is the date.
-                </p>
-            </div>
-
             {/* Youtube Video */}
             <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium" htmlFor="youtubeVideo">
+                <label className="text-base font-medium">
                     Youtube Video URL
                 </label>
                 <input
-                    id="youtubeVideo"
                     type="url"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                     {...register("youtubeVideoUrl", {
@@ -140,9 +93,7 @@ export default function EditContentForm({ door }) {
 
             {/* Message */}
             <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium" htmlFor="doorMessage">
-                    Message
-                </label>
+                <label className="text-base font-medium">Message</label>
                 <Controller
                     name="message"
                     control={control}
@@ -158,26 +109,75 @@ export default function EditContentForm({ door }) {
                 </p>
             </div>
 
-            {/* Image */}
+            {/* Door Text */}
             <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium" htmlFor="doorImage">
-                    Image
+                <label className="text-base font-medium">
+                    Closed Door Text
                 </label>
-                <Controller
-                    name="file"
-                    control={control}
-                    render={({ field }) => (
-                        <Dropzone
-                            defaultImageUrl={door.contentImage.fileUrl}
-                            onFileChange={field.onChange}
-                            setValue={setValue}
-                        />
-                    )}
+                <input
+                    type="text"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("closedDoorText")}
                 />
-
                 <p className="text-sm text-gray-500">
-                    The image displayed when user opens the door.
+                    The text displayed on the door when it&apos;s closed.
+                    Default is the date.
                 </p>
+            </div>
+
+            {/* Closed Door Text Color */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">
+                    Closed Door Text Color
+                </label>
+                <div className="flex items-center ">
+                    <input
+                        id="closedDoorTextColor"
+                        type="color"
+                        className="rounded"
+                        {...register("closedDoorTextColor")}
+                    />
+                    <label
+                        htmlFor="closedDoorTextColor"
+                        className="ml-3 text-sm"
+                    >
+                        {watch("closedDoorTextColor")}
+                    </label>
+                </div>
+                <p className="text-sm text-gray-500">
+                    The color of the closed-door text.
+                </p>
+            </div>
+
+            {/* Closed Door Color */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">
+                    Closed Door Color
+                </label>
+                <div className="flex items-center">
+                    <input
+                        id="closedDoorColor"
+                        type="color"
+                        className="rounded"
+                        {...register("closedDoorColor")}
+                    />
+                    <label className="ml-3 text-sm" htmlFor="closedDoorColor">
+                        {watch("closedDoorColor")}
+                    </label>
+                </div>
+                <p className="text-sm text-gray-500">
+                    Background color of the door when it is closed.
+                </p>
+            </div>
+
+            {/* Auto Open Time */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">Auto Open Time</label>
+                <input
+                    type="datetime-local"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("autoOpenTime")}
+                />
             </div>
 
             {/* Error message */}

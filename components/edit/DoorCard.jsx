@@ -7,7 +7,7 @@ import getThumbnailUrl from "/utils/getThumbnailUrl";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import FormContext from "../contextProviders/FormContext";
 import EditContentForm from "../forms/EditContentForm";
-import EditStyleForm from "../forms/EditStyleForm";
+import EditImagesForm from "../forms/EditImagesForm";
 import Modal from "../Modal";
 
 export default function DoorCard({ door, isOpen, onMenuToggle }) {
@@ -41,7 +41,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                                     setIsEdit(false);
                                 }}
                             />
-                            <EditStyleButton
+                            <EditImageButton
                                 onButtonClick={() => {
                                     setIsModalOpen(true);
                                     setIsEdit(true);
@@ -55,8 +55,10 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                             {isEdit ? (
                                 <Modal
                                     isOpen={isModalOpen}
-                                    title={`${door.closedDoorText} - Edit Style`}
-                                    ModalContent={<EditStyleForm door={door} />}
+                                    title={`${door.closedDoorText} - Edit Image`}
+                                    ModalContent={
+                                        <EditImagesForm door={door} />
+                                    }
                                     confirmLabel="Save"
                                 />
                             ) : (
@@ -177,13 +179,13 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
     );
 }
 
-function EditStyleButton({ onButtonClick }) {
+function EditImageButton({ onButtonClick }) {
     return (
         <button
             onClick={onButtonClick}
             className="block w-full text-left px-4 py-2 text-sm hover:bg-indigo-500/25"
         >
-            Edit Style
+            Edit Images
         </button>
     );
 }

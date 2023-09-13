@@ -6,7 +6,7 @@ export default async function ViewPage({ params }) {
     const calendar = await fetchCalendar(params.path);
     const doors = await fetchDoors(params.path);
 
-    if (!calendar || !doors){
+    if (!calendar || !doors) {
         return;
     }
 
@@ -22,12 +22,13 @@ export default async function ViewPage({ params }) {
         <main
             className="p-4 h-full min-h-screen relative overflow-hidden"
             style={{
-                backgroundColor: backgroundImage.fileUrl
-                    ? "transparent"
-                    : backgroundColor,
+                backgroundColor:
+                    backgroundImage && backgroundImage.fileUrl
+                        ? "transparent"
+                        : backgroundColor,
             }}
         >
-            {backgroundImage.fileUrl && (
+            {backgroundImage && backgroundImage.fileUrl && (
                 <Image
                     src={backgroundImage.fileUrl}
                     alt="Background Image"
@@ -37,7 +38,7 @@ export default async function ViewPage({ params }) {
             )}
 
             <header className="mt-4 relative z-10">
-                {logoImage.fileUrl && (
+                {logoImage && logoImage.fileUrl && (
                     <div className="flex justify-center items-center">
                         <Image
                             src={logoImage.fileUrl}

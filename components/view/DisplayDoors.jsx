@@ -70,7 +70,8 @@ const DoorsComponent = ({ doors }) => {
                                           backgroundPosition: "center",
                                           backgroundRepeat: "no-repeat",
                                       }
-                                    : door.contentImage.fileUrl
+                                    : door.contentImage &&
+                                      door.contentImage.fileUrl
                                     ? {
                                           backgroundImage: `url(${door.contentImage.fileUrl})`,
                                           backgroundPosition: "center",
@@ -85,6 +86,7 @@ const DoorsComponent = ({ doors }) => {
                             onClick={() => handleDoorClick(door)}
                         >
                             {!door.youtubeVideoUrl &&
+                                !door.contentImage &&
                                 !door.contentImage.fileUrl && (
                                     <p
                                         className="text-lg text-center"

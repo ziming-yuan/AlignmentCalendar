@@ -1,7 +1,7 @@
 export const fetchCalendar = async (path) => {
     try {
         const response = await fetch(
-            `https://${process.env.VERCEL_URL}/api/calendars/getOne/${path}`,
+            `http://${process.env.VERCEL_URL}/api/calendars/getOne/${path}`,
             { next: { tags: ["editPageCalendar"] } }
         );
         if (!response.ok) {
@@ -17,7 +17,7 @@ export const fetchCalendar = async (path) => {
 export const fetchDoors = async (path) => {
     try {
         const response = await fetch(
-            `https://${process.env.VERCEL_URL}/api/doors/getAll/${path}`,
+            `http://${process.env.VERCEL_URL}/api/doors/getAll/${path}`,
             { next: { tags: ["editPageDoors"] } }
         );
         if (!response.ok) {

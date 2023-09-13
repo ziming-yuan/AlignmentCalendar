@@ -86,7 +86,6 @@ const DoorsComponent = ({ doors }) => {
                             onClick={() => handleDoorClick(door)}
                         >
                             {!door.youtubeVideoUrl &&
-                                !door.contentImage &&
                                 !door.contentImage.fileUrl && (
                                     <p
                                         className="text-lg text-center"
@@ -94,7 +93,7 @@ const DoorsComponent = ({ doors }) => {
                                             color: door.closedDoorTextColor,
                                         }}
                                     >
-                                        Mystery Opened
+                                        {door.closedDoorText}
                                     </p>
                                 )}
                         </div>
@@ -108,12 +107,16 @@ const DoorsComponent = ({ doors }) => {
                 ${shakingDoorId === door._id && "animate-shake"}`}
                             onAnimationEnd={() => setShakingDoorId(null)}
                             style={{
-                                backgroundColor: door.closedDoorImage.fileUrl
-                                    ? "transparent"
-                                    : door.closedDoorColor,
-                                backgroundImage: door.closedDoorImage.fileUrl
-                                    ? `url(${door.closedDoorImage.fileUrl})`
-                                    : "none",
+                                backgroundColor:
+                                    door.closedDoorImage &&
+                                    door.closedDoorImage.fileUrl
+                                        ? "transparent"
+                                        : door.closedDoorColor,
+                                backgroundImage:
+                                    door.closedDoorImage &&
+                                    door.closedDoorImage.fileUrl
+                                        ? `url(${door.closedDoorImage.fileUrl})`
+                                        : "none",
                             }}
                             // Handle door click event
                             onClick={() => handleDoorClick(door)}
@@ -162,16 +165,17 @@ const DoorsComponent = ({ doors }) => {
                             </p>
                         )}
                         {/* Display content image if url is provided */}
-                        {selectedDoor.contentImage.fileUrl && (
-                            <Image
-                                src={selectedDoor.contentImage.fileUrl}
-                                alt="Content Image"
-                                width={0}
-                                height={0}
-                                sizes="100vw"
-                                className="w-full h-auto object-contain"
-                            />
-                        )}
+                        {selectedDoor.contentImage &&
+                            selectedDoor.contentImage.fileUrl && (
+                                <Image
+                                    src={selectedDoor.contentImage.fileUrl}
+                                    alt="Content Image"
+                                    width={0}
+                                    height={0}
+                                    sizes="100vw"
+                                    className="w-full h-auto object-contain"
+                                />
+                            )}
                         {/* Close button for the modal */}
                         <div className="flex justify-end">
                             <button

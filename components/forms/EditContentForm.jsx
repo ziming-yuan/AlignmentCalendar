@@ -4,6 +4,7 @@ import FormContext from "../contextProviders/FormContext";
 import TipTap from "/components/rte/TipTap";
 import { useForm, Controller } from "react-hook-form";
 import { updateDoorContent } from "/app/_actions";
+import Dropzone from "/components/Dropzone";
 
 const formatDate = (inputDate) => {
     const d = new Date(inputDate);
@@ -29,8 +30,9 @@ export default function EditContentForm({ door }) {
         register,
         handleSubmit,
         watch,
-        formState: { errors },
         control,
+        formState: { errors },
+        setValue,
     } = useForm({
         defaultValues: {
             date: door.date ? formatDate(door.date) : "",
@@ -40,19 +42,25 @@ export default function EditContentForm({ door }) {
             doorId: door._id,
             closedDoorColor: door.closedDoorColor,
             closedDoorTextColor: door.closedDoorTextColor,
+            contentImgKey: door.contentImage.fileKey,
+            contentImageFileUpdated: false,
+            contentImageOgFileDeleted: false,
+            closedImgKey: door.closedDoorImage.fileKey,
+            closedDoorImageFileUpdated: false,
+            closedDoorImageOgFileDeleted: false,
             autoOpenTime: door.autoOpenTime
                 ? formatDate(door.autoOpenTime)
                 : "",
         },
     });
 
-    console.log(watch("closedDoorColor"));
-
     const processData = async (data) => {
-        // const fileData = new FormData();
-        // fileData.append("file", data.file); // file is not serializable unless wrapped inside FormData
-        // data["file"] = "";
-        const imageResponse = await updateDoorContent(data);
+        const imageData = new FormData();
+        imageData.append("contentImage", data.contentImage); // file is not serializable unless wrapped inside FormData
+        imageData.append("closedDoorImage", data.closedDoorImage);
+        data["contentImage"] = "";
+        data["closedDoorImage"] = "";
+        await updateDoorContent(data, imageData);
         setIsModalOpen(false);
     };
 
@@ -109,6 +117,29 @@ export default function EditContentForm({ door }) {
                 </p>
             </div>
 
+            {/* Content Image */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium" htmlFor="doorImage">
+                    Content Image
+                </label>
+                <Controller
+                    name="contentImage"
+                    control={control}
+                    render={({ field }) => (
+                        <Dropzone
+                            defaultImageUrl={door.contentImage.fileUrl}
+                            onFileChange={field.onChange}
+                            setValue={setValue}
+                            name={"contentImage"}
+                        />
+                    )}
+                />
+
+                <p className="text-sm text-gray-500">
+                    The image displayed when the door is open.
+                </p>
+            </div>
+
             {/* Door Text */}
             <div className="relative flex flex-col mb-4 gap-y-2">
                 <label className="text-base font-medium">
@@ -146,6 +177,30 @@ export default function EditContentForm({ door }) {
                 </div>
                 <p className="text-sm text-gray-500">
                     The color of the closed-door text.
+                </p>
+            </div>
+
+            {/* Closed Door Image */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium" htmlFor="doorImage">
+                    Closed Door Image
+                </label>
+                <Controller
+                    name="closedDoorImage"
+                    control={control}
+                    render={({ field }) => (
+                        <Dropzone
+                            defaultImageUrl={door.closedDoorImage.fileUrl}
+                            onFileChange={field.onChange}
+                            setValue={setValue}
+                            name={"closedDoorImage"}
+                        />
+                    )}
+                />
+
+                <p className="text-sm text-gray-500">
+                    The background image displayed once door is closed. Will
+                    override closed-door color.
                 </p>
             </div>
 

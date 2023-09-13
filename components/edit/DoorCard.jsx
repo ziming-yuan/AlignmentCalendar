@@ -7,12 +7,11 @@ import getThumbnailUrl from "/utils/getThumbnailUrl";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import FormContext from "../contextProviders/FormContext";
 import EditContentForm from "../forms/EditContentForm";
-import EditImagesForm from "../forms/EditImagesForm";
+import { deleteDoor } from "/app/_actions";
 import Modal from "../Modal";
 
 export default function DoorCard({ door, isOpen, onMenuToggle }) {
     const formRef = useRef(null);
-    const [isEdit, setIsEdit] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const youtubeThumbnail = door.youtubeVideoUrl
         ? getThumbnailUrl(getYouTubeID(door.youtubeVideoUrl), "mq")
@@ -38,39 +37,19 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                             <EditContentButton
                                 onButtonClick={() => {
                                     setIsModalOpen(true);
-                                    setIsEdit(false);
                                 }}
                             />
-                            <EditImageButton
+                            <DeleteButton
                                 onButtonClick={() => {
-                                    setIsModalOpen(true);
-                                    setIsEdit(true);
+                                    deleteDoor(door._id);
                                 }}
                             />
-                            <EditButton
-                                onButtonClick={() => {
-                                    // delete the card
-                                }}
+                            <Modal
+                                isOpen={isModalOpen}
+                                title={`${door.closedDoorText} - Edit Content`}
+                                ModalContent={<EditContentForm door={door} />}
+                                confirmLabel="Save"
                             />
-                            {isEdit ? (
-                                <Modal
-                                    isOpen={isModalOpen}
-                                    title={`${door.closedDoorText} - Edit Image`}
-                                    ModalContent={
-                                        <EditImagesForm door={door} />
-                                    }
-                                    confirmLabel="Save"
-                                />
-                            ) : (
-                                <Modal
-                                    isOpen={isModalOpen}
-                                    title={`${door.closedDoorText} - Edit Content`}
-                                    ModalContent={
-                                        <EditContentForm door={door} />
-                                    }
-                                    confirmLabel="Save"
-                                />
-                            )}
                         </div>
                     </FormContext.Provider>
                 )}
@@ -179,17 +158,6 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
     );
 }
 
-function EditImageButton({ onButtonClick }) {
-    return (
-        <button
-            onClick={onButtonClick}
-            className="block w-full text-left px-4 py-2 text-sm hover:bg-indigo-500/25"
-        >
-            Edit Images
-        </button>
-    );
-}
-
 function EditContentButton({ onButtonClick }) {
     return (
         <button
@@ -201,7 +169,7 @@ function EditContentButton({ onButtonClick }) {
     );
 }
 
-function EditButton({ onButtonClick }) {
+function DeleteButton({ onButtonClick }) {
     return (
         <button
             onClick={onButtonClick}

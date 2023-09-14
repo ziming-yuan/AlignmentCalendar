@@ -4,6 +4,7 @@ import DoorsSection from "/components/edit/DoorsSection";
 import ViewPageButton from "/components/edit/ViewPageButton";
 import EditGeneralButton from "/components/edit/EditGeneralButton";
 import NewDoorButton from "/components/edit/NewDoorButton";
+import EditBC from "/components/breadcrumbs/EditBC";
 
 export default async function EditPage({ params }) {
     const calendar = await fetchCalendar(params.path);
@@ -16,7 +17,10 @@ export default async function EditPage({ params }) {
     return (
         <div>
             <Navbar isDashboard={false} />
-            <div className="container mx-auto p-6 pt-16">
+            <div className="container mx-auto p-6 pt-12">
+                <div className="mb-6">
+                    <EditBC />
+                </div>
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Edit Calendars</h1>
                     <ViewPageButton calendarPath={calendar.path} />

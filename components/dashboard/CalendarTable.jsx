@@ -1,16 +1,20 @@
-'use client';
+"use client";
 
 import CalendarHeader from "./CalendarHeader";
 import CalendarRows from "./CalendarRows";
 import NewCalendarButton from "./NewCalendarButton";
+import DashboardBC from "/components/breadcrumbs/DashboardBC";
 import FetchContext from "../contextProviders/FetchContext";
 import { useState } from "react";
 
-export default function CalendarTable(){
+export default function CalendarTable() {
     const [fetchFlag, setFetchFlag] = useState(false);
     return (
-        <FetchContext.Provider value={{fetchFlag, setFetchFlag}}>
-            <div className="container mx-auto p-6 pt-16">
+        <FetchContext.Provider value={{ fetchFlag, setFetchFlag }}>
+            <div className="container mx-auto p-6 pt-12">
+                <div className="mb-6">
+                    <DashboardBC />
+                </div>
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-2xl font-bold">Your Calendars</h1>
                     <NewCalendarButton />
@@ -21,5 +25,5 @@ export default function CalendarTable(){
                 </table>
             </div>
         </FetchContext.Provider>
-      );
+    );
 }

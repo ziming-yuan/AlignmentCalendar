@@ -41,7 +41,6 @@ export default function CalendarRows() {
                 );
             }
             const { data } = await response.json();
-            console.log("fetched data");
             setCalendars(data);
         } catch (error) {
             console.error("Failed to fetch calendars:", error.message);

@@ -59,7 +59,7 @@ export default function EditGeneralForm({ calendar }) {
                     <input
                         id="titleTextColor"
                         type="color"
-                        className="rounded"
+                        className="rounded border border-gray-300"
                         {...register("titleTextColor")}
                     />
                     <label className="ml-3 text-sm" htmlFor="titleTextColor">
@@ -128,7 +128,7 @@ export default function EditGeneralForm({ calendar }) {
                     <input
                         id="backgroundColor"
                         type="color"
-                        className="rounded"
+                        className="rounded border border-gray-300"
                         {...register("backgroundColor")}
                     />
                     <label className="ml-3 text-sm" htmlFor="backgroundColor">

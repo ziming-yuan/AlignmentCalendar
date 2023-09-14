@@ -167,7 +167,7 @@ export default function EditContentForm({ door }) {
                     <input
                         id="closedDoorTextColor"
                         type="color"
-                        className="rounded"
+                        className="rounded border border-gray-300"
                         {...register("closedDoorTextColor")}
                     />
                     <label
@@ -218,7 +218,7 @@ export default function EditContentForm({ door }) {
                     <input
                         id="closedDoorColor"
                         type="color"
-                        className="rounded"
+                        className="rounded border border-gray-300"
                         {...register("closedDoorColor")}
                     />
                     <label className="ml-3 text-sm" htmlFor="closedDoorColor">

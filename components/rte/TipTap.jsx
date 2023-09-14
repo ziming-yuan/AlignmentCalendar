@@ -146,7 +146,9 @@ const Tiptap = ({ onFileChange, initialMessage }) => {
             BulletList,
             TextStyle,
             FontFamily,
-            Link,
+            Link.configure({
+                validate: (href) => /^https?:\/\//.test(href),
+            }),
             TextAlign.configure({
                 types: ["heading", "paragraph"],
             }),

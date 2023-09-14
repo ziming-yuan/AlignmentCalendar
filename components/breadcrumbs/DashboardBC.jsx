@@ -2,15 +2,15 @@ import React from "react";
 
 const DashboardBC = () => {
     return (
-        <nav class="flex" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
+        <nav className="flex" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                <li className="inline-flex items-center">
                     <div
                         href="/dashboard"
-                        class="flex items-center text-sm font-medium text-gray-500"
+                        className="flex items-center text-sm font-medium text-gray-500"
                     >
                         <svg
-                            class="w-3 h-3 mr-2.5"
+                            className="w-3 h-3 mr-2.5"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor"

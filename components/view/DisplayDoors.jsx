@@ -3,7 +3,8 @@ import { useState } from "react";
 import getYouTubeID from "get-youtube-id";
 import getThumbnailUrl from "/utils/getThumbnailUrl";
 import Image from "next/image";
-import parser from "html-react-parser";
+import parse from "html-react-parser";
+import "./styles.scss";
 
 const DoorsComponent = ({ doors }) => {
     const currentDate = new Date();
@@ -160,9 +161,9 @@ const DoorsComponent = ({ doors }) => {
                         )}
                         {/* Display message if provided */}
                         {selectedDoor.message && (
-                            <p className="m-4">
-                                {parser(selectedDoor.message)}
-                            </p>
+                            <div className="m-4 rich-text">
+                                {getHTML(selectedDoor.message)}
+                            </div>
                         )}
                         {/* Display content image if url is provided */}
                         {selectedDoor.contentImage &&
@@ -196,4 +197,21 @@ export default DoorsComponent;
 
 const getYoutubeUrl = (url) => {
     return `https://www.youtube.com/embed/${getYouTubeID(url)}`;
+};
+
+const getHTML = (htmlString) => {
+    return parse(htmlString, {
+        replace: (domNode) => {
+            if (
+                domNode.name === "p" &&
+                (!domNode.children || domNode.children.length === 0)
+            ) {
+                return (
+                    <p>
+                        <br />
+                    </p>
+                );
+            }
+        },
+    });
 };

@@ -39,7 +39,7 @@ export default async function ViewPage({ params }) {
                 />
             )}
 
-            <header className="mt-4 relative z-10">
+            <header className="mt-6 relative z-10">
                 {logoImage?.fileUrl && (
                     <div className="flex justify-center items-center">
                         <Image
@@ -52,14 +52,14 @@ export default async function ViewPage({ params }) {
                     </div>
                 )}
                 <h1
-                    className="text-center mt-4 text-3xl font-medium"
+                    className="text-center mt-6 text-3xl font-medium"
                     style={{ color: titleTextColor }}
                 >
                     {title}
                 </h1>
             </header>
 
-            <section className="my-8 flex flex-wrap flex-none gap-4 justify-center relative z-10">
+            <section className="mt-12 mb-24 flex flex-wrap flex-none gap-4 justify-center relative z-10 mx-6 sm:mx-16 lg:mx-32">
                 <DoorsComponent doors={doors} />
             </section>
         </main>

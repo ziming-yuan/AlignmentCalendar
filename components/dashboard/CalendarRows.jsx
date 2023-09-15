@@ -114,7 +114,8 @@ export default function CalendarRows() {
     async function handleEmbed(path, id) {
         try {
             const embedCode =
-                `<iframe src="http://${process.env.NEXT_PUBLIC_VERCEL_URL}/calendar/${path}" frameBorder="0" scrolling="no" style="width: 100%; min-height: 600px"></iframe>`.trim();
+                `<iframe src="http://${process.env.NEXT_PUBLIC_VERCEL_URL}/calendar/${path}" frameBorder="0" scrolling="no" style="width: 100%"></iframe>
+                    <script id="alignment-calendar" src="https://${process.env.NEXT_PUBLIC_VERCEL_URL}/autoResize.js"></script>`.trim();
 
             await navigator.clipboard.writeText(embedCode);
             console.log("Embed code copied");

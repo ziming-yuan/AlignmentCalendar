@@ -18,6 +18,7 @@ import Link from "next/link";
 export default function CalendarRows() {
     const [calendars, setCalendars] = useState([]);
     const [activeTooltipId, setActiveTooltipId] = useState(null);
+    const [activeEmbedId, setActiveEmbedId] = useState(null);
     const { data: session } = useSession();
     const { fetchFlag, setFetchFlag } = useContext(FetchContext);
 
@@ -107,6 +108,20 @@ export default function CalendarRows() {
             setTimeout(() => setActiveTooltipId(null), 1000);
         } catch (err) {
             console.error("Failed to copy the link:", err);
+        }
+    }
+
+    async function handleEmbed(path, id) {
+        try {
+            const embedCode =
+                `<iframe src="http://${process.env.NEXT_PUBLIC_VERCEL_URL}/calendar/${path}" frameBorder="0" scrolling="no" style="width: 100%; min-height: 600px"></iframe>`.trim();
+
+            await navigator.clipboard.writeText(embedCode);
+            console.log("Embed code copied");
+            setActiveEmbedId(id);
+            setTimeout(() => setActiveEmbedId(null), 1000);
+        } catch (err) {
+            console.error("Failed to copy the embed code:", err);
         }
     }
 
@@ -210,10 +225,40 @@ export default function CalendarRows() {
                             )}
                         </div>
 
-                        <button className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out">
-                            Code
-                            <CodeBracketIcon className="w-4 h-4 ml-1" />
-                        </button>
+                        <div
+                            style={{
+                                position: "relative",
+                                display: "inline-block",
+                            }}
+                        >
+                            <button
+                                onClick={() =>
+                                    handleEmbed(calendar.path, calendar._id)
+                                }
+                                className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+                            >
+                                Code
+                                <ShareIcon className="w-3.5 h-3.5 ml-1" />
+                            </button>
+                            {activeEmbedId === calendar._id && (
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        bottom: "100%",
+                                        left: "50%",
+                                        transform:
+                                            "translateX(-50%) translateY(-5px)", // Translate Y to give a little gap
+                                        padding: "5px",
+                                        backgroundColor: "black",
+                                        color: "white",
+                                        borderRadius: "5px",
+                                    }}
+                                >
+                                    Copied!
+                                </div>
+                            )}
+                        </div>
+
                         <button
                             onClick={() => handleDelete(calendar._id)}
                             className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"

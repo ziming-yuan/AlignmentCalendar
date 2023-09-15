@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "/lib/dbConnect";
 import Calendar from "/models/calendar";
 import Door from "/models/door";
+import { revalidateTag } from "next/cache";
 
 // Create multiple new doors
 export async function POST(req) {
@@ -46,6 +47,8 @@ export async function POST(req) {
             currentDate.setDate(currentDate.getDate() + 1);
         }
         await Door.insertMany(newDoors);
+
+        revalidateTag("editPageDoors");
 
         return NextResponse.json(
             { message: "Multiple doors created successfully!" },

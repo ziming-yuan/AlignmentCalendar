@@ -17,6 +17,7 @@ import Link from "next/link";
 
 export default function CalendarRows() {
     const [calendars, setCalendars] = useState([]);
+    const [activeTooltipId, setActiveTooltipId] = useState(null);
     const { data: session } = useSession();
     const { fetchFlag, setFetchFlag } = useContext(FetchContext);
 
@@ -89,8 +90,23 @@ export default function CalendarRows() {
                 }),
             });
             setFetchFlag(!fetchFlag);
+            revalidateTag("editPageCalendar");
+            revalidateTag("editPageDoors");
         } catch (error) {
             console.log("Failed to post calendar:", error.message);
+        }
+    }
+
+    async function handleShare(path, id) {
+        try {
+            await navigator.clipboard.writeText(
+                `http://${process.env.NEXT_PUBLIC_VERCEL_URL}/calendar/${path}`
+            );
+            console.log("copied");
+            setActiveTooltipId(id);
+            setTimeout(() => setActiveTooltipId(null), 1000);
+        } catch (err) {
+            console.error("Failed to copy the link:", err);
         }
     }
 
@@ -133,22 +149,67 @@ export default function CalendarRows() {
                         </Link>
                         <button
                             onClick={() => handlePost(calendar._id)}
-                            className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+                            className={`text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md ${
+                                calendar.isActive
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "hover:bg-indigo-600 hover:text-white hover:border-gray-300"
+                            } transition duration-150 ease-in-out`}
+                            disabled={calendar.isActive}
                         >
                             Post
                             <CloudArrowUpIcon className="w-4 h-4 ml-1" />
                         </button>
                         <button
                             onClick={() => handleHide(calendar._id)}
-                            className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+                            className={`text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md ${
+                                !calendar.isActive
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "hover:bg-indigo-600 hover:text-white hover:border-gray-300"
+                            } transition duration-150 ease-in-out`}
+                            disabled={!calendar.isActive}
                         >
                             Hide
                             <CloudArrowDownIcon className="w-4 h-4 ml-1" />
                         </button>
-                        <button className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out">
-                            Share
-                            <ShareIcon className="w-3.5 h-3.5 ml-1" />
-                        </button>
+                        <div
+                            style={{
+                                position: "relative",
+                                display: "inline-block",
+                            }}
+                        >
+                            <button
+                                onClick={() =>
+                                    handleShare(calendar.path, calendar._id)
+                                }
+                                className={`text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md ${
+                                    !calendar.isActive
+                                        ? "opacity-50 cursor-not-allowed"
+                                        : "hover:bg-indigo-600 hover:text-white hover:border-gray-300"
+                                } transition duration-150 ease-in-out`}
+                                disabled={!calendar.isActive}
+                            >
+                                Share
+                                <ShareIcon className="w-3.5 h-3.5 ml-1" />
+                            </button>
+                            {activeTooltipId === calendar._id && (
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        bottom: "100%",
+                                        left: "50%",
+                                        transform:
+                                            "translateX(-50%) translateY(-5px)", // Translate Y to give a little gap
+                                        padding: "5px",
+                                        backgroundColor: "black",
+                                        color: "white",
+                                        borderRadius: "5px",
+                                    }}
+                                >
+                                    Copied!
+                                </div>
+                            )}
+                        </div>
+
                         <button className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out">
                             Code
                             <CodeBracketIcon className="w-4 h-4 ml-1" />

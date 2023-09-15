@@ -3,6 +3,7 @@ import dbConnect from "/lib/dbConnect";
 import Calendar from "/models/calendar";
 import Door from "/models/door";
 import { utapi } from "uploadthing/server";
+import { revalidateTag } from "next/cache";
 
 export async function DELETE(req, { params }) {
     try {
@@ -38,6 +39,9 @@ export async function DELETE(req, { params }) {
 
         // Delete the calendar
         await Calendar.findByIdAndDelete(calendarId);
+
+        revalidateTag("editPageCalendar");
+        revalidateTag("editPageDoors");
 
         return NextResponse.json(
             {

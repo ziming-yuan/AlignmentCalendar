@@ -5,9 +5,11 @@ import { fetchCalendar, fetchDoors } from "/utils/fetchCalendarData";
 
 export default async function ViewPage({ params }) {
     const calendar = await fetchCalendar(params.path);
+    if (!calendar?.isActive) {
+        notFound();
+    }
     const doors = await fetchDoors(params.path);
-
-    if (!calendar || !calendar.isActive) {
+    if (!doors) {
         notFound();
     }
 

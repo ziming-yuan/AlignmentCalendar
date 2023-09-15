@@ -1,11 +1,15 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Controller } from "react-hook-form";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import UploadIcon from "/components/icons/Upload.svg";
 import Image from "next/image";
 
-export default function Dropzone({ onFileChange, setValue, defaultImageUrl }) {
+export default function Dropzone({
+    onFileChange,
+    name,
+    setValue,
+    defaultImageUrl,
+}) {
     const fileInputRef = useRef(null);
     const [isDragActive, setIsDragActive] = useState(false);
     const [selectedFile, setSelectedFile] = useState(
@@ -16,17 +20,17 @@ export default function Dropzone({ onFileChange, setValue, defaultImageUrl }) {
     const handleFileChange = (file) => {
         if (file && file.size > 8 * 1024 * 1024) {
             setFileSizeError("File size exceeds the 8MB limit.");
-            setValue("isFileUpdate", false);
+            setValue(`${name}FileUpdated`, false);
             setSelectedFile(null);
             onFileChange(null);
         } else {
             if (selectedFile && selectedFile.isDefault) {
-                setValue("deleteOgFile", true);
+                setValue(`${name}OgFileDeleted`, true);
             }
             setSelectedFile(file);
             setFileSizeError(null);
             onFileChange(file);
-            setValue("isFileUpdate", true);
+            setValue(`${name}FileUpdated`, true);
         }
     };
 
@@ -34,7 +38,7 @@ export default function Dropzone({ onFileChange, setValue, defaultImageUrl }) {
         if (selectedFile.isDefault) {
             setSelectedFile(null);
             onFileChange(null);
-            setValue("deleteOgFile", true);
+            setValue(`${name}OgFileDeleted`, true);
         } else {
             setSelectedFile(null);
             onFileChange(null);
@@ -85,11 +89,6 @@ export default function Dropzone({ onFileChange, setValue, defaultImageUrl }) {
                     handleFileChange(e.target.files[0]);
                 }}
             />
-            {/* <Controller
-                name="fileSizeError"
-                control={control}
-                render={({ field }) => <input type="hidden" {...field} />}
-            /> */}
             <div
                 role="presentation"
                 className={`flex flex-col items-center justify-center rounded-lg gap-2 border border-dashed border-gray-900/25 p-4 ${

@@ -72,11 +72,11 @@ const alignmentOption = (props) => {
 const alignStyles = {
     control: (base) => ({
         ...base,
-        width: 115,
+        width: 110,
     }),
     menu: (base) => ({
         ...base,
-        width: 115,
+        width: 110,
     }),
 };
 
@@ -90,11 +90,11 @@ const headingOptions = [
 const headingStyles = {
     control: (base) => ({
         ...base,
-        width: 140,
+        width: 130,
     }),
     menu: (base) => ({
         ...base,
-        width: 140,
+        width: 130,
     }),
 };
 
@@ -110,11 +110,11 @@ const fontOptions = [
 const fontStyles = {
     control: (base) => ({
         ...base,
-        width: 155,
+        width: 145,
     }),
     menu: (base) => ({
         ...base,
-        width: 155, // adjust width as needed
+        width: 145, // adjust width as needed
     }),
 };
 
@@ -146,7 +146,9 @@ const Tiptap = ({ onFileChange, initialMessage }) => {
             BulletList,
             TextStyle,
             FontFamily,
-            Link,
+            Link.configure({
+                validate: (href) => /^https?:\/\//.test(href),
+            }),
             TextAlign.configure({
                 types: ["heading", "paragraph"],
             }),

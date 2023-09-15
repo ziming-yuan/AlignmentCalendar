@@ -47,17 +47,14 @@ $gray-300: #d1d5db;
         font-weight: bold;
     }
     a {
-        &:link {
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
+        color: blue;
+        text-decoration: underline;
+
         &:visited {
             color: purple;
-            text-decoration: underline;
         }
         &:hover {
-            text-decoration: underline; 
+            cursor: pointer;
         }
     }
 

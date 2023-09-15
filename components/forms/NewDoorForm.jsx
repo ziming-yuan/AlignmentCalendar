@@ -3,7 +3,7 @@ import { useContext } from "react";
 import FormContext from "../contextProviders/FormContext";
 import TipTap from "/components/rte/TipTap";
 import { useForm, Controller } from "react-hook-form";
-import { updateDoorContent } from "/app/_actions";
+import { createNewDoor } from "/app/_actions";
 import Dropzone from "/components/Dropzone";
 
 const formatDate = (inputDate) => {
@@ -23,7 +23,7 @@ const formatDate = (inputDate) => {
     return `${year}-${month}-${day}T${hour}:${minute}`;
 };
 
-export default function EditContentForm({ door }) {
+export default function EditContentForm({ calendarId }) {
     const { formRef, setIsModalOpen } = useContext(FormContext);
 
     const {
@@ -35,22 +35,20 @@ export default function EditContentForm({ door }) {
         setValue,
     } = useForm({
         defaultValues: {
-            date: door.date ? formatDate(door.date) : "",
-            closedDoorText: door.closedDoorText,
-            youtubeVideoUrl: door.youtubeVideoUrl,
-            message: door.message,
-            doorId: door._id,
-            closedDoorColor: door.closedDoorColor,
-            closedDoorTextColor: door.closedDoorTextColor,
-            contentImgKey: door.contentImage && door.contentImage.fileKey,
+            calendarId: calendarId,
+            date: "",
+            closedDoorText: "",
+            youtubeVideoUrl: "",
+            message: "",
+            closedDoorColor: "#FFFFFF",
+            closedDoorTextColor: "#000000",
+            contentImgKey: "",
             contentImageFileUpdated: false,
             contentImageOgFileDeleted: false,
-            closedImgKey: door.closedDoorImage && door.closedDoorImage.fileKey,
+            closedImgKey: "",
             closedDoorImageFileUpdated: false,
             closedDoorImageOgFileDeleted: false,
-            autoOpenTime: door.autoOpenTime
-                ? formatDate(door.autoOpenTime)
-                : "",
+            autoOpenTime: "",
         },
     });
 
@@ -60,7 +58,7 @@ export default function EditContentForm({ door }) {
         imageData.append("closedDoorImage", data.closedDoorImage);
         data["contentImage"] = "";
         data["closedDoorImage"] = "";
-        await updateDoorContent(data, imageData);
+        await createNewDoor(data, imageData);
         setIsModalOpen(false);
     };
 
@@ -74,11 +72,61 @@ export default function EditContentForm({ door }) {
                 <input
                     type="datetime-local"
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    {...register("date")}
+                    {...register("date", { required: true })}
                 />
                 <p className="text-sm text-gray-500">
                     The date and time of the door.
                 </p>
+            </div>
+
+            {/* Closed Door Text */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">
+                    Closed Door Text
+                </label>
+                <input
+                    type="text"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("closedDoorText", { required: true })}
+                />
+                <p className="text-sm text-gray-500">
+                    The text displayed on the door when it&apos;s closed.
+                    Default is the date.
+                </p>
+            </div>
+
+            {/* Closed Door Text Color */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">
+                    Closed Door Text Color
+                </label>
+                <div className="flex items-center ">
+                    <input
+                        id="closedDoorTextColor"
+                        type="color"
+                        className="rounded border border-gray-300"
+                        {...register("closedDoorTextColor")}
+                    />
+                    <label
+                        htmlFor="closedDoorTextColor"
+                        className="ml-3 text-sm"
+                    >
+                        {watch("closedDoorTextColor")}
+                    </label>
+                </div>
+                <p className="text-sm text-gray-500">
+                    The color of the closed-door text.
+                </p>
+            </div>
+
+            {/* Auto Open Time */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">Auto Open Time</label>
+                <input
+                    type="datetime-local"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("autoOpenTime", { required: true })}
+                />
             </div>
 
             {/* Youtube Video */}
@@ -127,7 +175,7 @@ export default function EditContentForm({ door }) {
                     control={control}
                     render={({ field }) => (
                         <Dropzone
-                            defaultImageUrl={door.contentImage?.fileUrl || ""}
+                            defaultImageUrl={""}
                             onFileChange={field.onChange}
                             setValue={setValue}
                             name={"contentImage"}
@@ -137,46 +185,6 @@ export default function EditContentForm({ door }) {
 
                 <p className="text-sm text-gray-500">
                     The image displayed when the door is open.
-                </p>
-            </div>
-
-            {/* Door Text */}
-            <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium">
-                    Closed Door Text
-                </label>
-                <input
-                    type="text"
-                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    {...register("closedDoorText")}
-                />
-                <p className="text-sm text-gray-500">
-                    The text displayed on the door when it&apos;s closed.
-                    Default is the date.
-                </p>
-            </div>
-
-            {/* Closed Door Text Color */}
-            <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium">
-                    Closed Door Text Color
-                </label>
-                <div className="flex items-center ">
-                    <input
-                        id="closedDoorTextColor"
-                        type="color"
-                        className="rounded border border-gray-300"
-                        {...register("closedDoorTextColor")}
-                    />
-                    <label
-                        htmlFor="closedDoorTextColor"
-                        className="ml-3 text-sm"
-                    >
-                        {watch("closedDoorTextColor")}
-                    </label>
-                </div>
-                <p className="text-sm text-gray-500">
-                    The color of the closed-door text.
                 </p>
             </div>
 
@@ -190,9 +198,7 @@ export default function EditContentForm({ door }) {
                     control={control}
                     render={({ field }) => (
                         <Dropzone
-                            defaultImageUrl={
-                                door.closedDoorImage?.fileUrl || ""
-                            }
+                            defaultImageUrl={""}
                             onFileChange={field.onChange}
                             setValue={setValue}
                             name={"closedDoorImage"}
@@ -227,20 +233,25 @@ export default function EditContentForm({ door }) {
                 </p>
             </div>
 
-            {/* Auto Open Time */}
-            <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium">Auto Open Time</label>
-                <input
-                    type="datetime-local"
-                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    {...register("autoOpenTime")}
-                />
-            </div>
-
             {/* Error message */}
             {errors.youtubeVideoUrl && (
                 <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
                     Please enter a valid YouTube URL.
+                </div>
+            )}
+            {errors.date && (
+                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                    Please enter a door date.
+                </div>
+            )}
+            {errors.closedDoorText && (
+                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                    Please enter closed door text.
+                </div>
+            )}
+            {errors.autoOpenTime && (
+                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                    Please set auto open time.
                 </div>
             )}
         </form>

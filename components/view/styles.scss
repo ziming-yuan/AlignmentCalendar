@@ -1,0 +1,12 @@
+.rich-text a {
+    color: blue;
+    text-decoration: underline;
+    
+    &:visited {
+        color: purple;
+        text-decoration: underline;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}

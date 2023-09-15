@@ -2,7 +2,7 @@ export const fetchCalendar = async (path) => {
     try {
         const response = await fetch(
             `https://${process.env.VERCEL_URL}/api/calendars/getOne/${path}`,
-            { next: { revalidate: 10 } }
+            { next: { tags: ["editPageCalendar"] } }
         );
         if (!response.ok) {
             throw new Error(`API call failed with status: ${response.status}`);

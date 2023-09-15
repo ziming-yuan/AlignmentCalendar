@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import getYouTubeID from "get-youtube-id";
 import getThumbnailUrl from "/utils/getThumbnailUrl";
 import Image from "next/image";
-import parser from "html-react-parser";
+import parse from "html-react-parser";
+import "./styles.scss";
 
 const DoorsComponent = ({ doors }) => {
     const currentDate = new Date();
@@ -12,6 +13,33 @@ const DoorsComponent = ({ doors }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [doorsStatus, setDoorsStatus] = useState({});
     const [shakingDoorId, setShakingDoorId] = useState(null);
+
+    const postHeightToParent = () => {
+        const height = document.documentElement.scrollHeight;
+        window.parent.postMessage(
+            {
+                type: "SET_IFRAME_HEIGHT",
+                height: `${height}px`,
+            },
+            "*"
+        );
+    };
+
+    useEffect(() => {
+        postHeightToParent();
+    }, [modalOpen]);
+
+    useEffect(() => {
+        if (typeof window.ResizeObserver !== "undefined") {
+            const resizeObserver = new ResizeObserver(() => {
+                postHeightToParent();
+            });
+
+            resizeObserver.observe(document.body);
+
+            return () => resizeObserver.disconnect();
+        }
+    }, []);
 
     // Toggle doorsStatus for a doorId
     const toggleDoorStatus = (doorId) => {
@@ -54,7 +82,7 @@ const DoorsComponent = ({ doors }) => {
                         // if youtubeVideoUrl: display thumbnail; else if contentImage: display contentImage; else use closedDoorColor
                         <div
                             key={door._id}
-                            className={`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center 
+                            className={`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] shadow-md rounded-md flex items-center justify-center 
                 ${shakingDoorId === door._id && "animate-shake"}`}
                             onAnimationEnd={() => setShakingDoorId(null)}
                             style={
@@ -70,7 +98,7 @@ const DoorsComponent = ({ doors }) => {
                                           backgroundPosition: "center",
                                           backgroundRepeat: "no-repeat",
                                       }
-                                    : door.contentImage.fileUrl
+                                    : door.contentImage?.fileUrl
                                     ? {
                                           backgroundImage: `url(${door.contentImage.fileUrl})`,
                                           backgroundPosition: "center",
@@ -85,14 +113,14 @@ const DoorsComponent = ({ doors }) => {
                             onClick={() => handleDoorClick(door)}
                         >
                             {!door.youtubeVideoUrl &&
-                                !door.contentImage.fileUrl && (
+                                !door.contentImage?.fileUrl && (
                                     <p
                                         className="text-lg text-center"
                                         style={{
                                             color: door.closedDoorTextColor,
                                         }}
                                     >
-                                        Mystery Opened
+                                        {door.closedDoorText}
                                     </p>
                                 )}
                         </div>
@@ -102,14 +130,14 @@ const DoorsComponent = ({ doors }) => {
                         // otherwise, if closedDoorImage: display image; else use closedDoorColor
                         <div
                             key={door._id}
-                            className={`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] shadow-md rounded-md flex items-center justify-center 
+                            className={`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] shadow-md rounded-md flex items-center justify-center 
                 ${shakingDoorId === door._id && "animate-shake"}`}
                             onAnimationEnd={() => setShakingDoorId(null)}
                             style={{
-                                backgroundColor: door.closedDoorImage.fileUrl
+                                backgroundColor: door.closedDoorImage?.fileUrl
                                     ? "transparent"
                                     : door.closedDoorColor,
-                                backgroundImage: door.closedDoorImage.fileUrl
+                                backgroundImage: door.closedDoorImage?.fileUrl
                                     ? `url(${door.closedDoorImage.fileUrl})`
                                     : "none",
                             }}
@@ -155,12 +183,12 @@ const DoorsComponent = ({ doors }) => {
                         )}
                         {/* Display message if provided */}
                         {selectedDoor.message && (
-                            <p className="m-4">
-                                {parser(selectedDoor.message)}
-                            </p>
+                            <div className="m-4 rich-text">
+                                {getHTML(selectedDoor.message)}
+                            </div>
                         )}
                         {/* Display content image if url is provided */}
-                        {selectedDoor.contentImage.fileUrl && (
+                        {selectedDoor.contentImage?.fileUrl && (
                             <Image
                                 src={selectedDoor.contentImage.fileUrl}
                                 alt="Content Image"
@@ -190,4 +218,21 @@ export default DoorsComponent;
 
 const getYoutubeUrl = (url) => {
     return `https://www.youtube.com/embed/${getYouTubeID(url)}`;
+};
+
+const getHTML = (htmlString) => {
+    return parse(htmlString, {
+        replace: (domNode) => {
+            if (
+                domNode.name === "p" &&
+                (!domNode.children || domNode.children.length === 0)
+            ) {
+                return (
+                    <p>
+                        <br />
+                    </p>
+                );
+            }
+        },
+    });
 };

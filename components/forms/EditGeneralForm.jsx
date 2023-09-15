@@ -79,9 +79,7 @@ export default function EditGeneralForm({ calendar }) {
                     control={control}
                     render={({ field }) => (
                         <Dropzone
-                            defaultImageUrl={
-                                calendar.logoImage && calendar.logoImage.fileUrl
-                            }
+                            defaultImageUrl={calendar.logoImage?.fileUrl || ""}
                             onFileChange={field.onChange}
                             setValue={setValue}
                             name={"logoImage"}
@@ -104,8 +102,7 @@ export default function EditGeneralForm({ calendar }) {
                     render={({ field }) => (
                         <Dropzone
                             defaultImageUrl={
-                                calendar.backgroundImage &&
-                                calendar.backgroundImage.fileUrl
+                                calendar.backgroundImage?.fileUrl || ""
                             }
                             onFileChange={field.onChange}
                             setValue={setValue}

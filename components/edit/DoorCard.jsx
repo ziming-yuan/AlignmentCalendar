@@ -72,7 +72,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                 {/* Content Image */}
                 <div>
                     <span className="font-semibold">Content Image:</span>
-                    {door.contentImage && door.contentImage.fileUrl ? (
+                    {door.contentImage?.fileUrl ? (
                         <div className="relative mt-1 flex items-center justify-center shadow-md w-[250px] h-[125px]">
                             <Image
                                 src={door.contentImage.fileUrl}
@@ -112,7 +112,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                 {/* Closed Door Image */}
                 <div>
                     <span className="font-semibold">Closed Door Image:</span>
-                    {door.closedDoorImage && door.closedDoorImage.fileUrl ? (
+                    {door.closedDoorImage?.fileUrl ? (
                         <div className="relative mt-1 flex items-center justify-center shadow-md w-[250px] h-[125px]">
                             <Image
                                 src={door.closedDoorImage.fileUrl}

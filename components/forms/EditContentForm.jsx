@@ -127,9 +127,7 @@ export default function EditContentForm({ door }) {
                     control={control}
                     render={({ field }) => (
                         <Dropzone
-                            defaultImageUrl={
-                                door.contentImage && door.contentImage.fileUrl
-                            }
+                            defaultImageUrl={door.contentImage?.fileUrl || ""}
                             onFileChange={field.onChange}
                             setValue={setValue}
                             name={"contentImage"}
@@ -193,8 +191,7 @@ export default function EditContentForm({ door }) {
                     render={({ field }) => (
                         <Dropzone
                             defaultImageUrl={
-                                door.closedDoorImage &&
-                                door.closedDoorImage.fileUrl
+                                door.closedDoorImage?.fileUrl || ""
                             }
                             onFileChange={field.onChange}
                             setValue={setValue}

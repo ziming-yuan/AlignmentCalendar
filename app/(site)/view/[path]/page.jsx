@@ -57,7 +57,7 @@ export default async function ViewPage({ params }) {
                 </h1>
             </header>
 
-            <section className="mt-12 mb-32 flex flex-wrap flex-none gap-4 justify-center relative z-10 mx-6 sm:mx-16 lg:mx-32">
+            <section className="mt-12 mb-32 flex flex-wrap flex-none gap-4 justify-center relative z-10 mx-4 sm:mx-12 lg:mx-24">
                 <DoorsComponent doors={doors} />
             </section>
 

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import DoorsComponent from "/components/view/DisplayDoors";
 import { fetchCalendar, fetchDoors } from "/utils/fetchCalendarData";
 import Link from "next/link";
@@ -7,8 +8,8 @@ export default async function ViewPage({ params }) {
     const calendar = await fetchCalendar(params.path);
     const doors = await fetchDoors(params.path);
 
-    if (!calendar || !doors) {
-        return;
+    if (!doors || !calendar) {
+        notFound();
     }
 
     const {

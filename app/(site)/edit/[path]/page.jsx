@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import Navbar from "/components/Navbar.jsx";
 import { fetchCalendar, fetchDoors } from "/utils/fetchCalendarData";
 import DoorsSection from "/components/edit/DoorsSection";
@@ -11,7 +12,7 @@ export default async function EditPage({ params }) {
     const doors = await fetchDoors(params.path);
 
     if (!doors || !calendar) {
-        return;
+        notFound();
     }
 
     return (

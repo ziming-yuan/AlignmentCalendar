@@ -24,5 +24,6 @@ export { default } from "next-auth/middleware";
 // }
 
 export const config = {
-    matcher: ["/api/:path*", "/dashboard", "/edit/:path*", "/view/:path*"],
+    matcher: ["/dashboard", "/edit/:path*", "/view/:path*"],
 };
+// "/api/:path*",

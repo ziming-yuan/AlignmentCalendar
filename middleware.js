@@ -1,4 +1,4 @@
-import { default as nextAuthMiddleware } from "next-auth/middleware";
+import nextAuthMiddleware from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export async function middleware(request) {

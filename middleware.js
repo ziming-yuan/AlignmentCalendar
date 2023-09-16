@@ -2,8 +2,7 @@ import nextAuthMiddleware from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export async function middleware(request) {
-    const authResponse =
-        (await nextAuthMiddleware(request)) || NextResponse.next();
+    const authResponse = nextAuthMiddleware(request) || NextResponse.next();
 
     if (request.nextUrl.pathname.startsWith("/calendar/")) {
         authResponse.headers.delete("X-Frame-Options");

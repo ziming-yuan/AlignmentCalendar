@@ -1,7 +1,9 @@
 import { default as nextAuthMiddleware } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
 export async function middleware(request) {
-    const authResponse = await nextAuthMiddleware(request);
+    const authResponse =
+        (await nextAuthMiddleware(request)) || NextResponse.next();
 
     if (request.nextUrl.pathname.startsWith("/calendar/")) {
         authResponse.headers.delete("X-Frame-Options");
@@ -9,6 +11,7 @@ export async function middleware(request) {
 
     return authResponse;
 }
+
 export const config = {
     matcher: ["/dashboard", "/edit/:path*", "/view/:path*"],
 };

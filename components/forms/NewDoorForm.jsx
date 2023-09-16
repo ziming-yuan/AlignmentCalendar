@@ -24,7 +24,7 @@ const formatDate = (inputDate) => {
 };
 
 export default function EditContentForm({ calendarId }) {
-    const { formRef, setIsModalOpen } = useContext(FormContext);
+    const { formRef, setIsModalOpen, setIsLoading } = useContext(FormContext);
 
     const {
         register,
@@ -53,6 +53,7 @@ export default function EditContentForm({ calendarId }) {
     });
 
     const processData = async (data) => {
+        setIsLoading(true);
         const imageData = new FormData();
         imageData.append("contentImage", data.contentImage); // file is not serializable unless wrapped inside FormData
         imageData.append("closedDoorImage", data.closedDoorImage);
@@ -60,6 +61,7 @@ export default function EditContentForm({ calendarId }) {
         data["closedDoorImage"] = "";
         await createNewDoor(data, imageData);
         setIsModalOpen(false);
+        setIsLoading(false);
     };
 
     return (
@@ -127,6 +129,9 @@ export default function EditContentForm({ calendarId }) {
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                     {...register("autoOpenTime", { required: true })}
                 />
+                <p className="text-sm text-gray-500">
+                    When the door automatically opens.
+                </p>
             </div>
 
             {/* Youtube Video */}

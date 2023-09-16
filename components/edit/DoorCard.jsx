@@ -13,6 +13,7 @@ import Modal from "../Modal";
 export default function DoorCard({ door, isOpen, onMenuToggle }) {
     const formRef = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const youtubeThumbnail = door.youtubeVideoUrl
         ? getThumbnailUrl(getYouTubeID(door.youtubeVideoUrl), "mq")
         : null;
@@ -32,7 +33,9 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                     <EllipsisHorizontalIcon className="h-5 w-5" />
                 </button>
                 {isOpen && (
-                    <FormContext.Provider value={{ formRef, setIsModalOpen }}>
+                    <FormContext.Provider
+                        value={{ formRef, setIsModalOpen, setIsLoading }}
+                    >
                         <div className="absolute right-4 top-8 py-1 w-30 bg-white rounded-md shadow-xl z-10 border border-gray-100 divide divide-y divide-gray-200">
                             <EditContentButton
                                 onButtonClick={() => {
@@ -49,6 +52,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                                 title={`${door.closedDoorText} - Edit Content`}
                                 ModalContent={<EditContentForm door={door} />}
                                 confirmLabel="Save"
+                                isConfirmButtonDisabled={isLoading}
                             />
                         </div>
                     </FormContext.Provider>

@@ -6,17 +6,21 @@ import FormContext from "../contextProviders/FormContext";
 
 const EditGeneralButton = ({ calendar }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const formRef = useRef(null);
 
     return (
         <>
-            <FormContext.Provider value={{ formRef, setIsModalOpen }}>
+            <FormContext.Provider
+                value={{ formRef, setIsModalOpen, setIsLoading }}
+            >
                 <Button onButtonClick={() => setIsModalOpen(true)} />
                 <Modal
                     isOpen={isModalOpen}
                     title="Edit General Styling"
                     ModalContent={<EditGeneralForm calendar={calendar} />}
                     confirmLabel="Save"
+                    isConfirmButtonDisabled={isLoading}
                 />
             </FormContext.Provider>
         </>

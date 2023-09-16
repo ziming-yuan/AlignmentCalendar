@@ -6,7 +6,7 @@ import Dropzone from "/components/Dropzone";
 import { updateCalendarContent } from "/app/_actions";
 
 export default function EditGeneralForm({ calendar }) {
-    const { formRef, setIsModalOpen } = useContext(FormContext);
+    const { formRef, setIsModalOpen, setIsLoading } = useContext(FormContext);
     const {
         register,
         handleSubmit,
@@ -27,6 +27,7 @@ export default function EditGeneralForm({ calendar }) {
     });
 
     const updateCalendarData = async (data) => {
+        setIsLoading(true);
         const imageData = new FormData();
         imageData.append("backgroundImage", data.backgroundImage);
         imageData.append("logoImage", data.logoImage);
@@ -34,6 +35,7 @@ export default function EditGeneralForm({ calendar }) {
         data["backgroundImage"] = "";
         console.log(data);
         await updateCalendarContent(data, imageData);
+        setIsLoading(false);
         setIsModalOpen(false);
     };
 

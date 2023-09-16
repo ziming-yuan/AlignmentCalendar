@@ -24,7 +24,7 @@ const formatDate = (inputDate) => {
 };
 
 export default function EditContentForm({ door }) {
-    const { formRef, setIsModalOpen } = useContext(FormContext);
+    const { formRef, setIsModalOpen, setIsLoading } = useContext(FormContext);
 
     const {
         register,
@@ -55,12 +55,14 @@ export default function EditContentForm({ door }) {
     });
 
     const processData = async (data) => {
+        setIsLoading(true);
         const imageData = new FormData();
         imageData.append("contentImage", data.contentImage); // file is not serializable unless wrapped inside FormData
         imageData.append("closedDoorImage", data.closedDoorImage);
         data["contentImage"] = "";
         data["closedDoorImage"] = "";
         await updateDoorContent(data, imageData);
+        setIsLoading(false);
         setIsModalOpen(false);
     };
 

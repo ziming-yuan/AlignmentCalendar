@@ -1,17 +1,14 @@
-export { default } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { default as nextAuthMiddleware } from "next-auth/middleware";
 
-export function middleware(request) {
-    const response = NextResponse.next();
+export async function middleware(request) {
+    const authResponse = await nextAuthMiddleware(request);
 
     if (request.nextUrl.pathname.startsWith("/calendar/")) {
-        response.headers.delete("X-Frame-Options");
+        authResponse.headers.delete("X-Frame-Options");
     }
 
-    return response;
+    return authResponse;
 }
-
 export const config = {
     matcher: ["/dashboard", "/edit/:path*", "/view/:path*"],
 };
-// "/api/:path*",

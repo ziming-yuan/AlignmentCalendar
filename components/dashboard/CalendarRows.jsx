@@ -91,8 +91,6 @@ export default function CalendarRows() {
                 }),
             });
             setFetchFlag(!fetchFlag);
-            revalidateTag("editPageCalendar");
-            revalidateTag("editPageDoors");
         } catch (error) {
             console.log("Failed to post calendar:", error.message);
         }
@@ -101,11 +99,11 @@ export default function CalendarRows() {
     async function handleShare(path, id) {
         try {
             await navigator.clipboard.writeText(
-                `http://${process.env.NEXT_PUBLIC_VERCEL_URL}/calendar/${path}`
+                `http://${process.env.NEXT_PUBLIC_VERCEL_DOMAIN}/calendar/${path}`
             );
             console.log("copied");
             setActiveTooltipId(id);
-            setTimeout(() => setActiveTooltipId(null), 1000);
+            setTimeout(() => setActiveTooltipId(null), 600);
         } catch (err) {
             console.error("Failed to copy the link:", err);
         }
@@ -113,12 +111,12 @@ export default function CalendarRows() {
 
     async function handleEmbed(path, id) {
         try {
-            const embedCode = `<iframe src="http://${process.env.NEXT_PUBLIC_VERCEL_URL}/calendar/${path}" id="alignment-calendar" frameBorder="0" style="width: 100%"></iframe><script src="https://${process.env.NEXT_PUBLIC_VERCEL_URL}/autoResize.js"></script>`;
+            const embedCode = `<iframe src="http://${process.env.NEXT_PUBLIC_VERCEL_DOMAIN}/calendar/${path}" id="alignment-calendar" frameBorder="0" style="width: 100%"></iframe><script src="https://${process.env.NEXT_PUBLIC_VERCEL_URL}/autoResize.js"></script>`;
 
             await navigator.clipboard.writeText(embedCode);
             console.log("Embed code copied");
             setActiveEmbedId(id);
-            setTimeout(() => setActiveEmbedId(null), 1000);
+            setTimeout(() => setActiveEmbedId(null), 600);
         } catch (err) {
             console.error("Failed to copy the embed code:", err);
         }
@@ -149,17 +147,19 @@ export default function CalendarRows() {
                         )}
                     </td>
                     <td className="px-2 sm:px-4 py-2">
-                        <Link href={`/edit/${calendar.path}`}>
-                            <button className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out">
-                                Edit
-                                <PencilIcon className="w-3 h-3 ml-1" />
-                            </button>
+                        <Link
+                            href={`/edit/${calendar.path}`}
+                            className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+                        >
+                            Edit
+                            <PencilIcon className="w-3 h-3 ml-1" />
                         </Link>
-                        <Link href={`/view/${calendar.path}`}>
-                            <button className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out">
-                                View
-                                <EyeIcon className="w-4 h-4 ml-1" />
-                            </button>
+                        <Link
+                            href={`/view/${calendar.path}`}
+                            className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
+                        >
+                            View
+                            <EyeIcon className="w-4 h-4 ml-1" />
                         </Link>
                         <button
                             onClick={() => handlePost(calendar._id)}
@@ -195,12 +195,7 @@ export default function CalendarRows() {
                                 onClick={() =>
                                     handleShare(calendar.path, calendar._id)
                                 }
-                                className={`text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md ${
-                                    !calendar.isActive
-                                        ? "opacity-50 cursor-not-allowed"
-                                        : "hover:bg-indigo-600 hover:text-white hover:border-gray-300"
-                                } transition duration-150 ease-in-out`}
-                                disabled={!calendar.isActive}
+                                className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
                             >
                                 Share
                                 <ShareIcon className="w-3.5 h-3.5 ml-1" />
@@ -237,7 +232,7 @@ export default function CalendarRows() {
                                 className="text-indigo-700 px-2 py-1 m-1 inline-flex items-center border-gray-100 border shadow rounded-md hover:bg-indigo-600 hover:text-white hover:border-gray-300 transition duration-150 ease-in-out"
                             >
                                 Code
-                                <ShareIcon className="w-3.5 h-3.5 ml-1" />
+                                <CodeBracketIcon className="w-3.5 h-3.5 ml-1" />
                             </button>
                             {activeEmbedId === calendar._id && (
                                 <div

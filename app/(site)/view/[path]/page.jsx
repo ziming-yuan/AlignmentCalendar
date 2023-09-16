@@ -62,23 +62,19 @@ export default async function ViewPage({ params }) {
             </section>
 
             {/* Fixed Footer */}
-            <footer className="fixed bottom-0 left-0 w-full p-4 flex justify-center bg-white shadow-lg z-20 gap-x-4">
-                <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md shadow border border-gray-300 justify-center items-center flex focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <Link
-                        href={`/dashboard`}
-                        className="text-white text-sm font-medium"
-                    >
-                        Dashboard
-                    </Link>
-                </button>
-                <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md shadow border border-gray-300 justify-center items-center flex focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <Link
-                        href={`/edit/${calendar.path}`}
-                        className="text-white text-sm font-medium"
-                    >
-                        Edit Page
-                    </Link>
-                </button>
+            <footer className="fixed bottom-0 left-0 w-full p-4 flex justify-center bg-white shadow-lg z-20 gap-x-4 border-t">
+                <Link
+                    href={`/dashboard`}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md shadow border border-gray-300 justify-center items-center flex focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white text-sm font-medium"
+                >
+                    Dashboard
+                </Link>
+                <Link
+                    href={`/edit/${calendar.path}`}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md shadow border border-gray-300 justify-center items-center flex focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white text-sm font-medium"
+                >
+                    Edit Page
+                </Link>
             </footer>
         </main>
     );

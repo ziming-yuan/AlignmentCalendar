@@ -1,10 +1,32 @@
 "use server";
 import { utapi } from "uploadthing/server";
 import { revalidateTag } from "next/cache";
+import { NextResponse } from "next/server";
 import dbConnect from "/lib/dbConnect";
 import Door from "/models/door";
 import Calendar from "/models/calendar";
-import { NextResponse } from "next/server";
+import User from "/models/user";
+import bcrypt from "bcryptjs";
+
+export async function handleRegister(formData) {
+    const email = formData.email;
+    const password = formData.password;
+    try {
+        await dbConnect();
+        const user = await User.findOne({ email }).select("_id");
+        if (user) {
+            return { success: false, error: "User exists" };
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.create({
+            email,
+            password: hashedPassword,
+        });
+        return { success: true, error: null };
+    } catch (error) {
+        return { success: false, error: `${error}` };
+    }
+}
 
 export async function deleteDoor(doorId) {
     try {

@@ -1,13 +1,19 @@
 "use client";
 import Link from "next/link";
-import { CalendarDaysIcon } from "@heroicons/react/24/solid";
+import {
+    CalendarDaysIcon,
+    EyeIcon,
+    EyeSlashIcon,
+} from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { handleRegister } from "/app/_actions";
 
-export default function Home() {
+export default function Register() {
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [accountCreated, setAccountCreated] = useState(false);
     const router = useRouter();
 
     const {
@@ -25,7 +31,10 @@ export default function Home() {
         setError("");
         const { success, error } = await handleRegister(data);
         if (success) {
-            router.push("/");
+            setAccountCreated(true);
+            setTimeout(() => {
+                router.push("dashboard");
+            }, 2000);
         } else {
             setError(error);
         }
@@ -57,11 +66,20 @@ export default function Home() {
                             id="email"
                             type="email"
                             autoComplete="new-password"
-                            className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300"
-                            {...register("email", { required: true })}
+                            placeholder="Enter email address"
+                            className="w-full p-2 bg-white rounded border border-gray-300 text-sm"
+                            {...register("email", {
+                                required: "Email is required",
+                            })}
                         />
+                        {errors.email && (
+                            <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                                {errors.email.message}
+                            </div>
+                        )}
                     </div>
 
+                    {/* Password field */}
                     <div className="mb-4 relative">
                         <label
                             htmlFor="password"
@@ -69,13 +87,40 @@ export default function Home() {
                         >
                             Password
                         </label>
-                        <input
-                            id="password"
-                            type="password"
-                            autoComplete="new-password"
-                            className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300"
-                            {...register("password", { required: true })}
-                        />
+                        <div className="flex relative">
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="new-password"
+                                placeholder="At least 8 characters, 1 special"
+                                className="w-full p-2 bg-white rounded border border-gray-300 pr-10 text-sm"
+                                {...register("password", {
+                                    required: "Password is required",
+                                    minLength: {
+                                        value: 8,
+                                        message:
+                                            "Password should be at least 8 characters",
+                                    },
+                                    pattern: {
+                                        value: /^(?=.*[0-9])/,
+                                        message:
+                                            "Password should contain at least one number",
+                                    },
+                                })}
+                            />
+                            <div
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5"
+                            >
+                                {showPassword ? <EyeIcon /> : <EyeSlashIcon />}
+                            </div>
+                        </div>
+
+                        {errors.password && (
+                            <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                                {errors.password.message}
+                            </div>
+                        )}
                     </div>
 
                     <button
@@ -91,9 +136,9 @@ export default function Home() {
                         </div>
                     )}
 
-                    {(errors.email || errors.password) && (
-                        <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                            All fields are required.
+                    {accountCreated && (
+                        <div className="bg-green-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                            Account created successfully! Redirecting...
                         </div>
                     )}
 

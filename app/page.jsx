@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarDaysIcon } from "@heroicons/react/24/solid";
+import {
+    CalendarDaysIcon,
+    EyeIcon,
+    EyeSlashIcon,
+} from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -9,6 +13,7 @@ import { signIn } from "next-auth/react";
 
 export default function Home() {
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
 
     const {
@@ -36,7 +41,7 @@ export default function Home() {
                 setError("Invalid Credentials");
                 return;
             }
-            router.push("dashboard");
+            router.push("/dashboard");
         } catch (error) {
             console.log(error);
         }
@@ -68,7 +73,7 @@ export default function Home() {
                             id="email"
                             type="email"
                             autoComplete="current-password"
-                            className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300"
+                            className="w-full p-2 bg-white rounded border border-gray-300 text-sm"
                             {...register("email", { required: true })}
                         />
                     </div>
@@ -80,13 +85,21 @@ export default function Home() {
                         >
                             Password
                         </label>
-                        <input
-                            id="password"
-                            type="password"
-                            autoComplete="current-password"
-                            className="w-full h-9 px-2 py-3 bg-white rounded border border-gray-300"
-                            {...register("password", { required: true })}
-                        />
+                        <div className="flex relative">
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="current-password"
+                                className="w-full p-2 bg-white rounded border border-gray-300 pr-10 text-sm"
+                                {...register("password", { required: true })}
+                            />
+                            <div
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5"
+                            >
+                                {showPassword ? <EyeIcon /> : <EyeSlashIcon />}
+                            </div>
+                        </div>
                         <a
                             href="#"
                             className="absolute right-0 top-0 text-indigo-600 text-sm font-medium leading-tight"

@@ -62,15 +62,15 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
             {/* Card Content */}
             <div className="p-4 text-sm space-y-2">
                 {/* Door Date */}
-                <div>
-                    <span className="font-semibold">Door Date: </span>
-                    {new Date(door.date).toLocaleString()}
+                <div className="flex space-x-2">
+                    <span className="font-semibold">Door Date:</span>
+                    <span> {new Date(door.date).toLocaleString()} </span>
                 </div>
 
                 {/* Message */}
-                <div className="truncate">
-                    <span className="font-semibold">Message: </span>
-                    {getFirstWords(door.message, 15)}
+                <div className="flex space-x-2 truncate">
+                    <span className="font-semibold">Message:</span>
+                    <span>{getFirstWords(door.message, 15)}</span>
                 </div>
 
                 {/* Content Image */}
@@ -132,7 +132,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                     )}
                 </div>
 
-                {/* Colors */}
+                {/* Closed Door Color */}
                 <div className="flex space-x-4">
                     <span className="font-semibold">Closed Door Color:</span>
                     <div
@@ -140,6 +140,14 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                         style={{ backgroundColor: door.closedDoorColor }}
                     ></div>
                 </div>
+
+                {/* Message */}
+                <div className="flex space-x-2">
+                    <span className="font-semibold">Closed Door Text: </span>
+                    <span>{door.closedDoorText}</span>
+                </div>
+
+                {/* Closed Door Text Color */}
                 <div className="flex space-x-4">
                     <span className="font-semibold">
                         Closed Door Text Color:
@@ -151,11 +159,14 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                 </div>
 
                 {/* Door Auto Open Time */}
-                <div>
+                <div className="flex space-x-2">
                     <span className="font-semibold">Auto Open Time: </span>
-                    {door.autoOpenTime
-                        ? new Date(door.autoOpenTime).toLocaleString()
-                        : "Not Set"}
+                    <span>
+                        {" "}
+                        {door.autoOpenTime
+                            ? new Date(door.autoOpenTime).toLocaleString()
+                            : "Not Set"}{" "}
+                    </span>
                 </div>
             </div>
         </div>

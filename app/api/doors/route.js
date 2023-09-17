@@ -11,6 +11,7 @@ export async function POST(req) {
         await dbConnect();
         const {
             calendarId,
+            name,
             date,
             message = "",
             youtubeVideoUrl = "",
@@ -41,6 +42,7 @@ export async function POST(req) {
 
         const newDoor = new Door({
             calendarId,
+            name,
             date,
             message,
             youtubeVideoUrl,

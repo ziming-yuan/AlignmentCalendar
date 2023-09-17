@@ -3,6 +3,7 @@ import dbConnect from "/lib/dbConnect";
 import Calendar from "/models/calendar";
 import Door from "/models/door";
 import { revalidateTag } from "next/cache";
+import { addDays, format, startOfDay } from "date-fns";
 
 // Create multiple new doors
 export async function POST(req) {
@@ -19,8 +20,8 @@ export async function POST(req) {
             );
         }
 
-        const start = new Date(startDate);
-        const end = new Date(endDate);
+        const start = startOfDay(new Date(startDate)); // start of the duration in local time
+        const end = startOfDay(new Date(endDate)); // end of the duration in local time
         let currentDate = start;
         const newDoors = [];
         while (currentDate <= end) {
@@ -42,10 +43,10 @@ export async function POST(req) {
                         fileKey: "",
                     },
                     closedDoorColor: "#FFFFFF",
-                    autoOpenTime: new Date(currentDate),
+                    autoOpenTime: addDays(new Date(currentDate), 7), // add a week to currentDate
                 })
             );
-            currentDate.setDate(currentDate.getDate() + 1);
+            currentDate = addDays(currentDate, 1); // Increment by 1 day
         }
         await Door.insertMany(newDoors);
 
@@ -64,23 +65,6 @@ export async function POST(req) {
 }
 
 function formatDate(date) {
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ];
-
-    const monthName = months[date.getMonth()];
-    const day = date.getDate();
-
-    return `${monthName} ${day}`;
+    // Use format function from date-fns for formatting
+    return format(date, "MMMM d"); // "MMMM" gives full month name, "d" gives day of the month
 }

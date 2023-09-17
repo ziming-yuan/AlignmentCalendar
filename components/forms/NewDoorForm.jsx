@@ -36,6 +36,7 @@ export default function EditContentForm({ calendarId }) {
     } = useForm({
         defaultValues: {
             calendarId: calendarId,
+            name: "",
             date: "",
             closedDoorText: "",
             youtubeVideoUrl: "",
@@ -66,6 +67,24 @@ export default function EditContentForm({ calendarId }) {
 
     return (
         <form ref={formRef} onSubmit={handleSubmit(processData)}>
+            {/* Door Name */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">Door Name</label>
+                <input
+                    type="text"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("name", { required: true })}
+                />
+                <p className="text-sm text-gray-500">
+                    Name of the door for your reference.
+                </p>
+                {errors.name && (
+                    <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md">
+                        Please enter a name for the door.
+                    </div>
+                )}
+            </div>
+
             {/* Door Date & Time */}
             <div className="relative flex flex-col mb-4 gap-y-2">
                 <label className="text-base font-medium">
@@ -79,46 +98,11 @@ export default function EditContentForm({ calendarId }) {
                 <p className="text-sm text-gray-500">
                     The date and time of the door.
                 </p>
-            </div>
-
-            {/* Closed Door Text */}
-            <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium">
-                    Closed Door Text
-                </label>
-                <input
-                    type="text"
-                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
-                    {...register("closedDoorText", { required: true })}
-                />
-                <p className="text-sm text-gray-500">
-                    The text displayed on the door when it&apos;s closed.
-                    Default is the date.
-                </p>
-            </div>
-
-            {/* Closed Door Text Color */}
-            <div className="relative flex flex-col mb-4 gap-y-2">
-                <label className="text-base font-medium">
-                    Closed Door Text Color
-                </label>
-                <div className="flex items-center ">
-                    <input
-                        id="closedDoorTextColor"
-                        type="color"
-                        className="rounded border border-gray-300"
-                        {...register("closedDoorTextColor")}
-                    />
-                    <label
-                        htmlFor="closedDoorTextColor"
-                        className="ml-3 text-sm"
-                    >
-                        {watch("closedDoorTextColor")}
-                    </label>
-                </div>
-                <p className="text-sm text-gray-500">
-                    The color of the closed-door text.
-                </p>
+                {errors.date && (
+                    <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md">
+                        Please enter a door date.
+                    </div>
+                )}
             </div>
 
             {/* Auto Open Time */}
@@ -132,6 +116,11 @@ export default function EditContentForm({ calendarId }) {
                 <p className="text-sm text-gray-500">
                     When the door automatically opens.
                 </p>
+                {errors.autoOpenTime && (
+                    <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md">
+                        Please set auto open time.
+                    </div>
+                )}
             </div>
 
             {/* Youtube Video */}
@@ -150,6 +139,11 @@ export default function EditContentForm({ calendarId }) {
                 <p className="text-sm text-gray-500">
                     Link to Youtube video when door is open.
                 </p>
+                {errors.youtubeVideoUrl && (
+                    <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                        Please enter a valid YouTube URL.
+                    </div>
+                )}
             </div>
 
             {/* Message */}
@@ -193,6 +187,46 @@ export default function EditContentForm({ calendarId }) {
                 </p>
             </div>
 
+            {/* Closed Door Text */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">
+                    Closed Door Text
+                </label>
+                <input
+                    type="text"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("closedDoorText")}
+                />
+                <p className="text-sm text-gray-500">
+                    The text displayed on the door when it&apos;s closed.
+                    Default is the date.
+                </p>
+            </div>
+
+            {/* Closed Door Text Color */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">
+                    Closed Door Text Color
+                </label>
+                <div className="flex items-center ">
+                    <input
+                        id="closedDoorTextColor"
+                        type="color"
+                        className="rounded border border-gray-300"
+                        {...register("closedDoorTextColor")}
+                    />
+                    <label
+                        htmlFor="closedDoorTextColor"
+                        className="ml-3 text-sm"
+                    >
+                        {watch("closedDoorTextColor")}
+                    </label>
+                </div>
+                <p className="text-sm text-gray-500">
+                    The color of the closed-door text.
+                </p>
+            </div>
+
             {/* Closed Door Image */}
             <div className="relative flex flex-col mb-4 gap-y-2">
                 <label className="text-base font-medium" htmlFor="doorImage">
@@ -210,7 +244,6 @@ export default function EditContentForm({ calendarId }) {
                         />
                     )}
                 />
-
                 <p className="text-sm text-gray-500">
                     The background image displayed once door is closed. Will
                     override closed-door color.
@@ -237,28 +270,6 @@ export default function EditContentForm({ calendarId }) {
                     Background color of the door when it is closed.
                 </p>
             </div>
-
-            {/* Error message */}
-            {errors.youtubeVideoUrl && (
-                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                    Please enter a valid YouTube URL.
-                </div>
-            )}
-            {errors.date && (
-                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                    Please enter a door date.
-                </div>
-            )}
-            {errors.closedDoorText && (
-                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                    Please enter closed door text.
-                </div>
-            )}
-            {errors.autoOpenTime && (
-                <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-                    Please set auto open time.
-                </div>
-            )}
         </form>
     );
 }

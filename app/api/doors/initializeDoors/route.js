@@ -19,14 +19,15 @@ export async function POST(req) {
             );
         }
 
-        const start = toLocalDate(startDate);
-        const end = toLocalDate(endDate);
+        const start = new Date(startDate);
+        const end = new Date(endDate);
         let currentDate = start;
         const newDoors = [];
         while (currentDate <= end) {
             newDoors.push(
                 new Door({
                     calendarId: calendarId,
+                    name: formatDate(currentDate),
                     date: new Date(currentDate), // currentDate is a reference only
                     message: "",
                     youtubeVideoUrl: "",
@@ -82,10 +83,4 @@ function formatDate(date) {
     const day = date.getDate();
 
     return `${monthName} ${day}`;
-}
-
-function toLocalDate(date) {
-    const [year, month, day] = date.split("-").map(Number);
-    const localDate = new Date(year, month - 1, day);
-    return localDate;
 }

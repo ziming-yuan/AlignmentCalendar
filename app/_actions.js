@@ -62,6 +62,7 @@ export async function deleteDoor(doorId) {
 
 export async function updateDoorContent(formData, imageData) {
     const doorId = formData.doorId;
+    const name = formData.name;
     const closedDoorText = formData.closedDoorText;
     const date = formData.date;
     const message = formData.message;
@@ -83,6 +84,7 @@ export async function updateDoorContent(formData, imageData) {
     await dbConnect();
 
     await Door.findByIdAndUpdate(doorId, {
+        name,
         date: new Date(date),
         closedDoorText,
         message,
@@ -216,6 +218,7 @@ export async function updateCalendarContent(formData, imageData) {
 
 export async function createNewDoor(formData, imageData) {
     const calendarId = formData.calendarId;
+    const name = formData.name;
     const closedDoorText = formData.closedDoorText;
     const date = formData.date;
     const message = formData.message;
@@ -234,6 +237,7 @@ export async function createNewDoor(formData, imageData) {
 
     let newDoorData = {
         calendarId,
+        name,
         date: new Date(date),
         closedDoorText,
         message,

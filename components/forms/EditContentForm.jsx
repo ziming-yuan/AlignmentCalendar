@@ -36,6 +36,7 @@ export default function EditContentForm({ door }) {
     } = useForm({
         defaultValues: {
             date: door.date ? formatDate(door.date) : "",
+            name: door.name,
             closedDoorText: door.closedDoorText,
             youtubeVideoUrl: door.youtubeVideoUrl,
             message: door.message,
@@ -68,6 +69,19 @@ export default function EditContentForm({ door }) {
 
     return (
         <form ref={formRef} onSubmit={handleSubmit(processData)}>
+            {/* Door Name */}
+            <div className="relative flex flex-col mb-4 gap-y-2">
+                <label className="text-base font-medium">Door Name</label>
+                <input
+                    type="text"
+                    className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
+                    {...register("name")}
+                />
+                <p className="text-sm text-gray-500">
+                    Name of the door for your reference.
+                </p>
+            </div>
+
             {/* Door Date & Time */}
             <div className="relative flex flex-col mb-4 gap-y-2">
                 <label className="text-base font-medium">
@@ -142,7 +156,7 @@ export default function EditContentForm({ door }) {
                 </p>
             </div>
 
-            {/* Door Text */}
+            {/* Closed Door Text */}
             <div className="relative flex flex-col mb-4 gap-y-2">
                 <label className="text-base font-medium">
                     Closed Door Text

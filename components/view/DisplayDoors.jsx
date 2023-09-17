@@ -140,6 +140,7 @@ const DoorsComponent = ({ doors }) => {
                                 backgroundImage: door.closedDoorImage?.fileUrl
                                     ? `url(${door.closedDoorImage.fileUrl})`
                                     : "none",
+                                backgroundSize: "cover",
                             }}
                             // Handle door click event
                             onClick={() => handleDoorClick(door)}

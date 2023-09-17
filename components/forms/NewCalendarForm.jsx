@@ -11,7 +11,7 @@ function NewCalendarForm() {
     const [endDate, setEndDate] = useState(null);
     const [daysDiff, setDaysDiff] = useState("0");
     const [error, setError] = useState(null);
-    const { formRef, setIsModalOpen } = useContext(FormContext);
+    const { formRef, setIsModalOpen, setIsLoading } = useContext(FormContext);
     const { fetchFlag, setFetchFlag } = useContext(FetchContext);
     const { data: session } = useSession();
 
@@ -32,11 +32,14 @@ function NewCalendarForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         if (!calendarTitle || !calendarDescription || !startDate || !endDate) {
             setError("All fields required");
+            setIsLoading(false);
             return;
         } else if (daysDiff < 0) {
             setError("Invalid date duration");
+            setIsLoading(false);
             return;
         }
         const calendarResponse = await fetch("api/calendars", {
@@ -55,6 +58,7 @@ function NewCalendarForm() {
             console.log("Calendar created successfully.");
         } else {
             setError("Failed to create a new calendar. Please try again.");
+            setIsLoading(false);
             return;
         }
         const { data } = await calendarResponse.json();
@@ -73,11 +77,13 @@ function NewCalendarForm() {
         });
 
         if (doorsResponse.ok) {
+            setIsLoading(false);
             setIsModalOpen(false); // Call the onConfirm prop, which will close the modal
             console.log("Doors created successfully.");
             setFetchFlag(!fetchFlag); // Set fetchFlag, which prompt CalendarRows to refetch calendars
         } else {
             setError("Failed to create doors. Please try again.");
+            setIsLoading(false);
             return;
         }
     };

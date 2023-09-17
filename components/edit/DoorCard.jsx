@@ -27,7 +27,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
             {/* Header */}
             <div className="flex justify-between items-center border-b px-4 py-2">
                 <h2 className="text-base text-indigo-600 font-semibold">
-                    {door.closedDoorText}
+                    {door.name}
                 </h2>
                 <button onClick={handleMenuToggle}>
                     <EllipsisHorizontalIcon className="h-5 w-5" />

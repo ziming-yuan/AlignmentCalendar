@@ -49,7 +49,7 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                             />
                             <Modal
                                 isOpen={isModalOpen}
-                                title={`${door.closedDoorText} - Edit Content`}
+                                title={`${door.name} - Edit Content`}
                                 ModalContent={<EditContentForm door={door} />}
                                 confirmLabel="Save"
                                 isConfirmButtonDisabled={isLoading}

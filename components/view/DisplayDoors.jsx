@@ -72,7 +72,7 @@ const DoorsComponent = ({ doors }) => {
     return (
         <>
             {doors.map((door) => {
-                // if beyond autoOpenTime or door is clicked once
+                // if beyond autoOpenTime or door is clicked once (door opened)
                 if (
                     currentDate > new Date(door.autoOpenTime) ||
                     (currentDate >= new Date(door.date) &&
@@ -82,72 +82,78 @@ const DoorsComponent = ({ doors }) => {
                         // if youtubeVideoUrl: display thumbnail; else if contentImage: display contentImage; else use closedDoorColor
                         <div
                             key={door._id}
-                            className={`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] shadow-md rounded-md flex items-center justify-center 
-                ${shakingDoorId === door._id && "animate-shake"}`}
+                            className={`relative w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] shadow-md rounded-md flex items-center justify-center
+                        ${shakingDoorId === door._id && "animate-shake"}`}
                             onAnimationEnd={() => setShakingDoorId(null)}
-                            style={
-                                door.youtubeVideoUrl
-                                    ? {
-                                          backgroundImage: `url(${getThumbnailUrl(
-                                              getYouTubeID(
-                                                  door.youtubeVideoUrl
-                                              ),
-                                              "mq"
-                                          )})`,
-                                          backgroundSize: "cover",
-                                          backgroundPosition: "center",
-                                          backgroundRepeat: "no-repeat",
-                                      }
-                                    : door.contentImage?.fileUrl
-                                    ? {
-                                          backgroundImage: `url(${door.contentImage.fileUrl})`,
-                                          backgroundPosition: "center",
-                                          backgroundSize: "cover",
-                                          backgroundRepeat: "no-repeat",
-                                      }
-                                    : {
-                                          backgroundColor: door.closedDoorColor,
-                                      }
-                            }
-                            // Handle door click event
                             onClick={() => handleDoorClick(door)}
+                            style={{
+                                backgroundColor:
+                                    !door.youtubeVideoUrl &&
+                                    !door.contentImage?.fileUrl
+                                        ? door.closedDoorColor
+                                        : undefined,
+                            }}
                         >
-                            {!door.youtubeVideoUrl &&
-                                !door.contentImage?.fileUrl && (
-                                    <p
-                                        className="text-lg text-center"
-                                        style={{
-                                            color: door.closedDoorTextColor,
-                                        }}
-                                    >
-                                        {door.closedDoorText}
-                                    </p>
-                                )}
+                            {door.youtubeVideoUrl ? (
+                                <Image
+                                    fill
+                                    src={getThumbnailUrl(
+                                        getYouTubeID(door.youtubeVideoUrl),
+                                        "mq"
+                                    )}
+                                    sizes="(min-width: 640px) 150px, 150px (min-width: 1024px) 175px, 175px"
+                                    className="object-cover shadow-md rounded-md"
+                                    alt="Opened Door Thumbnail"
+                                />
+                            ) : door.contentImage?.fileUrl ? (
+                                <Image
+                                    fill
+                                    src={door.contentImage.fileUrl}
+                                    sizes="(min-width: 640px) 150px, 150px (min-width: 1024px) 175px, 175px"
+                                    className="object-cover shadow-md rounded-md"
+                                    alt="Opened Door Content Image"
+                                />
+                            ) : (
+                                <p
+                                    className="text-lg text-center mx-2"
+                                    style={{
+                                        color: door.closedDoorTextColor,
+                                    }}
+                                >
+                                    {door.closedDoorText}
+                                </p>
+                            )}
                         </div>
                     );
                 } else {
                     return (
-                        // otherwise, if closedDoorImage: display image; else use closedDoorColor
+                        // otherwise (closed door), if closedDoorImage: display image; else use closedDoorColor; both need text
                         <div
                             key={door._id}
-                            className={`w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] shadow-md rounded-md flex items-center justify-center 
+                            className={`relative w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[175px] lg:h-[175px] shadow-md rounded-md flex items-center justify-center 
                 ${shakingDoorId === door._id && "animate-shake"}`}
                             onAnimationEnd={() => setShakingDoorId(null)}
-                            style={{
-                                backgroundColor: door.closedDoorImage?.fileUrl
-                                    ? "transparent"
-                                    : door.closedDoorColor,
-                                backgroundImage: door.closedDoorImage?.fileUrl
-                                    ? `url(${door.closedDoorImage.fileUrl})`
-                                    : "none",
-                                backgroundSize: "cover",
-                            }}
-                            // Handle door click event
                             onClick={() => handleDoorClick(door)}
+                            style={{
+                                backgroundColor: !door.closedDoorImage?.fileUrl
+                                    ? door.closedDoorColor
+                                    : undefined,
+                            }}
                         >
+                            {door.closedDoorImage?.fileUrl && (
+                                <Image
+                                    fill
+                                    src={door.closedDoorImage.fileUrl}
+                                    className="object-cover shadow-md rounded-md inset-0 z-0"
+                                    sizes="(min-width: 640px) 150px, 150px (min-width: 1024px) 175px, 175px"
+                                    alt="Closed Door Image"
+                                />
+                            )}
                             <p
-                                className="text-lg text-center"
-                                style={{ color: door.closedDoorTextColor }}
+                                className="text-lg text-center mx-2 z-10"
+                                style={{
+                                    color: door.closedDoorTextColor,
+                                }}
                             >
                                 {door.closedDoorText}
                             </p>
@@ -160,7 +166,7 @@ const DoorsComponent = ({ doors }) => {
                 //   <div className="bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-4 sm:max-w-2xl lg:max-w-3xl">
                 <div
                     className={`fixed inset-0 bg-black w-full h-full flex items-center justify-center transition-opacity ease-out duration-300 
-                        ${modalOpen ? "bg-opacity-50" : "bg-opacity-0"}`}
+                        ${modalOpen ? "bg-opacity-50" : "bg-opacity-0"} z-20`}
                 >
                     <div
                         className={`relative bg-white rounded-lg w-full max-h-[80vh] sm:max-h-[90vh] overflow-y-scroll mx-4 sm:max-w-2xl lg:max-w-3xl 
@@ -191,7 +197,7 @@ const DoorsComponent = ({ doors }) => {
                         {/* Display content image if url is provided */}
                         {selectedDoor.contentImage?.fileUrl && (
                             <Image
-                                src={selectedDoor.contentImage.fileUrl}
+                                src={selectedDoor.contentImage?.fileUrl}
                                 alt="Content Image"
                                 width={0}
                                 height={0}

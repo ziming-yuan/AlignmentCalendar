@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "../components/Providers";
+import { Analytics } from "@vercel/analytics/react";
 import Favicon from "/public/favicon.ico";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className={inter.className}>
                 <AuthProvider>{children}</AuthProvider>
+                <Analytics />
             </body>
         </html>
     );

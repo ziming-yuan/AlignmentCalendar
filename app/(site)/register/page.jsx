@@ -33,7 +33,7 @@ export default function Register() {
         if (success) {
             setAccountCreated(true);
             setTimeout(() => {
-                router.push("dashboard");
+                router.push("/");
             }, 2000);
         } else {
             setError(error);

@@ -20,8 +20,14 @@ export async function POST(req) {
                 { status: 400 }
             );
         }
-        const start = startOfDay(new Date(startDate)); // UTC
-        const end = startOfDay(new Date(endDate)); //UTC
+        const start = utcToZonedTime(
+            startOfDay(new Date(startDate)),
+            "America/New_York"
+        );
+        const end = utcToZonedTime(
+            startOfDay(new Date(endDate)),
+            "America/New_York"
+        );
         let currentDate = start;
         const newDoors = [];
         while (currentDate <= end) {
@@ -29,10 +35,7 @@ export async function POST(req) {
                 new Door({
                     calendarId: calendarId,
                     name: formatDate(currentDate),
-                    date: utcToZonedTime(
-                        new Date(currentDate),
-                        "America/New_York"
-                    ), // currentDate is a reference only
+                    date: new Date(currentDate), // currentDate is a reference only
                     message: "",
                     youtubeVideoUrl: "",
                     contentImage: {
@@ -46,10 +49,7 @@ export async function POST(req) {
                         fileKey: "",
                     },
                     closedDoorColor: "#FFFFFF",
-                    autoOpenTime: utcToZonedTime(
-                        addDays(new Date(currentDate), 7),
-                        "America/New_York"
-                    ), // add a week to currentDate
+                    autoOpenTime: addDays(new Date(currentDate), 7), // add a week to currentDate
                 })
             );
             currentDate = addDays(currentDate, 1); // Increment by 1 day

@@ -245,6 +245,9 @@ export default function EditContentForm({ door }) {
                     className="flex-grow px-2 py-2 bg-white text-sm rounded border border-gray-300 shadow"
                     {...register("autoOpenTime")}
                 />
+                <p className="text-sm text-gray-500">
+                    When the door automatically opens.
+                </p>
             </div>
 
             {/* Error message */}

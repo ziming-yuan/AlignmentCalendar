@@ -53,7 +53,9 @@ export default function Home() {
                 {/* Title and Icon */}
                 <div className="flex items-center text-indigo-600 mb-8 justify-center">
                     <CalendarDaysIcon className="w-9 h-9 mr-4" />
-                    <h1 className="text-3xl font-semibold">Advent Calendar</h1>
+                    <h1 className="text-3xl font-semibold">
+                        Alignment Calendar
+                    </h1>
                 </div>
 
                 <p className="text-xl leading-5 text-gray-900 h-5 text-center mb-4">

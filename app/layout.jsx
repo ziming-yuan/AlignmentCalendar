@@ -7,8 +7,9 @@ import Favicon from "/public/favicon.ico";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Advent Calendar",
-    description: "Advent-styled calendar for Interfaith Alignment",
+    title: "Alignment Calendar",
+    description:
+        "Advent-styled calendar manager for Alignment: Interfaith Contemplative Practices",
     icons: [{ rel: "icon", url: Favicon.src }],
 };
 

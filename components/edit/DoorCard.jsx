@@ -64,7 +64,11 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                 {/* Door Date */}
                 <div className="flex space-x-2">
                     <span className="font-semibold">Door Date:</span>
-                    <span> {new Date(door.date).toLocaleString()} </span>
+                    <span>
+                        {new Date(door.date).toLocaleString("en-US", {
+                            timeZone: "America/New_York",
+                        })}
+                    </span>
                 </div>
 
                 {/* Message */}
@@ -162,10 +166,12 @@ export default function DoorCard({ door, isOpen, onMenuToggle }) {
                 <div className="flex space-x-2">
                     <span className="font-semibold">Auto Open Time: </span>
                     <span>
-                        {" "}
                         {door.autoOpenTime
-                            ? new Date(door.autoOpenTime).toLocaleString()
-                            : "Not Set"}{" "}
+                            ? new Date(door.autoOpenTime).toLocaleString(
+                                  "en-US",
+                                  { timeZone: "America/New_York" }
+                              )
+                            : "Not Set"}
                     </span>
                 </div>
             </div>

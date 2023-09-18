@@ -5,13 +5,16 @@ import TipTap from "/components/rte/TipTap";
 import { useForm, Controller } from "react-hook-form";
 import { updateDoorContent } from "/app/_actions";
 import Dropzone from "/components/Dropzone";
+import { utcToZonedTime, format } from "date-fns-tz";
 
 const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const localDate = new Date(
-        date.getTime() - date.getTimezoneOffset() * 60000
-    );
-    return localDate.toISOString().slice(0, 19);
+    // Convert the UTC date string to a Date object in the EST timezone
+    const estDate = utcToZonedTime(new Date(dateString), "America/New_York");
+
+    // Format the date in the "YYYY-MM-DDTHH:MM:SS" format
+    return format(estDate, "yyyy-MM-dd'T'HH:mm:ss", {
+        timeZone: "America/New_York",
+    });
 };
 
 export default function EditContentForm({ door }) {

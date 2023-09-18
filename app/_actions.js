@@ -7,9 +7,6 @@ import Door from "/models/door";
 import Calendar from "/models/calendar";
 import User from "/models/user";
 import bcrypt from "bcryptjs";
-import { utcToZonedTime } from "date-fns-tz";
-
-const timeZone = "America/New_York";
 
 export async function handleRegister(formData) {
     const email = formData.email;
@@ -88,13 +85,13 @@ export async function updateDoorContent(formData, imageData) {
 
     await Door.findByIdAndUpdate(doorId, {
         name,
-        date: utcToZonedTime(new Date(date), timeZone),
+        date: new Date(date),
         closedDoorText,
         message,
         youtubeVideoUrl,
         closedDoorColor,
         closedDoorTextColor,
-        autoOpenTime: utcToZonedTime(new Date(autoOpenTime), timeZone),
+        autoOpenTime: new Date(autoOpenTime),
     });
 
     if (contentImgOgD) {
@@ -241,13 +238,13 @@ export async function createNewDoor(formData, imageData) {
     let newDoorData = {
         calendarId,
         name,
-        date: utcToZonedTime(new Date(date), timeZone),
+        date: new Date(date),
         closedDoorText,
         message,
         youtubeVideoUrl,
         closedDoorColor,
         closedDoorTextColor,
-        autoOpenTime: utcToZonedTime(new Date(autoOpenTime), timeZone),
+        autoOpenTime: new Date(autoOpenTime),
     };
 
     if (contentImgU) {

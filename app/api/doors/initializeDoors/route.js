@@ -6,11 +6,6 @@ import { revalidateTag } from "next/cache";
 import { addDays, format, startOfDay } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 
-const timeZone = "America/New_York"; // EST/EDT time zone
-function timeConvert(date) {
-    return utcToZonedTime(new Date(date), timeZone);
-}
-
 // Create multiple new doors
 export async function POST(req) {
     try {
@@ -25,9 +20,8 @@ export async function POST(req) {
                 { status: 400 }
             );
         }
-
-        const start = startOfDay(timeConvert(startDate)); // start of the duration in EST
-        const end = startOfDay(timeConvert(endDate));
+        const start = startOfDay(new Date(startDate)); // UTC
+        const end = startOfDay(new Date(endDate)); //UTC
         let currentDate = start;
         const newDoors = [];
         while (currentDate <= end) {
@@ -35,7 +29,10 @@ export async function POST(req) {
                 new Door({
                     calendarId: calendarId,
                     name: formatDate(currentDate),
-                    date: timeConvert(currentDate), // currentDate is a reference only
+                    date: utcToZonedTime(
+                        new Date(currentDate),
+                        "America/New_York"
+                    ), // currentDate is a reference only
                     message: "",
                     youtubeVideoUrl: "",
                     contentImage: {
@@ -51,7 +48,7 @@ export async function POST(req) {
                     closedDoorColor: "#FFFFFF",
                     autoOpenTime: utcToZonedTime(
                         addDays(new Date(currentDate), 7),
-                        timeZone
+                        "America/New_York"
                     ), // add a week to currentDate
                 })
             );

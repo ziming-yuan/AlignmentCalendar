@@ -4,7 +4,7 @@ import Calendar from "/models/calendar";
 import Door from "/models/door";
 import { revalidateTag } from "next/cache";
 import { addDays, format } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
+import { zonedTimeToUtc } from "date-fns-tz";
 
 // Create multiple new doors
 export async function POST(req) {
@@ -20,12 +20,12 @@ export async function POST(req) {
                 { status: 400 }
             );
         }
-        const start = utcToZonedTime(
-            new Date(startDate + "T00:00:00.000Z"),
+        const start = zonedTimeToUtc(
+            startDate + "T00:00:00.00",
             "America/New_York"
         );
-        const end = utcToZonedTime(
-            new Date(endDate + "T00:00:00.000Z"),
+        const end = zonedTimeToUtc(
+            endDate + "T00:00:00.00",
             "America/New_York"
         );
         let currentDate = start;

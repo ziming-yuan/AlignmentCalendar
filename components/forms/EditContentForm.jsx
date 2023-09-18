@@ -6,21 +6,12 @@ import { useForm, Controller } from "react-hook-form";
 import { updateDoorContent } from "/app/_actions";
 import Dropzone from "/components/Dropzone";
 
-const formatDate = (inputDate) => {
-    const d = new Date(inputDate);
-    let month = "" + (d.getMonth() + 1);
-    let day = "" + d.getDate();
-    const year = d.getFullYear();
-
-    let hour = "" + d.getHours();
-    let minute = "" + d.getMinutes();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-    if (hour.length < 2) hour = "0" + hour;
-    if (minute.length < 2) minute = "0" + minute;
-
-    return `${year}-${month}-${day}T${hour}:${minute}`;
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const localDate = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000
+    );
+    return localDate.toISOString().slice(0, 19);
 };
 
 export default function EditContentForm({ door }) {

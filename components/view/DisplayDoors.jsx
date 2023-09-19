@@ -91,20 +91,21 @@ const DoorsComponent = ({ doors }) => {
                                     !door.youtubeVideoUrl &&
                                     !door.contentImage?.fileUrl
                                         ? door.closedDoorColor
-                                        : undefined,
+                                        : "black",
                             }}
                         >
                             {door.youtubeVideoUrl ? (
-                                <Image
-                                    fill
-                                    src={getThumbnailUrl(
-                                        getYouTubeID(door.youtubeVideoUrl),
-                                        "mq"
-                                    )}
-                                    sizes="(min-width: 640px) 150px, 150px (min-width: 1024px) 175px, 175px"
-                                    className="object-cover shadow-md rounded-md"
-                                    alt="Opened Door Thumbnail"
-                                />
+                                <div className="relative shadow-md rounded-md w-[120px] h-[90px] sm:w-[150px] sm:h-[112.5px] lg:w-[175px] lg:h-[132px]">
+                                    <Image
+                                        fill
+                                        src={getThumbnailUrl(
+                                            getYouTubeID(door.youtubeVideoUrl),
+                                            "mq"
+                                        )}
+                                        className="object-cover"
+                                        alt="Opened Door Thumbnail"
+                                    />
+                                </div>
                             ) : door.contentImage?.fileUrl ? (
                                 <Image
                                     fill

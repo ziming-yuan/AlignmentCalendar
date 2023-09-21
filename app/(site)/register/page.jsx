@@ -94,7 +94,7 @@ export default function Register() {
                                 id="password"
                                 type={showPassword ? "text" : "password"}
                                 autoComplete="new-password"
-                                placeholder="At least 8 characters, 1 special"
+                                placeholder="At least 8 characters, 1 number"
                                 className="w-full p-2 bg-white rounded border border-gray-300 pr-10 text-sm"
                                 {...register("password", {
                                     required: "Password is required",

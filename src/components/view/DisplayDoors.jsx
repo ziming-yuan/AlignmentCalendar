@@ -189,12 +189,6 @@ const DoorsComponent = ({ doors }) => {
                             />
                             // <YouTube videoId={getYouTubeID(selectedDoor.youtubeVideoUrl)} opts={opts} iframeClassName="w-full aspect-video" />;
                         )}
-                        {/* Display message if provided */}
-                        {selectedDoor.message && (
-                            <div className="m-4 rich-text">
-                                {getHTML(selectedDoor.message)}
-                            </div>
-                        )}
                         {/* Display content image if url is provided */}
                         {selectedDoor.contentImage?.fileUrl && (
                             <Image
@@ -205,6 +199,12 @@ const DoorsComponent = ({ doors }) => {
                                 sizes="100vw"
                                 className="w-full h-auto object-contain"
                             />
+                        )}
+                        {/* Display message if provided */}
+                        {selectedDoor.message && (
+                            <div className="m-4 rich-text">
+                                {getHTML(selectedDoor.message)}
+                            </div>
                         )}
                         {/* Close button for the modal */}
                         <div className="flex justify-end">

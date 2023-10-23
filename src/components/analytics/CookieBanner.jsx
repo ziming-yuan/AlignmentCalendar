@@ -27,7 +27,7 @@ export default function CookieBanner() {
             } px-3 md:px-4 py-3 justify-between items-center flex-col sm:flex-row gap-y-2 gap-x-4 rounded-lg shadow-lg`}
         >
             <div className="text-center text-sm">
-                <Link href="/info/cookies">
+                <Link href="#">
                     <p className="inline-flex items-center">
                         We use
                         <span className="font-bold text-indigo-400 ml-1 mr-1">

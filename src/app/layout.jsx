@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { AuthProvider } from "@/components/Providers";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
-import CookieBanner from "@/components/analytics/cookieBanner";
+import CookieBanner from "@/components/analytics/CookieBanner";
 import Favicon from "/public/favicon.ico";
 
 const inter = Inter({ subsets: ["latin"] });

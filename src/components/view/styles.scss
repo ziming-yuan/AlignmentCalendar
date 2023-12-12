@@ -48,4 +48,13 @@
             cursor: pointer;
         }
     }
+    p {
+        font-size: 12px;
+        @media (min-width: 600px) {
+            font-size: 14px;
+        }
+        @media (min-width: 992px) {
+            font-size: 16px;
+        }
+    }
 }

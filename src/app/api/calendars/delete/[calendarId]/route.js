@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Calendar from "@/models/calendar";
 import Door from "@/models/door";
-import { utapi } from "uploadthing/server";
+import { utapi } from "@/utils/uploadthingServer";
 import { revalidateTag } from "next/cache";
 
 export async function DELETE(req, { params }) {

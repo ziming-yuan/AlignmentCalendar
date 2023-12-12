@@ -1,5 +1,5 @@
 "use server";
-import { utapi } from "uploadthing/server";
+import { UTApi } from "uploadthing/server";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
@@ -8,6 +8,8 @@ import Calendar from "@/models/calendar";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
 import { zonedTimeToUtc } from "date-fns-tz";
+
+const utapi = new UTApi();
 
 export async function handleRegister(formData) {
     const email = formData.email;
